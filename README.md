@@ -10,7 +10,7 @@ A simple example:
 In cli: (And later on a web GUI)
 
 ```bash
-graphp newnode User(id) # id is indexed, allowind for User::getByID()
+graphp newnode User(id) # id is indexed, allowing for User::getByID()
 graphp newnode BankAccount
 graphp newedge User->BankAccount
 ```
