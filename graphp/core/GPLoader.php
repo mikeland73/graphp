@@ -1,12 +1,11 @@
 <?
 
-// We ned this here for obovious reasons
+// We load a couple of things up front. Everything else gets loaded on demand.
+require_once '../graphp/core/GPObject.php';
 require_once '../graphp/lib/GPSingletonTrait.php';
-class GPLoaderException extends Exception {}
-class GPControllerNotFoundException extends GPLoaderException {}
-class GPViewNotFoundException extends GPLoaderException {}
+require_once '../third_party/libphutil/src/__phutil_library_init__.php';
 
-class GPLoader {
+class GPLoader extends GPObject {
 
   use
     GPSingletonTrait;
@@ -72,6 +71,10 @@ class GPLoader {
     require_once $file;
   }
 }
+
+class GPLoaderException extends Exception {}
+class GPControllerNotFoundException extends GPLoaderException {}
+class GPViewNotFoundException extends GPLoaderException {}
 
 // To instanciate a new GPLoader we need to call this once.
 GPLoader::init();
