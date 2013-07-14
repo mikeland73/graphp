@@ -11,7 +11,9 @@ class GPLoader extends GPObject {
     GPSingletonTrait;
 
   private $core = [
+    'GPConfig' => true,
     'GPController' => true,
+    'GPDatabase' => true,
     'GPLoader' => true,
     'GPObject' => true,
     'GPRouter' => true,
@@ -30,6 +32,8 @@ class GPLoader extends GPObject {
 
   private $utils = [
     'arrays' => true,
+    'assert' => true,
+    'Exceptions' => true,
   ];
 
   public function __construct() {
@@ -55,7 +59,7 @@ class GPLoader extends GPObject {
     }
   }
 
-  public function loadController($controller_name) {
+  public static function loadController($controller_name) {
     $file = '../app/controllers/' . $controller_name . '.php';
     if (!file_exists($file)) {
       throw new GPControllerNotFoundException();
@@ -63,7 +67,7 @@ class GPLoader extends GPObject {
     require_once $file;
   }
 
-  public function loadView($view_name, $data = []) {
+  public static function loadView($view_name, $data = []) {
     $file = '../app/views/' . $view_name . '.php';
     if (!file_exists($file)) {
       throw new GPViewNotFoundException();
@@ -72,9 +76,10 @@ class GPLoader extends GPObject {
   }
 }
 
+class_alias('GPLoader', 'GP');
 class GPLoaderException extends Exception {}
 class GPControllerNotFoundException extends GPLoaderException {}
 class GPViewNotFoundException extends GPLoaderException {}
 
 // To instanciate a new GPLoader we need to call this once.
-GPLoader::init();
+GP::init();

@@ -19,3 +19,12 @@ function idxx(array $array, $key) {
   }
   return $array[$key];
 }
+
+/**
+ * Returns first element in array. false if array is empty.
+ * @param  array  $array
+ * @return mixed        First element of array or false is array is empty
+ */
+function idx0(array $array) {
+  return reset($array);
+}
