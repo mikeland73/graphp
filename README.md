@@ -3,14 +3,14 @@ graphp
 
 The GraPHP web framework.
 
-The goal of this framework is to build a lightweight web framework with a graph DB abstraction. It should be very easy to create the graph schema with no knowledge of of how the data is stored. Also, the schema should be incredibly flexible so you should never need migrations when adding new models (nodes), connections (edges), or data that lives in nodes.
+The goal of this project is to build a lightweight web framework with a graph DB abstraction. It should be very easy to create the graph schema with no knowledge of of how the data is stored. Also, the schema should be incredibly flexible so you should never need migrations when adding new models (nodes), connections (edges), or data that lives in nodes.
 
 A simple example:
 
 In cli: (And later on a web GUI)
 
 ```bash
-graphp newnode User(name) # id is indexed, allowing for User::getByName()
+graphp newnode User(name) # name is indexed, allowing for User::getByName()
 graphp newnode BankAccount
 graphp newedge User->BankAccount
 ```
@@ -40,4 +40,4 @@ TODO (mikeland86) :P
 FAQ
 ======
 #### Why PHP?
-Great question. Inertia, I guess. The good news is we are using php 5.4 which has some cool features like traits and short array syntax (don't laugh).
+Great question. Inertia, I guess. The good news is we are using php 5.4 which has some cool features like traits and short array syntax.
