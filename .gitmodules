@@ -1,0 +1,3 @@
+[submodule "libphutil"]
+  path = third_party/libphutil
+  url = git@github.com:facebook/libphutil.git
