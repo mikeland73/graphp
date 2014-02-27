@@ -19,6 +19,7 @@ class GPRouter extends GPObject {
 
   private function process() {
     $uri = $_SERVER['REQUEST_URI'];
+    $uri = str_replace('index.php', '', $uri);
     if (isset($this->routes[$uri])) {
       // TODO (mikeland86): Add regex support
       $this->parts = $this->routes[$uri];
@@ -28,6 +29,7 @@ class GPRouter extends GPObject {
   }
 
   private function defaultRouting() {
+    // error handling. check controller exists. check method exists.
     $controller_name = ucfirst(idxx($this->parts, 0));
     $method_name = idxx($this->parts, 1);
     GPLoader::sharedInstance()->loadController($controller_name);

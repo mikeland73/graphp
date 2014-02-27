@@ -1,6 +1,6 @@
 <?
 
-function asser_true($var, $exception_class = 'Exception') {
+function assert_true($var, $exception_class = 'Exception') {
   if (!$var) {
     throw new $exception_class();
   }

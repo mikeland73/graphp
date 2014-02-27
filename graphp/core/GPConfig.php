@@ -8,4 +8,8 @@ class GPConfig extends GPObject {
     $this->config = require_once '../config/' . $name . '.php';
   }
 
+  public function toArray() {
+    return $this->config;
+  }
+
 }
