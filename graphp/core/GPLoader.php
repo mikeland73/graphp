@@ -27,6 +27,8 @@ class GPLoader extends GPObject {
     'GPDataTypes' => true,
     'GPEdge' => true,
     'GPNode' => true,
+    'GPNodeLoader' => true,
+    'GPNodeMagicMethods' => true,
     'GPNodeMap' => true,
   ];
 
@@ -43,13 +45,21 @@ class GPLoader extends GPObject {
 
   private function registerGPAutoloader() {
     spl_autoload_register([$this, 'GPAutoloader']);
+    spl_autoload_register([$this, 'GPNodeAutoloader']);
   }
 
   private function GPAutoloader($class_name) {
+    // TODO optimize by saving this into map the first time it is called.
     foreach ($this as $folder => $map) {
       if (array_key_exists($class_name, $map)) {
         require_once '../graphp/' . $folder . '/' . $class_name . '.php';
       }
+    }
+  }
+
+  private function GPNodeAutoloader($class_name) {
+    if (GPNodeMap::isNode($class_name)) {
+      require_once '../app/models/' . $class_name . '.php';
     }
   }
 

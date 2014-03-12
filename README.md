@@ -18,10 +18,9 @@ graphp newedge User->BankAccount
 In code:
 
 ```php
-$user = new User(['name' => 'Jane Doe']);
-$bank_account = new BankAccount(['accountNumber' => 12345, 'balance' => 125.05]);
-GPNode::batchSave([$user, $bank_account]);
-$user->addBankAccount($bank_account)->saveBankAccount();
+$user = (new User(['name' => 'Jane Doe']))->save();
+$bank_account = (new BankAccount(['accountNumber' => 12345, 'balance' => 125.05]))->save();
+$user->addBankAccount($bank_account)->save();
 ```
 
 and later:

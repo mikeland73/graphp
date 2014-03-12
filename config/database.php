@@ -1,8 +1,9 @@
 <?
 
 return [
-  'dbHost' => 'localhost',
-  'dbName' => 'graphp',
-  'dbUser' => 'root',
-  'dbPass' => '',
+  'host' => 'localhost',
+  'database' => 'graphp',
+  'user' => 'root',
+  'pass' => '',
+  'port' => 0,
 ];

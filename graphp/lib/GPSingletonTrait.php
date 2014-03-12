@@ -5,7 +5,7 @@ trait GPSingletonTrait {
   private static $sharedInstance;
 
   /**
-   * Retusn singleton instance. Creates one if needed.
+   * Return singleton instance. Creates one if needed.
    * @return this
    */
   public static function sharedInstance() {
@@ -22,6 +22,10 @@ trait GPSingletonTrait {
    * @return this
    */
   public static function init() {
+    return self::sharedInstance();
+  }
+
+  public static function get() {
     return self::sharedInstance();
   }
 
