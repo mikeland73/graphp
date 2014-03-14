@@ -36,12 +36,12 @@ trait GPNodeMagicMethods {
     } else if (substr_compare($method, 'loadConnected', 0, 13) === 0) {
     } else if (substr_compare($method, 'loadConnectedIDs', 0, 16) === 0) {
     } else if (substr_compare($method, 'get', 0, 3) === 0) {
-      return $this->getDataX(mb_substr($method, 3));
+      return $this->getDataX(mb_strtolower(mb_substr($method, 3)));
     } else if (substr_compare($method, 'set', 0, 3) === 0) {
       assert_equals(count($args), 1, 'GPBadArgException');
-      return $this->setDataX(mb_substr($method, 3), idx0($args));
+      return $this->setDataX(mb_strtolower(mb_substr($method, 3)), idx0($args));
     } else if (substr_compare($method, 'unset', 0, 3) === 0) {
-      return $this->unsetDataX(mb_substr($method, 3));
+      return $this->unsetDataX(mb_strtolower(mb_substr($method, 5)));
     } else {
       throw new GPBadMethodCallException();
     }

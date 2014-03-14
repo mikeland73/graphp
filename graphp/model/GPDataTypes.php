@@ -3,12 +3,15 @@
 class GPDataTypes extends GPObject {
 
   const GP_INT = 'is_int';
+  const GP_NODE_ID = 'is_int';
   const GP_FLOAT = 'is_float';
   const GP_NUMBER = 'is_number';
   const GP_ARRAY = 'is_array';
   const GP_STRING = 'is_string';
   const GP_BOOL = 'is_bool';
   const GP_ANY = 'is_any';
+
+  const INDEXED = 'indexed';
 
   public static function assertValueIsOfType($type, $value) {
     self::assertConstValueExists($type);

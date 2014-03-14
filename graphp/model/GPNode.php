@@ -11,7 +11,7 @@ abstract class GPNode extends GPObject {
     // array([edge_type] => [array of nodes indexed by id])
     $connectedNodes = array();
 
-  private static
+  protected static
     $data_types = array();
 
   public function __construct(array $data = array()) {
@@ -27,7 +27,8 @@ abstract class GPNode extends GPObject {
   }
 
   public function setDataX($key, $value) {
-    $type = idxx($this->data_types, $key);
+    $type_or_array = idxx(static::$data_types, $key);
+    $type = is_array($type_or_array) ? idx0($type_or_array) : $type_or_array;
     GPDataTypes::assertValueIsOfType($type, $value);
     return $this->setData($key, $value);
   }
@@ -38,7 +39,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function getDataX($key) {
-    assert_in_array($key, $this->data_types);
+    assert_in_array($key, static::$data_types);
     return $this->getData($key);
   }
 
@@ -51,7 +52,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function unsetDataX($key) {
-    assert_in_array($key, $this->data_types);
+    assert_in_array($key, static::$data_types);
     return $this->unsetData($key);
   }
 
@@ -61,9 +62,8 @@ abstract class GPNode extends GPObject {
   }
 
   public function save() {
-    // Save node to DB.
     if ($this->id) {
-      GPDatabase::get()->updateNode($this);
+      GPDatabase::get()->updateNodeData($this);
     } else {
       $this->id = GPDatabase::get()->insertNode($this);
     }

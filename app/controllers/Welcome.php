@@ -7,9 +7,8 @@ class Welcome extends GPController {
   }
 
   public function index($arg1 = 'default') {
-    //(new Example())->save();
-    //$node = Example::getByID(4);
-    //var_dump($node);
+    $user = User::getByID(16);
+    $user->unsetName()->save();
     GP::loadView('welcome_view', ['arg1' => $arg1]);
   }
 

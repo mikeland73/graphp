@@ -13,7 +13,7 @@ function assert_false($var, $exception_class = 'Exception') {
 }
 
 function assert_equals($var, $val, $exception_class = 'Exception') {
-  if ($var === $val) {
+  if ($var !== $val) {
     throw new $exception_class();
   }
 }

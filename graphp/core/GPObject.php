@@ -10,8 +10,8 @@ class GPObject {
 
   }
 
-  public static function assertConstValueExists() {
-    idxx(self::getClassConstants(), self::getClassConstantsFlip());
+  public static function assertConstValueExists($name) {
+    idxx(self::getClassConstantsFlip(), $name);
   }
 
   public static function getClassConstants() {

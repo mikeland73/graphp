@@ -25,6 +25,15 @@ class GPDatabase extends GPObject {
     return $this->connection->getInsertID();
   }
 
+  public function updateNodeData(GPNode $node) {
+    queryfx(
+      $this->connection,
+      'UPDATE  node SET data = %s WHERE id = %d',
+      $node->getJSONData(),
+      $node->getID()
+    );
+  }
+
   public function getNodeByID($id) {
     return queryfx_one(
       $this->connection,

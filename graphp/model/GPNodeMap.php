@@ -5,6 +5,8 @@ class GPNodeMap extends GPObject {
   private static $map = [
     1000 => 'GPEdge',
     1001 => 'Example',
+    1002 => 'User',
+    1003 => 'BankAccount',
   ];
 
   private static $inverseMap = [];
