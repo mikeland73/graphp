@@ -18,7 +18,31 @@ trait GPNodeLoader {
     return self::$cache[$id];
   }
 
+  public static function multiGetByID(array $ids) {
+    if (!$ids) {
+      return array();
+    }
+    // TODO
+    return array(self::getByID(idx0($ids)));
+  }
+
+  public static function __callStatic($name, array $arguments) {
+    if (substr_compare($name, 'getBy', 0, 5) === 0) {
+      $type_name = mb_strtolower(mb_substr($name, 5));
+      assert_in_array($type_name, static::$data_types, 'GPBadArgException');
+      assert_equals(count($arguments), 1, 'GPBadArgException');
+      return self::getByIndexData(
+        GPDataTypes::getIndexedType($type_name),
+        head($arguments)
+      );
+    }
+    throw new GPBadMethodCallException();
+  }
+
   private static function getByIndexData($data_type, $data) {
+    $db = GPDatabase::get();
+    $node_ids = $db->getNodeIDsByTypeData($data_type, $data);
+    return self::multiGetByID($node_ids);
   }
 
 }

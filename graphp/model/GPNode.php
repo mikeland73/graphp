@@ -19,7 +19,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function getID() {
-    return $this->id;
+    return (int) $this->id;
   }
 
   public function getType() {
@@ -51,6 +51,16 @@ abstract class GPNode extends GPObject {
     return json_encode($this->data);
   }
 
+  public function getIndexedData() {
+    $keys = array_keys(array_filter(
+      static::$data_types,
+      function($x) {
+        return is_array($x) && idx($x, 1) === GPDataTypes::INDEXED;
+      }
+    ));
+    return array_select_keys($this->data, $keys);
+  }
+
   public function unsetDataX($key) {
     assert_in_array($key, static::$data_types);
     return $this->unsetData($key);
@@ -62,11 +72,14 @@ abstract class GPNode extends GPObject {
   }
 
   public function save() {
+    // TODO transaction
+    $db = GPDatabase::get();
     if ($this->id) {
-      GPDatabase::get()->updateNodeData($this);
+      $db->updateNodeData($this);
     } else {
-      $this->id = GPDatabase::get()->insertNode($this);
+      $this->id = $db->insertNode($this);
     }
+    $db->updateNodeIndexedData($this);
     return $this;
   }
 }

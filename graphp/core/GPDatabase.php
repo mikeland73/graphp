@@ -42,6 +42,35 @@ class GPDatabase extends GPObject {
     );
   }
 
+  public function getNodeIDsByTypeData($type, $data) {
+    return ipull(queryfx_all(
+      $this->connection,
+      'SELECT node_id FROM node_data WHERE type = %d AND data = %s;',
+      $type,
+      $data
+    ), 'node_id');
+  }
+
+  public function updateNodeIndexedData(GPNode $node) {
+    $values = array();
+    $parts = array();
+    foreach ($node->getIndexedData() as $name => $val) {
+      $parts[] = '(%d, %d, %s)';
+      $values[] = $node->getID();
+      $values[] = GPDataTypes::getIndexedType($name);
+      $values[] = $val;
+    }
+    if (!$parts) {
+      return;
+    }
+    vqueryfx(
+      $this->connection,
+      'INSERT INTO node_data (node_id, type, data) VALUES '.
+      implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);',
+      $values
+    );
+  }
+
   public function __destruct() {
     $this->guard->dispose();
   }

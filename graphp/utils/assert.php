@@ -14,12 +14,12 @@ function assert_false($var, $exception_class = 'Exception') {
 
 function assert_equals($var, $val, $exception_class = 'Exception') {
   if ($var !== $val) {
-    throw new $exception_class();
+    throw new $exception_class($var.' not equal to '.$val);
   }
 }
 
 function assert_in_array($idx, array $array, $exception_class = 'Exception') {
   if (!array_key_exists($idx, $array)) {
-    throw new $exception_class();
+    throw new $exception_class($idx.' not in '.json_encode($array));
   }
 }

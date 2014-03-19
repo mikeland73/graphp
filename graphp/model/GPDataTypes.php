@@ -26,4 +26,8 @@ class GPDataTypes extends GPObject {
     return true;
   }
 
+  public static function getIndexedType($name) {
+    return (int) base_convert($name, 36, 10);
+  }
+
 }
