@@ -71,6 +71,10 @@ class GPDatabase extends GPObject {
     );
   }
 
+  public function saveEdges(array $array_of_arrays) {
+
+  }
+
   public function __destruct() {
     $this->guard->dispose();
   }

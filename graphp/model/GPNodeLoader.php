@@ -27,14 +27,21 @@ trait GPNodeLoader {
   }
 
   public static function __callStatic($name, array $arguments) {
+    $only_one = false;
     if (substr_compare($name, 'getBy', 0, 5) === 0) {
       $type_name = mb_strtolower(mb_substr($name, 5));
+    } else if (substr_compare($name, 'getOneBy', 0, 8) === 0) {
+      $type_name = mb_strtolower(mb_substr($name, 8));
+      $only_one = true;
+    }
+    if (isset($type_name)) {
       assert_in_array($type_name, static::$data_types, 'GPBadArgException');
       assert_equals(count($arguments), 1, 'GPBadArgException');
-      return self::getByIndexData(
+      $results = self::getByIndexData(
         GPDataTypes::getIndexedType($type_name),
         head($arguments)
       );
+      return $only_one ? idx0($results) : $results;
     }
     throw new GPBadMethodCallException();
   }

@@ -9,7 +9,8 @@ abstract class GPNode extends GPObject {
     $data,
     $id,
     // array([edge_type] => [array of nodes indexed by id])
-    $connectedNodes = array();
+    $connectedNodes = array(),
+    $pendingConnectedNodes = array();
 
   protected static
     $data_types = array();
@@ -80,6 +81,21 @@ abstract class GPNode extends GPObject {
       $this->id = $db->insertNode($this);
     }
     $db->updateNodeIndexedData($this);
+    $db->saveEdges($this->pendingConnectedNodes);
     return $this;
+  }
+
+  private function addPendingConnectedNodes(GPEdge $edge, array $nodes) {
+    assert_equals(
+      count($nodes), count(mfilter($nodes, 'getID')),
+      'You can\'t add nodes that have not been saved'
+    );
+    if (!array_key_exists($edge->getEdgeType(), $this->pendingConnectedNodes)) {
+      $this->pendingConnectedNodes[$edge->getEdgeType()] = array();
+    }
+    $this->pendingConnectedNodes[$edge->getEdgeType()] = array_merge_by_keys(
+      $this->pendingConnectedNodes[$edge->getEdgeType()],
+      mpull($nodes, null, 'getID')
+    );
   }
 }

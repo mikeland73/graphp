@@ -14,7 +14,7 @@ trait GPNodeMagicMethods {
   // (returns one node)
   // getAllConnectedFoo same as getConnectedFoo but returns all (array)
   //
-  // addConnectedBar Should only work if Bar is name of edge. Adds a Bar
+  // addBar Should only work if Bar is name of edge. Adds a Bar
   // type edge.
   //
   // removeConnected[edge_type]($node) should remove edge to that node
@@ -30,7 +30,9 @@ trait GPNodeMagicMethods {
     if (substr_compare($method, 'getConnected', 0, 12) === 0) {
       //TODO
     } else if (substr_compare($method, 'getAllConnected', 0, 15) === 0) {
-    } else if (substr_compare($method, 'addConnected', 0, 12) === 0) {
+    } else if (substr_compare($method, 'add', 0, 3) === 0) {
+      $edge = GPEdgeMap::get()->getEdgeX(mb_substr($method, 3));
+      $this->addPendingConnectedNodes($edge, $args);
     } else if (substr_compare($method, 'removeConnected', 0, 15) === 0) {
     } else if (substr_compare($method, 'removeAllConnected', 0, 18) === 0) {
     } else if (substr_compare($method, 'loadConnected', 0, 13) === 0) {

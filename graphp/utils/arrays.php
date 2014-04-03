@@ -30,3 +30,13 @@ function idxx(array $array, $key) {
 function idx0(array $array) {
   return reset($array);
 }
+
+function array_merge_by_keys() {
+  $result = array();
+  foreach (func_get_args() as $array) {
+    foreach ($array as $key => $value) {
+      $result[$key] = $value;
+    }
+  }
+  return $result;
+}

@@ -12,9 +12,11 @@ function assert_false($var, $exception_class = 'Exception') {
   }
 }
 
-function assert_equals($var, $val, $exception_class = 'Exception') {
+function assert_equals($var, $val, $message = '') {
   if ($var !== $val) {
-    throw new $exception_class($var.' not equal to '.$val);
+    throw new Exception(
+      'Failed asserting that '.$var.' is equal to '.$val.' - '.$message
+    );
   }
 }
 
