@@ -27,7 +27,7 @@ class GPDataTypes extends GPObject {
   }
 
   public static function getIndexedType($name) {
-    return (int) base_convert($name, 36, 10);
+    return STRUtils::to64BitInt($name);
   }
 
 }

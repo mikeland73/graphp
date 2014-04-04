@@ -34,9 +34,11 @@ class GPLoader extends GPObject {
   ];
 
   private $utils = [
+    // TODO turn into classes for smarter autoloading
     'arrays' => true,
     'assert' => true,
     'Exceptions' => true,
+    'STRUtils' => true,
   ];
 
   public function __construct() {

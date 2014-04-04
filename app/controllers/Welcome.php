@@ -10,6 +10,7 @@ class Welcome extends GPController {
     $user = User::getOneByName('Mikes');
     $bank_account = (new BankAccount())->save();
     $user->addBankAccount($bank_account);
+    $user->save();
     //$user->setName('Mikes')->save();
     //var_dump($users);
     GP::loadView('welcome_view', ['arg1' => $arg1]);

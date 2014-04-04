@@ -71,7 +71,24 @@ class GPDatabase extends GPObject {
     );
   }
 
-  public function saveEdges(array $array_of_arrays) {
+  public function saveEdges(GPNode $from_node, array $array_of_arrays) {
+    $values = array();
+    $parts = array();
+    foreach ($array_of_arrays as $edge_type => $to_nodes) {
+      foreach ($to_nodes as $to_node) {
+        $parts[] = '(%d, %d, %d)';
+        array_push($values, $from_node->getID(), $to_node->getID(), $edge_type);
+      }
+    }
+    if (!$parts) {
+      return;
+    }
+    vqueryfx(
+      $this->connection,
+      'INSERT IGNORE INTO edge (from_node_id, to_node_id, type) VALUES '.
+      implode(',', $parts) . ';',
+      $values
+    );
 
   }
 

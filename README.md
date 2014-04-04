@@ -26,7 +26,7 @@ $user->addBankAccount($bank_account)->save();
 and later:
 
 ```php
-$user = User::getByName('Jane Doe');
+$user = User::getOneByName('Jane Doe');
 $account = $user->loadBankAccount()->getBankAccount();
 echo $account->getBalance(); // 125.05
 ```

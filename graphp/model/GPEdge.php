@@ -11,7 +11,7 @@ class GPEdge extends GPNode {
   ];
 
   public function getEdgeType() {
-     return $this->getName(); // TODO
+     return STRUtils::to64BitInt($this->getName());
   }
 
 }

@@ -81,7 +81,8 @@ abstract class GPNode extends GPObject {
       $this->id = $db->insertNode($this);
     }
     $db->updateNodeIndexedData($this);
-    $db->saveEdges($this->pendingConnectedNodes);
+    $db->saveEdges($this, $this->pendingConnectedNodes);
+    $this->pendingConnectedNodes = array();
     return $this;
   }
 
