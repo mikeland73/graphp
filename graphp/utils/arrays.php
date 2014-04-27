@@ -40,3 +40,29 @@ function array_merge_by_keys() {
   }
   return $result;
 }
+
+function key_by_value(array $array) {
+  $result = array();
+  foreach ($array as $key => $value) {
+    $result[$value] = $value;
+  }
+  return $result;
+}
+
+function array_concat_in_place(& $arr1, $arr2) {
+  foreach ($arr2 as $key => $value) {
+    $arr1[] = $value;
+  }
+}
+
+function array_flatten(array $array) {
+  $result = array();
+  foreach ($array as $key => $value) {
+    if (is_array($value)){
+      array_concat_in_place($result, array_flatten($value));
+    } else {
+      $result[$key] = $value;
+    }
+  }
+  return $result;
+}

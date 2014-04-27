@@ -5,7 +5,8 @@ trait GPNodeLoader {
   private static $cache = array();
 
   private static function NodeFromArray(array $data) {
-    $node = new static(json_decode($data['data'], true));
+    $class = GPNodeMap::getClass($data['type']);
+    $node = new $class(json_decode($data['data'], true));
     $node->id = $data['id'];
     return $node;
   }
@@ -19,11 +20,13 @@ trait GPNodeLoader {
   }
 
   public static function multiGetByID(array $ids) {
-    if (!$ids) {
-      return array();
+    $ids = key_by_value($ids);
+    $to_fetch = array_diff_key($ids, self::$cache);
+    $node_datas = GPDatabase::get()->multigetNodeByID($ids);
+    foreach ($node_datas as $node_data) {
+      self::$cache[$node_data['id']] = self::nodeFromArray($node_data);
     }
-    // TODO
-    return array(self::getByID(idx0($ids)));
+    return array_select_keys(self::$cache, $ids);
   }
 
   public static function __callStatic($name, array $arguments) {

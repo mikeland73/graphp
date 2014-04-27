@@ -115,4 +115,21 @@ abstract class GPNode extends GPObject {
     $types = mpull($edges, 'getEdgeType');
     return array_select_keys($this->connectedNodeIDs, $types);
   }
+
+  private function loadConnectedNodes(array $edges) {
+    $ids = $this->loadConnectedIDs($edges)->getConnectedIDs($edges);
+    $nodes = self::multiGetByID(array_flatten($ids));
+    foreach ($ids as $edge_type => & $ids_for_edge_type) {
+      foreach ($ids_for_edge_type as $key => $id) {
+        $ids_for_edge_type[$key] = $nodes[$id];
+      }
+    }
+    $this->connectedNodes = array_merge_by_keys($this->connectedNodes, $ids);
+    return $this;
+  }
+
+  private function getConnectedNodes(array $edges) {
+    $types = mpull($edges, 'getEdgeType');
+    return array_select_keys($this->connectedNodes, $types);
+  }
 }

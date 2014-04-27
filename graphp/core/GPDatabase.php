@@ -42,6 +42,17 @@ class GPDatabase extends GPObject {
     );
   }
 
+  public function multigetNodeByID(array $ids) {
+    if (!$ids) {
+      return array();
+    }
+    return queryfx_all(
+      $this->connection,
+      'SELECT * FROM node WHERE id IN (%Ld);',
+      $ids
+    );
+  }
+
   public function getNodeIDsByTypeData($type, $data) {
     return ipull(queryfx_all(
       $this->connection,

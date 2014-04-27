@@ -11,7 +11,7 @@ class Welcome extends GPController {
     // $bank_account = (new BankAccount())->save();
     // $user->addBankAccount($bank_account);
     // $user->save();
-    $ids = $user->loadConnectedBankAccountIDs()->getAllConnectedBankAccountIDs();
+    $ids = $user->loadConnectedBankAccount()->getAllConnectedBankAccount();
     var_dump($ids);
     //$user->setName('Mikes')->save();
     //var_dump($users);
