@@ -11,7 +11,7 @@ class GPRouter extends GPObject {
 
   public function __construct() {
     parent::__construct();
-    $this->routes = require_once '../config/routes.php';
+    $this->routes = require_once ROOT_PATH.'config/routes.php';
     $this->process();
     // TODO (mikeland86): allow override of default routing
     $this->defaultRouting();

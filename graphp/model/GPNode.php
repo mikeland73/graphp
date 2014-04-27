@@ -9,6 +9,7 @@ abstract class GPNode extends GPObject {
     $data,
     $id,
     // array([edge_type] => [array of nodes indexed by id])
+    $connectedNodeIDs = array(),
     $connectedNodes = array(),
     $pendingConnectedNodes = array();
 
@@ -98,5 +99,20 @@ abstract class GPNode extends GPObject {
       $this->pendingConnectedNodes[$edge->getEdgeType()],
       mpull($nodes, null, 'getID')
     );
+  }
+
+  private function loadConnectedIDs(array $edges) {
+    $types = mpull($edges, 'getEdgeType');
+    $ids = GPDatabase::get()->getConnectedIDs(array($this), $types);
+    $this->connectedNodeIDs = array_merge_by_keys(
+      $this->connectedNodeIDs,
+      $ids
+    );
+    return $this;
+  }
+
+  private function getConnectedIDs(array $edges) {
+    $types = mpull($edges, 'getEdgeType');
+    return array_select_keys($this->connectedNodeIDs, $types);
   }
 }

@@ -1,7 +1,9 @@
 <?
 
+define('ROOT_PATH', __DIR__.'/../');
+
 try {
-  require_once '../graphp/core/GPLoader.php';
+  require_once ROOT_PATH.'graphp/core/GPLoader.php';
   GPRouter::init();
 } catch(Exception $e) {
   // TODO (mikeland86) make this better (maybe a pretty html error or something)

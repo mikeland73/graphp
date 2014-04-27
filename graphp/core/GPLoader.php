@@ -1,9 +1,9 @@
 <?
 
 // We load a couple of things up front. Everything else gets loaded on demand.
-require_once '../graphp/core/GPObject.php';
-require_once '../graphp/lib/GPSingletonTrait.php';
-require_once '../third_party/libphutil/src/__phutil_library_init__.php';
+require_once ROOT_PATH.'graphp/core/GPObject.php';
+require_once ROOT_PATH.'graphp/lib/GPSingletonTrait.php';
+require_once ROOT_PATH.'third_party/libphutil/src/__phutil_library_init__.php';
 
 class GPLoader extends GPObject {
 
@@ -55,25 +55,26 @@ class GPLoader extends GPObject {
     // TODO optimize by saving this into map the first time it is called.
     foreach ($this as $folder => $map) {
       if (array_key_exists($class_name, $map)) {
-        require_once '../graphp/' . $folder . '/' . $class_name . '.php';
+        require_once
+          ROOT_PATH.'graphp/' . $folder . '/' . $class_name . '.php';
       }
     }
   }
 
   private function GPNodeAutoloader($class_name) {
     if (GPNodeMap::isNode($class_name)) {
-      require_once '../app/models/' . $class_name . '.php';
+      require_once ROOT_PATH.'app/models/' . $class_name . '.php';
     }
   }
 
   private function loadUtils() {
     foreach ($this->utils as $file_name => $_) {
-      require_once '../graphp/utils/' . $file_name . '.php';
+      require_once ROOT_PATH.'graphp/utils/' . $file_name . '.php';
     }
   }
 
   public static function loadController($controller_name) {
-    $file = '../app/controllers/' . $controller_name . '.php';
+    $file = ROOT_PATH.'app/controllers/' . $controller_name . '.php';
     if (!file_exists($file)) {
       throw new GPControllerNotFoundException();
     }
@@ -81,7 +82,7 @@ class GPLoader extends GPObject {
   }
 
   public static function loadView($view_name, $data = []) {
-    $file = '../app/views/' . $view_name . '.php';
+    $file = ROOT_PATH.'app/views/' . $view_name . '.php';
     if (!file_exists($file)) {
       throw new GPViewNotFoundException();
     }

@@ -89,7 +89,25 @@ class GPDatabase extends GPObject {
       implode(',', $parts) . ';',
       $values
     );
+  }
 
+  public function getConnectedIDs(array $from_nodes, array $types) {
+    if (!$types || !$from_nodes) {
+      return array();
+    }
+    $results = queryfx_all(
+      $this->connection,
+      'SELECT to_node_id, type FROM edge '.
+      'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC;',
+      mpull($from_nodes, 'getID'),
+      $types
+    );
+    $ordered = array();
+    foreach ($results as $result) {
+      $ordered[$result['type']] = idx($ordered, $result['type'], array());
+      $ordered[$result['type']][$result['to_node_id']] = $result['to_node_id'];
+    }
+    return $ordered;
   }
 
   public function __destruct() {
