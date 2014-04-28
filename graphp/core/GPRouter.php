@@ -31,7 +31,7 @@ class GPRouter extends GPObject {
   private function defaultRouting() {
     // error handling. check controller exists. check method exists.
     $controller_name = ucfirst(idxx($this->parts, 0));
-    $method_name = idxx($this->parts, 1);
+    $method_name = idx($this->parts, 1, 'index');
     GPLoader::sharedInstance()->loadController($controller_name);
     $controller = new $controller_name();
     $args = array_slice($this->parts, 2);

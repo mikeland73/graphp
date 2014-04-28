@@ -28,7 +28,7 @@ trait GPNodeMagicMethods {
 
   public function __call($method, $args) {
     if (substr_compare($method, 'getConnected', 0, 12) === 0) {
-
+      // TODO
     } else if (substr_compare($method, 'getAllConnected', 0, 15) === 0) {
       if (substr_compare($method, 'IDs', -3) === 0) {
         $edge_name = mb_substr($method, 15, strlen($method) - 18);
