@@ -1,6 +1,5 @@
 <?
 
-if (ob_get_level()) ob_end_clean();
 define('ROOT_PATH', __DIR__.'/../');
 
 try {
@@ -8,9 +7,9 @@ try {
   GPRouter::init();
 } catch(Exception $e) {
   // TODO (mikeland86) make this better (maybe a pretty html error or something)
-  echo ' There was an exception: <br /><br />';
-  echo $e->getMessage() . '<br /><br />';
-  echo $e . '<br /><br />';
+  echo ' There was an exception: <br />';
+  echo $e->getMessage() . '<br />';
+  echo str_replace("\n", '<br />', $e->getTraceAsString())  . '<br /><br />';
   // Propagate exception so that it gets logged
   throw $e;
 }
