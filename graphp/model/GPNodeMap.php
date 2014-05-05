@@ -36,4 +36,8 @@ class GPNodeMap extends GPObject {
     $map = self::getInverseMap();
     return array_key_exists($node_name, $map);
   }
+
+  public static function getAllTypes() {
+    return self::$map;
+  }
 }

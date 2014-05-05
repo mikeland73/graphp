@@ -121,6 +121,23 @@ class GPDatabase extends GPObject {
     return $ordered;
   }
 
+  public function getAllByType($type, $limit, $offset) {
+    return queryfx_all(
+      $this->connection,
+      'SELECT * FROM node WHERE type = %d LIMIT %d, %d;',
+      $type,
+      $offset,
+      $limit
+    );
+  }
+
+  public function getTypeCounts() {
+    return queryfx_all(
+      $this->connection,
+      'SELECT type, COUNT(1) AS count FROM node GROUP BY type;'
+    );
+  }
+
   public function __destruct() {
     $this->guard->dispose();
   }

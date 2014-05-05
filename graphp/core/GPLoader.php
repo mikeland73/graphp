@@ -17,6 +17,7 @@ class GPLoader extends GPObject {
     'GPLoader' => true,
     'GPObject' => true,
     'GPRouter' => true,
+    'GPRequestData' => true,
   ];
 
   private $lib = [
@@ -81,7 +82,7 @@ class GPLoader extends GPObject {
     require_once $file;
   }
 
-  public static function view($view_name, $data = [], $return = false) {
+  public static function view($view_name, array $data = [], $return = false) {
     $file = ROOT_PATH.'app/views/' . $view_name . '.php';
     if (!file_exists($file)) {
       throw new GPViewNotFoundException();
@@ -94,6 +95,10 @@ class GPLoader extends GPObject {
       return $buffer;
     }
     ob_end_flush();
+  }
+
+  public static function viewWithLayout($view, $layout, array $data = []) {
+    GP::view($layout, ['content' => GP::view($view, $data, true)]);
   }
 }
 

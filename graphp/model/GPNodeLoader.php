@@ -4,6 +4,11 @@ trait GPNodeLoader {
 
   private static $cache = array();
 
+  public static function createFromType($type, array $data = array()) {
+    $class = GPNodeMap::getClass($type);
+    return new $class($data);
+  }
+
   private static function NodeFromArray(array $data) {
     $class = GPNodeMap::getClass($data['type']);
     $node = new $class(json_decode($data['data'], true));
@@ -47,6 +52,17 @@ trait GPNodeLoader {
       return $only_one ? idx0($results) : $results;
     }
     throw new GPBadMethodCallException();
+  }
+
+  public static function getAll($limit = 100, $offset = 0) {
+    $node_datas =
+      GPDatabase::get()->getAllByType(static::TYPE, $limit, $offset);
+    foreach ($node_datas as $node_data) {
+      if (!isset(self::$cache[$node_data['id']])) {
+        self::$cache[$node_data['id']] = self::nodeFromArray($node_data);
+      }
+    }
+    return array_select_keys(self::$cache, ipull($node_datas, 'id'));
   }
 
   private static function getByIndexData($data_type, $data) {

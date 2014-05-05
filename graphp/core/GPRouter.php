@@ -20,6 +20,7 @@ class GPRouter extends GPObject {
   private function process() {
     $uri = $_SERVER['REQUEST_URI'];
     $uri = str_replace('index.php', '', $uri);
+    $uri = preg_replace('/\?.*/', '', $uri);
     if (isset($this->routes[$uri])) {
       // TODO (mikeland86): Add regex support
       $this->parts = $this->routes[$uri];

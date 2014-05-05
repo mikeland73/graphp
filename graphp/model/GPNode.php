@@ -49,6 +49,10 @@ abstract class GPNode extends GPObject {
     return idx($this->data, $key);
   }
 
+  public function getDataArray() {
+    return $this->data;
+  }
+
   public function getJSONData() {
     return json_encode($this->data);
   }
