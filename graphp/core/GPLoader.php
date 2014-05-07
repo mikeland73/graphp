@@ -82,12 +82,13 @@ class GPLoader extends GPObject {
     require_once $file;
   }
 
-  public static function view($view_name, array $data = [], $return = false) {
+  public static function view($view_name, array $_data = [], $return = false) {
     $file = ROOT_PATH.'app/views/' . $view_name . '.php';
     if (!file_exists($file)) {
       throw new GPViewNotFoundException();
     }
     ob_start();
+    extract($_data);
     require $file;
     if ($return) {;
       $buffer = ob_get_contents();

@@ -1,4 +1,4 @@
-<h1>Node View - <?= $data['node']->getID() ?></h1>
+<h1>Node View - <?= $node->getID() ?></h1>
 <div class="table-responsive">
   <table class="table table-bordered table-striped">
     <thead>
@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <? foreach($data['node']->getDataArray() as $key => $value): ?>
+      <? foreach($node->getDataArray() as $key => $value): ?>
         <tr>
           <th scope="row"><code><?=$key?></code></th>
           <th scope="row"><?=$value?></th>

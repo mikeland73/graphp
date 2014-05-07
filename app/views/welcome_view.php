@@ -21,9 +21,9 @@
         This is a work in progress, please
         <a href="https://github.com/mikeland86/graphp">contribute</a>
       </div>
-      <? if (!empty($data['arg1'])): ?>
+      <? if (!empty($arg1)): ?>
         <div>
-          arg1 is <?= $data['arg1'] ?>
+          arg1 is <?= $arg1 ?>
         </div>
       <? endif; ?>
     </div>

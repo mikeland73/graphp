@@ -1,10 +1,10 @@
 <h3>
-  <form action="<?=Admin::getURI('node_type', $data['type'])?>" method="POST">
-    <?=$data['name']?>
+  <form action="<?=Admin::getURI('node_type', $type)?>" method="POST">
+    <?=$name?>
     <button class="btn btn-primary">
-      New <?=$data['name']?>
+      New <?=$name?>
     </button>
-    <input name="type" type="hidden" value="<?=$data['type']?>">
+    <input name="type" type="hidden" value="<?=$type?>">
   </form>
 </h3>
 
@@ -19,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <? foreach ($data['nodes'] as $node): ?>
+      <? foreach ($nodes as $node): ?>
         <tr>
           <td>
             <a href="<?=Admin::getURI('node', $node->getID())?>">
