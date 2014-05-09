@@ -6,6 +6,10 @@ class User extends GPNode {
     'name' => [GPDataTypes::GP_STRING, GPDataTypes::INDEXED],
   ];
 
-  const TYPE = 1002;
+  protected static function getEdgeTypesImpl() {
+    return [
+      new GPEdge(static::getType(), BankAccount::getType(), 'BankAccount'),
+    ];
+  }
 
 }

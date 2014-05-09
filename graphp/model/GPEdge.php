@@ -1,17 +1,33 @@
 <?
 
-class GPEdge extends GPNode {
+class GPEdge extends GPObject {
 
-  const TYPE = 1000;
+  private
+    $fromType,
+    $toType,
+    $name,
+    $storageKey;
 
-  protected static $data_types = [
-    'fromType' => GPDataTypes::GP_NODE_ID,
-    'toType' => GPDataTypes::GP_NODE_ID,
-    'name' => GPDataTypes::GP_STRING,
-  ];
+  public function __construct($from_type, $to_type, $name, $storage_key = '') {
+    $this->fromType = $from_type;
+    $this->toType = $to_type;
+    $this->name = $name;
+    $this->storageKey = $storage_key;
+  }
 
-  public function getEdgeType() {
-     return STRUtils::to64BitInt($this->getName());
+  public function getType() {
+     return STRUtils::to64BitInt($this->getStorageKey());
+  }
+
+  public function getName() {
+    return $this->name;
+  }
+
+  private function getStorageKey() {
+    if ($this->storageKey) {
+      $this->storageKey;
+    }
+    return $this->fromType.$this->toType.$this->name;
   }
 
 }

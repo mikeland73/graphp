@@ -56,7 +56,7 @@ trait GPNodeLoader {
 
   public static function getAll($limit = 100, $offset = 0) {
     $node_datas =
-      GPDatabase::get()->getAllByType(static::TYPE, $limit, $offset);
+      GPDatabase::get()->getAllByType(static::getType(), $limit, $offset);
     foreach ($node_datas as $node_data) {
       if (!isset(self::$cache[$node_data['id']])) {
         self::$cache[$node_data['id']] = self::nodeFromArray($node_data);

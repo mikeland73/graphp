@@ -27,7 +27,6 @@ class GPLoader extends GPObject {
   private $model = [
     'GPDataTypes' => true,
     'GPEdge' => true,
-    'GPEdgeMap' => true,
     'GPNode' => true,
     'GPNodeLoader' => true,
     'GPNodeMagicMethods' => true,
@@ -63,6 +62,7 @@ class GPLoader extends GPObject {
   }
 
   private function GPNodeAutoloader($class_name) {
+    // TODO allow nested dir
     if (GPNodeMap::isNode($class_name)) {
       require_once ROOT_PATH.'app/models/' . $class_name . '.php';
     }

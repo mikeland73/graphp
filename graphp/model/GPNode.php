@@ -9,14 +9,15 @@ abstract class GPNode extends GPObject {
     $data,
     $id,
     // array([edge_type] => [array of nodes indexed by id])
-    $connectedNodeIDs = array(),
-    $connectedNodes = array(),
-    $pendingConnectedNodes = array();
+    $connectedNodeIDs = [],
+    $connectedNodes = [],
+    $pendingConnectedNodes = [];
 
   protected static
-    $data_types = array();
+    $data_types = [],
+    $edge_types = [];
 
-  public function __construct(array $data = array()) {
+  public function __construct(array $data = []) {
     $this->data = $data;
   }
 
@@ -24,8 +25,12 @@ abstract class GPNode extends GPObject {
     return (int) $this->id;
   }
 
-  public function getType() {
-    return static::TYPE;
+  public static function getType() {
+    return STRUtils::to64BitInt(static::getStorageKey());
+  }
+
+  public static function getStorageKey() {
+    return 'node_'.get_called_class();
   }
 
   public function setDataX($key, $value) {
@@ -87,7 +92,7 @@ abstract class GPNode extends GPObject {
     }
     $db->updateNodeIndexedData($this);
     $db->saveEdges($this, $this->pendingConnectedNodes);
-    $this->pendingConnectedNodes = array();
+    $this->pendingConnectedNodes = [];
     return $this;
   }
 
@@ -96,17 +101,17 @@ abstract class GPNode extends GPObject {
       count($nodes), count(mfilter($nodes, 'getID')),
       'You can\'t add nodes that have not been saved'
     );
-    if (!array_key_exists($edge->getEdgeType(), $this->pendingConnectedNodes)) {
-      $this->pendingConnectedNodes[$edge->getEdgeType()] = array();
+    if (!array_key_exists($edge->getType(), $this->pendingConnectedNodes)) {
+      $this->pendingConnectedNodes[$edge->getType()] = [];
     }
-    $this->pendingConnectedNodes[$edge->getEdgeType()] = array_merge_by_keys(
-      $this->pendingConnectedNodes[$edge->getEdgeType()],
+    $this->pendingConnectedNodes[$edge->getType()] = array_merge_by_keys(
+      $this->pendingConnectedNodes[$edge->getType()],
       mpull($nodes, null, 'getID')
     );
   }
 
   private function loadConnectedIDs(array $edges) {
-    $types = mpull($edges, 'getEdgeType');
+    $types = mpull($edges, 'getType');
     $ids = GPDatabase::get()->getConnectedIDs(array($this), $types);
     $this->connectedNodeIDs = array_merge_by_keys(
       $this->connectedNodeIDs,
@@ -116,7 +121,7 @@ abstract class GPNode extends GPObject {
   }
 
   private function getConnectedIDs(array $edges) {
-    $types = mpull($edges, 'getEdgeType');
+    $types = mpull($edges, 'getType');
     return array_select_keys($this->connectedNodeIDs, $types);
   }
 
@@ -133,7 +138,22 @@ abstract class GPNode extends GPObject {
   }
 
   private function getConnectedNodes(array $edges) {
-    $types = mpull($edges, 'getEdgeType');
+    $types = mpull($edges, 'getType');
     return array_select_keys($this->connectedNodes, $types);
+  }
+
+  protected static function getEdgeTypesImpl() {
+    return [];
+  }
+
+  public static function getEdgeTypes() {
+    if (!static::$edge_types) {
+      static::$edge_types = mpull(static::getEdgeTypesImpl(), null, 'getName');
+    }
+    return static::$edge_types;
+  }
+
+  public static function getEdgeType($name) {
+    return idxx(static::getEdgeTypes(), $name);
   }
 }

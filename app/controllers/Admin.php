@@ -4,7 +4,7 @@ class Admin extends GPController {
 
   public function index() {
     $data = [
-      'types' => GPNodeMap::getAllTypes(),
+      'types' => GPNodeMap::regenAndGetAllTypes(),
       'counts' => ipull(GPDatabase::get()->getTypeCounts(), 'count', 'type'),
     ];
     GP::viewWithLayout('admin/explore_view', 'layout/main', $data);

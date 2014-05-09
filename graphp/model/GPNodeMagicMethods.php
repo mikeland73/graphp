@@ -32,16 +32,16 @@ trait GPNodeMagicMethods {
     } else if (substr_compare($method, 'getAllConnected', 0, 15) === 0) {
       if (substr_compare($method, 'IDs', -3) === 0) {
         $edge_name = mb_substr($method, 15, strlen($method) - 18);
-        $edge = GPEdgeMap::get()->getEdgeX($edge_name);
+        $edge = static::getEdgeType($edge_name);
         $result = $this->getConnectedIDs(array($edge));
       } else {
         $edge_name = mb_substr($method, 15);
-        $edge = GPEdgeMap::get()->getEdgeX($edge_name);
+        $edge = static::getEdgeType($edge_name);
         $result = $this->getConnectedNodes(array($edge));
       }
-      return idx($result, $edge->getEdgeType(), array());
+      return idx($result, $edge->getType(), array());
     } else if (substr_compare($method, 'add', 0, 3) === 0) {
-      $edge = GPEdgeMap::get()->getEdgeX(mb_substr($method, 3));
+      $edge = static::getEdgeType(mb_substr($method, 3));
       $this->addPendingConnectedNodes($edge, $args);
     } else if (substr_compare($method, 'removeConnected', 0, 15) === 0) {
       // TODO
@@ -50,11 +50,11 @@ trait GPNodeMagicMethods {
     } else if (substr_compare($method, 'loadConnected', 0, 13) === 0) {
       if (substr_compare($method, 'IDs', -3) === 0) {
         $edge_name = mb_substr($method, 13, strlen($method) - 16);
-        $edge = GPEdgeMap::get()->getEdgeX($edge_name);
+        $edge = static::getEdgeType($edge_name);
         return $this->loadConnectedIDs(array($edge));
       } else {
         $edge_name = mb_substr($method, 13);
-        $edge = GPEdgeMap::get()->getEdgeX($edge_name);
+        $edge = static::getEdgeType($edge_name);
         return $this->loadConnectedNodes(array($edge));
       }
     } else if (substr_compare($method, 'get', 0, 3) === 0) {

@@ -2,18 +2,20 @@
 
 class GPNodeMap extends GPObject {
 
-  private static $map = [
-    1000 => 'GPEdge',
-    1001 => 'Example',
-    1002 => 'User',
-    1003 => 'BankAccount',
-  ];
-
   private static $inverseMap = [];
+
+  private static $map = [];
+
+  private static function getMap() {
+    if (!self::$map) {
+      self::$map = @include ROOT_PATH.'graphp/maps/node';
+    }
+    return self::$map ?: [];
+  }
 
   private static function getInverseMap() {
     if (!self::$inverseMap) {
-      self::$inverseMap = array_flip(self::$map);
+      self::$inverseMap = array_flip(self::getMap());
     }
     return self::$inverseMap;
   }
@@ -29,15 +31,49 @@ class GPNodeMap extends GPObject {
      * @return mixed Value.
      */
   public static function getClass($type) {
-    return idxx(self::$map, $type);
+    if (!idx(self::getMap(), $type)) {
+      self::regenMap();
+    }
+    return idxx(self::getMap(), $type);
   }
 
   public static function isNode($node_name) {
     $map = self::getInverseMap();
+    if (!idx($map, $node_name)) {
+      self::regenMap();
+      $map = self::getInverseMap();
+    }
     return array_key_exists($node_name, $map);
   }
 
-  public static function getAllTypes() {
-    return self::$map;
+  public static function regenAndGetAllTypes() {
+    self::regenMap();
+    return self::getMap();
+  }
+
+  private static function regenMap() {
+    self::$map = [];
+    self::$inverseMap = [];
+    $file = "<?\nreturn [\n";
+    foreach (self::findNodesInDir() as $class) {
+      $file .= '  '.$class::getType().' => \''.$class."',\n";
+      self::$map[$class::getType()] = $class;
+      self::$inverseMap[$class] = $class::getType();
+    }
+    $file .= "];\n";
+    file_put_contents(ROOT_PATH.'graphp/maps/node', $file);
+  }
+
+  private static function findNodesInDir() {
+    // TODO allow nested dir
+    $files = scandir(ROOT_PATH.'app/models');
+    $nodes = [];
+    foreach ($files as $file) {
+      if (substr_compare($file, '.php', -4) === 0) {
+        require_once ROOT_PATH.'app/models/'.$file;
+        $nodes[] = substr($file, 0, -4);
+      }
+    }
+    return $nodes;
   }
 }
