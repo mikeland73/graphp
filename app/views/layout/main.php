@@ -25,7 +25,6 @@
             <div class="navbar-header">
               <a class="navbar-brand" href="<?=Admin::getURI()?>">Node Types</a>
               <a class="navbar-brand" href="<?=Admin::getURI('edges')?>">Edge Types</a>
-              <a class="navbar-brand" href="<?=Admin::getURI('index_data')?>">Indexed Data</a>
             </div>
           </div>
         </div>

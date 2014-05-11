@@ -4,7 +4,7 @@
     <button class="btn btn-primary">
       New <?=$name?>
     </button>
-    <input name="type" type="hidden" value="<?=$type?>">
+    <input name="create" type="hidden">
   </form>
 </h3>
 
@@ -28,10 +28,21 @@
           </td>
           <td><?=$node->getJSONData()?></td>
           <td>
-            <button type="button" class="btn btn-sm">Edit</button>
+            <a
+              class="btn btn-sm btn-default active"
+              href="<?=Admin::getURI('node', $node->getID())?>">
+              Edit
+            </a>
           </td>
           <td>
-            <button type="button" class="btn btn-sm btn-danger">Delete</button>
+            <form action="<?=Admin::getURI('node_type', $type)?>" method="POST">
+              <input
+                name="delete_node_id"
+                type="hidden"
+                value="<?=$node->getID()?>"
+              />
+              <button class="btn btn-sm btn-danger">Delete</button>
+            </form>
           </td>
         </tr>
       <? endforeach; ?>

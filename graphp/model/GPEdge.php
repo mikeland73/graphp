@@ -1,5 +1,6 @@
 <?
 
+// TODO rename to edgetype
 class GPEdge extends GPObject {
 
   private
@@ -21,6 +22,14 @@ class GPEdge extends GPObject {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function getToType() {
+    return $this->toType;
+  }
+
+  public function getFromType() {
+    return $this->fromType;
   }
 
   private function getStorageKey() {
