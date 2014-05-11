@@ -6,7 +6,7 @@ class GPObject {
     $classConstants,
     $classConstantsFlip;
 
-  public function __construct() {
+  protected function __construct() {
 
   }
 

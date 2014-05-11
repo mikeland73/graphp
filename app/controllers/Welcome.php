@@ -3,11 +3,14 @@
 class Welcome extends GPController {
 
   public function index($arg1 = 'default') {
-    $wallet = Wallet::getOneBySize('small');
-    $wallet->addPendingConnectedNodes(
-        new GPEdge(Wallet::getType(), User::getType(), 'Owner'),
-        [(new User())->save()]
-    )->save();
+    //GPSession::set('user_id', 6676);
+    // $user_id = GPSession::get('user_id');
+    // var_dump($user_id);
+    // $wallet = Wallet::getOneBySize('small');
+    // $wallet->addPendingConnectedNodes(
+    //     new GPEdge(Wallet::getType(), User::getType(), 'Owner'),
+    //     [(new User())->save()]
+    // )->save();
 
     //$wallet->setConnectedOwner(new User())->save();
     //var_dump($wallet->getSize());

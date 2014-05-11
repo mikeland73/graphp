@@ -18,6 +18,7 @@ class GPLoader extends GPObject {
     'GPObject' => true,
     'GPRouter' => true,
     'GPRequestData' => true,
+    'GPSession' => true,
   ];
 
   private $lib = [

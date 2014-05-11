@@ -11,7 +11,7 @@ class GPDatabase extends GPObject {
 
   public function __construct() {
     $this->guard = new AphrontWriteGuard(function() {/*TODO*/});
-    $config = new GPConfig('database');
+    $config = GPConfig::get('database');
     $this->connection = new AphrontMySQLiDatabaseConnection($config->toArray());
   }
 

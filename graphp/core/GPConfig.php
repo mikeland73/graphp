@@ -2,9 +2,20 @@
 
 class GPConfig extends GPObject {
 
-  private $config;
+  private static $configs = [];
 
-  public function __construct($name) {
+  private $config;
+  private $name;
+
+  public static function get($name = 'general') {
+    if (!isset(self::$configs[$name])) {
+      self::$configs[$name] = new GPConfig($name);
+    }
+    return self::$configs[$name];
+  }
+
+  protected function __construct($name) {
+    $this->name = $name;
     $this->config = require_once ROOT_PATH.'config/' . $name . '.php';
   }
 
@@ -12,4 +23,10 @@ class GPConfig extends GPObject {
     return $this->config;
   }
 
+  public function __get($name) {
+    if (isset($this->config[$name])) {
+      return $this->config[$name];
+    }
+    throw new Exception($name.' does not is not in '.$this->name.' config' , 1);
+  }
 }
