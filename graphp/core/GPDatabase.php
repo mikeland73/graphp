@@ -44,7 +44,7 @@ class GPDatabase extends GPObject {
 
   public function multigetNodeByID(array $ids) {
     if (!$ids) {
-      return array();
+      return [];
     }
     return queryfx_all(
       $this->connection,
@@ -63,8 +63,8 @@ class GPDatabase extends GPObject {
   }
 
   public function updateNodeIndexedData(GPNode $node) {
-    $values = array();
-    $parts = array();
+    $values = [];
+    $parts = [];
     foreach ($node->getIndexedData() as $name => $val) {
       $parts[] = '(%d, %d, %s)';
       $values[] = $node->getID();
@@ -82,15 +82,20 @@ class GPDatabase extends GPObject {
     );
   }
 
-  public function saveEdges(GPNode $from_node, array $array_of_arrays) {
-    $values = array();
-    $parts = array();
+  private function getEdgeParts(GPNode $from_node, array $array_of_arrays) {
+    $values = [];
+    $parts = [];
     foreach ($array_of_arrays as $edge_type => $to_nodes) {
       foreach ($to_nodes as $to_node) {
         $parts[] = '(%d, %d, %d)';
         array_push($values, $from_node->getID(), $to_node->getID(), $edge_type);
       }
     }
+    return [$parts, $values];
+  }
+
+  public function saveEdges(GPNode $from_node, array $array_of_arrays) {
+    list($parts, $values) = $this->getEdgeParts($from_node, $array_of_arrays);
     if (!$parts) {
       return;
     }
@@ -102,9 +107,40 @@ class GPDatabase extends GPObject {
     );
   }
 
+  public function deleteEdges(GPNode $from_node, array $array_of_arrays) {
+    list($parts, $values) = $this->getEdgeParts($from_node, $array_of_arrays);
+    if (!$parts) {
+      return;
+    }
+    vqueryfx(
+      $this->connection,
+      'DELETE FROM edge WHERE (from_node_id, to_node_id, type) IN ('.
+      implode(',', $parts) . ');',
+      $values
+    );
+  }
+
+  public function deleteAllEdges(GPNode $from_node, array $edge_types) {
+    $values = [];
+    $parts = [];
+    foreach ($edge_types as $edge_type) {
+      $parts[] = '(%d, %d)';
+      array_push($values, $from_node->getID(), $edge_type);
+    }
+    if (!$parts) {
+      return;
+    }
+    vqueryfx(
+      $this->connection,
+      'DELETE FROM edge WHERE (from_node_id, type) IN ('.
+      implode(',', $parts) . ');',
+      $values
+    );
+  }
+
   public function getConnectedIDs(array $from_nodes, array $types) {
     if (!$types || !$from_nodes) {
-      return array();
+      return [];
     }
     $results = queryfx_all(
       $this->connection,
@@ -113,9 +149,9 @@ class GPDatabase extends GPObject {
       mpull($from_nodes, 'getID'),
       $types
     );
-    $ordered = array();
+    $ordered = [];
     foreach ($results as $result) {
-      $ordered[$result['type']] = idx($ordered, $result['type'], array());
+      $ordered[$result['type']] = idx($ordered, $result['type'], []);
       $ordered[$result['type']][$result['to_node_id']] = $result['to_node_id'];
     }
     return $ordered;
@@ -135,6 +171,17 @@ class GPDatabase extends GPObject {
     return queryfx_all(
       $this->connection,
       'SELECT type, COUNT(1) AS count FROM node GROUP BY type;'
+    );
+  }
+
+  public function deleteNodes(array $nodes) {
+    if (!$nodes) {
+      return;
+    }
+    queryfx(
+      $this->connection,
+      'DELETE FROM node WHERE id IN (%Ld);',
+      mpull($nodes, 'getID')
     );
   }
 

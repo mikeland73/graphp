@@ -66,3 +66,7 @@ function array_flatten(array $array) {
   }
   return $result;
 }
+
+function make_array($val) {
+  return is_array($val) ? $val : [$val];
+}

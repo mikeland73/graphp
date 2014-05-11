@@ -44,9 +44,11 @@ trait GPNodeMagicMethods {
       $edge = static::getEdgeType(mb_substr($method, 3));
       $this->addPendingConnectedNodes($edge, $args);
     } else if (substr_compare($method, 'removeConnected', 0, 15) === 0) {
-      // TODO
+      $edge = static::getEdgeType(mb_substr($method, 15));
+      $node->addPendingRemovalNodes($edge, idx0($args));
     } else if (substr_compare($method, 'removeAllConnected', 0, 18) === 0) {
-      // TODO
+      $edge = static::getEdgeType(mb_substr($method, 18));
+      $node->addPendingRemovalAllNodes();
     } else if (substr_compare($method, 'loadConnected', 0, 13) === 0) {
       if (substr_compare($method, 'IDs', -3) === 0) {
         $edge_name = mb_substr($method, 13, strlen($method) - 16);

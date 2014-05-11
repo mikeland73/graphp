@@ -16,6 +16,10 @@ class GPRequestData extends GPObject {
     return $this->get($key, 'is_string');
   }
 
+  public function getExists($key) {
+    return isset($this->data[$key]);
+  }
+
   private function get($key, callable $validator) {
     $value = strip_tags(trim(idx($this->data, $key, '')));
     if ($validator($value)) {

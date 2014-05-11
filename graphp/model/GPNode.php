@@ -11,11 +11,14 @@ abstract class GPNode extends GPObject {
     // array([edge_type] => [array of nodes indexed by id])
     $connectedNodeIDs = [],
     $connectedNodes = [],
-    $pendingConnectedNodes = [];
+    $pendingConnectedNodes = [],
+    $pendingRemovalNodes = [],
+    $pendingRemovalAllNodes = [];
 
   protected static
     $data_types = [],
-    $edge_types = [];
+    $edge_types = [],
+    $edge_types_by_type = [];
 
   public function __construct(array $data = []) {
     $this->data = $data;
@@ -92,22 +95,40 @@ abstract class GPNode extends GPObject {
     }
     $db->updateNodeIndexedData($this);
     $db->saveEdges($this, $this->pendingConnectedNodes);
+    $db->deleteEdges($this, $this->pendingRemovalNodes);
+    $db->deleteAllEdges($this, $this->pendingRemovalAllNodes);
     $this->pendingConnectedNodes = [];
+    $this->pendingRemovalNodes = [];
+    $this->pendingRemovalAllNodes = [];
     return $this;
   }
 
-  private function addPendingConnectedNodes(GPEdge $edge, array $nodes) {
+  public function addPendingConnectedNodes(GPEdge $edge, array $nodes) {
+    return $this->addPendingNodes('pendingConnectedNodes', $edge, $nodes);
+  }
+
+  public function addPendingRemovalNodes(GPEdge $edge, array $nodes) {
+    return $this->addPendingNodes('pendingRemovalNodes', $edge, $nodes);
+  }
+
+  public function addPendingRemovalAllNodes($edge) {
+    $this->pendingRemovalAllNodes[$edge->getType()] = $edge->getType();
+    return $this;
+  }
+
+  private function addPendingNodes($var, GPEdge $edge, array $nodes) {
     assert_equals(
       count($nodes), count(mfilter($nodes, 'getID')),
       'You can\'t add nodes that have not been saved'
     );
-    if (!array_key_exists($edge->getType(), $this->pendingConnectedNodes)) {
-      $this->pendingConnectedNodes[$edge->getType()] = [];
+    if (!array_key_exists($edge->getType(), $this->$var)) {
+      $this->{$var}[$edge->getType()] = [];
     }
-    $this->pendingConnectedNodes[$edge->getType()] = array_merge_by_keys(
-      $this->pendingConnectedNodes[$edge->getType()],
+    $this->{$var}[$edge->getType()] = array_merge_by_keys(
+      $this->{$var}[$edge->getType()],
       mpull($nodes, null, 'getID')
     );
+    return $this;
   }
 
   private function loadConnectedIDs(array $edges) {
@@ -125,7 +146,7 @@ abstract class GPNode extends GPObject {
     return array_select_keys($this->connectedNodeIDs, $types);
   }
 
-  private function loadConnectedNodes(array $edges) {
+  public function loadConnectedNodes(array $edges) {
     $ids = $this->loadConnectedIDs($edges)->getConnectedIDs($edges);
     $nodes = self::multiGetByID(array_flatten($ids));
     foreach ($ids as $edge_type => & $ids_for_edge_type) {
@@ -137,7 +158,7 @@ abstract class GPNode extends GPObject {
     return $this;
   }
 
-  private function getConnectedNodes(array $edges) {
+  public function getConnectedNodes(array $edges) {
     $types = mpull($edges, 'getType');
     return array_select_keys($this->connectedNodes, $types);
   }
@@ -146,14 +167,27 @@ abstract class GPNode extends GPObject {
     return [];
   }
 
-  public static function getEdgeTypes() {
-    if (!static::$edge_types) {
-      static::$edge_types = mpull(static::getEdgeTypesImpl(), null, 'getName');
+  public function delete() {
+    GPDatabase::get()->deleteNodes([$this]);
+  }
+
+  final public static function getEdgeTypes() {
+    $class = get_called_class();
+    if (!isset(static::$edge_types[$class])) {
+      $edges = static::getEdgeTypesImpl();
+      static::$edge_types[$class] = mpull($edges, null, 'getName');
+      static::$edge_types_by_type[$class] = mpull($edges, null, 'getType');
     }
-    return static::$edge_types;
+    return static::$edge_types[$class];
   }
 
   public static function getEdgeType($name) {
     return idxx(static::getEdgeTypes(), $name);
+  }
+
+  public static function getEdgeTypeByType($type) {
+    $class = get_called_class();
+    isset(static::$edge_types_by_type[$class]) ?: static::getEdgeTypes();
+    return idxx(static::$edge_types_by_type[$class], $type);
   }
 }
