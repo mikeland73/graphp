@@ -23,6 +23,7 @@
               class="text-center"
               action="<?=Admin::getURI('node', $node->getID())?>"
               method="POST">
+              <?=GPSecurity::csrf()?>
               <input name="data_key_to_unset" type="hidden" value="<?=$key?>">
               <button class="btn btn-xs btn-danger">
                 X
@@ -35,6 +36,7 @@
   </table>
 </div>
 <form action="<?=Admin::getURI('node', $node->getID())?>" method="POST">
+  <?=GPSecurity::csrf()?>
   <input name="data_key" type="text" placeholder="key">
   <input name="data_val" type="text" placeholder="val">
   <button class="btn btn-primary btn-sm">
@@ -71,6 +73,7 @@
                 class="text-center"
                 action="<?=Admin::getURI('node', $node->getID())?>"
                 method="POST">
+                <?=GPSecurity::csrf()?>
                 <input name="edge_type" type="hidden" value="<?=$e?>">
                 <input
                   name="to_id"
@@ -89,6 +92,7 @@
   </table>
 </div>
 <form action="<?=Admin::getURI('node', $node->getID())?>" method="POST">
+  <?=GPSecurity::csrf()?>
   <input name="edge_type" type="text" placeholder="edge type">
   <input name="to_id" type="text" placeholder="To node ID">
   <button class="btn btn-primary btn-sm">

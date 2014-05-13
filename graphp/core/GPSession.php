@@ -2,13 +2,15 @@
 
 class GPSession extends GPObject {
 
+  const UID = 'uid';
+
   private static $config;
   private static $session;
 
   public static function init() {
     self::$config = GPConfig::get();
     $json_with_hash = idx($_COOKIE, self::$config->cookie_name, '');
-    $json = '[]';
+    $json = json_encode([base64_encode(microtime().mt_rand())]);
     if ($json_with_hash) {
       $json = mb_substr($json_with_hash, 0, -40);
       $hash = mb_substr($json_with_hash, -40);
@@ -17,6 +19,9 @@ class GPSession extends GPObject {
       }
     }
     self::$session = json_decode($json, true);
+    if (!self::get(self::UID)) {
+      self::set(self::UID, base64_encode(microtime().mt_rand()));
+    }
   }
 
   public static function get($key, $default = null) {

@@ -1,5 +1,6 @@
 <h3>
   <form action="<?=Admin::getURI('node_type', $type)?>" method="POST">
+    <?=GPSecurity::csrf()?>
     <?=$name?>
     <button class="btn btn-primary">
       New <?=$name?>
@@ -36,6 +37,7 @@
           </td>
           <td>
             <form action="<?=Admin::getURI('node_type', $type)?>" method="POST">
+              <?=GPSecurity::csrf()?>
               <input
                 name="delete_node_id"
                 type="hidden"

@@ -18,6 +18,7 @@ class GPLoader extends GPObject {
     'GPObject' => true,
     'GPRouter' => true,
     'GPRequestData' => true,
+    'GPSecurity' => true,
     'GPSession' => true,
   ];
 
@@ -58,6 +59,7 @@ class GPLoader extends GPObject {
       if (array_key_exists($class_name, $map)) {
         require_once
           ROOT_PATH.'graphp/' . $folder . '/' . $class_name . '.php';
+        return;
       }
     }
   }

@@ -10,9 +10,33 @@ class GPDatabase extends GPObject {
     $guard;
 
   public function __construct() {
-    $this->guard = new AphrontWriteGuard(function() {/*TODO*/});
+    $this->guard = new AphrontWriteGuard(function() {
+      if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new Exception(
+          'You can only write to the database on post requests. If you need to
+           make writes on get request, use GPDatabase::beginUnguardedWrites()',
+          1
+        );
+      }
+      if (!GPSecurity::isCSFRTokenValid(idx($_POST, 'csrf'))) {
+        throw new Exception(
+          'The request did not have a valid csrf token. This may be an attack or
+           you may have forgetten to include it in a post request that does
+           writes',
+          1
+        );
+      }
+    });
     $config = GPConfig::get('database');
     $this->connection = new AphrontMySQLiDatabaseConnection($config->toArray());
+  }
+
+  public function beginUnguardedWrites() {
+    AphrontWriteGuard::beginUnguardedWrites();
+  }
+
+  public function endUnguardedWrites() {
+    AphrontWriteGuard::endUnguardedWrites();
   }
 
   public function insertNode(GPNode $node) {
