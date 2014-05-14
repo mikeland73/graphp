@@ -27,7 +27,7 @@ class GPLoader extends GPObject {
   ];
 
   private $model = [
-    'GPDataTypes' => true,
+    'GPDataType' => true,
     'GPEdge' => true,
     'GPNode' => true,
     'GPNodeLoader' => true,

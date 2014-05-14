@@ -21,7 +21,7 @@ class GPEdge extends GPObject {
   }
 
   public function getName() {
-    return $this->name;
+    return mb_strtolower($this->name);
   }
 
   public function getToType() {

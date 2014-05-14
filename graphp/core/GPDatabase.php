@@ -92,7 +92,7 @@ class GPDatabase extends GPObject {
     foreach ($node->getIndexedData() as $name => $val) {
       $parts[] = '(%d, %d, %s)';
       $values[] = $node->getID();
-      $values[] = GPDataTypes::getIndexedType($name);
+      $values[] = $node->getDataTypeByName($name)->getIndexedType();
       $values[] = $val;
     }
     if (!$parts) {

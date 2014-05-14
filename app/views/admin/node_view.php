@@ -1,4 +1,7 @@
-<h1>Node View - ID <?= $node->getID() ?> Type <?= get_class($node) ?></h1>
+<a href="<?=Admin::getURI('node_type', $node->getType())?>">
+  back to <?= get_class($node) ?> list
+</a>
+<h2><?= get_class($node) ?> ID <?= $node->getID() ?></h2>
 <h3>Data:</h3>
 <div class="table-responsive">
   <table class="table table-bordered table-striped">
@@ -66,7 +69,10 @@
               <a href="<?=Admin::getURI('node', $conn_node->getID())?>">
                 <?=$conn_node->getID()?>
               </a>
-              <?=' type: '.get_class($conn_node)?>
+              type:
+              <a href="<?=Admin::getURI('node_type', $conn_node->getType())?>">
+                <?=get_class($conn_node)?>
+              </a>
             </th>
             <th scope="row">
               <form

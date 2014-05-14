@@ -37,24 +37,23 @@ abstract class GPNode extends GPObject {
   }
 
   public function setDataX($key, $value) {
-    $type_or_array = idxx(static::$data_types, $key);
-    $type = is_array($type_or_array) ? idx0($type_or_array) : $type_or_array;
-    GPDataTypes::assertValueIsOfType($type, $value);
+    $data_type = static::getDataTypeByName($key);
+    $data_type->assertValueIsOfType($value);
     return $this->setData($key, $value);
   }
 
   public function setData($key, $value) {
-    $this->data[$key] = $value;
+    $this->data[mb_strtolower($key)] = $value;
     return $this;
   }
 
   public function getDataX($key) {
-    assert_in_array($key, static::$data_types);
+    $this->getDataTypeByName($key);
     return $this->getData($key);
   }
 
   public function getData($key) {
-    return idx($this->data, $key);
+    return idx($this->data, mb_strtolower($key));
   }
 
   public function getDataArray() {
@@ -66,22 +65,17 @@ abstract class GPNode extends GPObject {
   }
 
   public function getIndexedData() {
-    $keys = array_keys(array_filter(
-      static::$data_types,
-      function($x) {
-        return is_array($x) && idx($x, 1) === GPDataTypes::INDEXED;
-      }
-    ));
+    $keys = array_keys(mfilter($this->getDataTypes(), 'isIndexed'));
     return array_select_keys($this->data, $keys);
   }
 
   public function unsetDataX($key) {
-    assert_in_array($key, static::$data_types);
+    $this->getDataTypeByName($key);
     return $this->unsetData($key);
   }
 
   public function unsetData($key) {
-    unset($this->data[$key]);
+    unset($this->data[mb_strtolower($key)]);
     return $this;
   }
 
@@ -143,7 +137,7 @@ abstract class GPNode extends GPObject {
 
   private function getConnectedIDs(array $edges) {
     $types = mpull($edges, 'getType');
-    return array_select_keys($this->connectedNodeIDs, $types);
+    return array_select_keysx($this->connectedNodeIDs, $types);
   }
 
   public function loadConnectedNodes(array $edges) {
@@ -160,7 +154,7 @@ abstract class GPNode extends GPObject {
 
   public function getConnectedNodes(array $edges) {
     $types = mpull($edges, 'getType');
-    return array_select_keys($this->connectedNodes, $types);
+    return array_select_keysx($this->connectedNodes, $types);
   }
 
   protected static function getEdgeTypesImpl() {
@@ -182,12 +176,28 @@ abstract class GPNode extends GPObject {
   }
 
   public static function getEdgeType($name) {
-    return idxx(static::getEdgeTypes(), $name);
+    return idxx(static::getEdgeTypes(), mb_strtolower($name));
   }
 
   public static function getEdgeTypeByType($type) {
     $class = get_called_class();
     isset(static::$edge_types_by_type[$class]) ?: static::getEdgeTypes();
     return idxx(static::$edge_types_by_type[$class], $type);
+  }
+
+  protected static function getDataTypesImpl() {
+    return [];
+  }
+
+  public static function getDataTypes() {
+    if (!static::$data_types) {
+      static::$data_types = mpull(static::getDataTypesImpl(), null, 'getName');
+    }
+    return static::$data_types;
+  }
+
+  public static function getDataTypeByName($name) {
+    $data_types = static::getDataTypes();
+    return idxx($data_types, mb_strtolower($name));
   }
 }

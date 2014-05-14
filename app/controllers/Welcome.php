@@ -3,27 +3,9 @@
 class Welcome extends GPController {
 
   public function index($arg1 = 'default') {
-    //GPSession::set('user_id', 6676);
-    // $user_id = GPSession::get('user_id');
-    // var_dump($user_id);
-    // $wallet = Wallet::getOneBySize('small');
-    // $wallet->addPendingConnectedNodes(
-    //     new GPEdge(Wallet::getType(), User::getType(), 'Owner'),
-    //     [(new User())->save()]
-    // )->save();
-
-    //$wallet->setConnectedOwner(new User())->save();
-    //var_dump($wallet->getSize());
-    //$wallet->setSize(123);
-    //$user = new User(['name' => 'Mikel']);
-    //$user = User::getOneByName('Mikes');
-    // $bank_account = (new BankAccount())->save();
-    // $user->addBankAccount($bank_account);
-    // $user->save();
-    // $ids = $user->loadConnectedBankAccount()->getAllConnectedBankAccount();
-    //var_dump($ids);
-    //$user->setName('Mikes')->save();
-    //var_dump($users);
+    //GPDatabase::get()->beginUnguardedWrites();
+    $user = User::getOneByName('Mike');
+    $ba = $user->loadBankAccount()->getOneBankAccount();
     GP::view('welcome_view', ['arg1' => $arg1]);
   }
 

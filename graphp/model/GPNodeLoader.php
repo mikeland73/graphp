@@ -43,10 +43,10 @@ trait GPNodeLoader {
       $only_one = true;
     }
     if (isset($type_name)) {
-      assert_in_array($type_name, static::$data_types, 'GPBadArgException');
+      $data_type = static::getDataTypeByName($type_name);
       assert_equals(count($arguments), 1, 'GPBadArgException');
       $results = self::getByIndexData(
-        GPDataTypes::getIndexedType($type_name),
+        $data_type->getIndexedType(),
         head($arguments)
       );
       return $only_one ? idx0($results) : $results;

@@ -33,7 +33,6 @@
     <div class="container">
       <div class="page-header">
         <h1>Node Explorer</h1>
-        <p class="lead">Navigate the data graph.</p>
       </div>
       <?=$content?>
     </div>

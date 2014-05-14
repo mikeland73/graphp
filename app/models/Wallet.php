@@ -2,9 +2,11 @@
 
 class Wallet extends GPNode {
 
-    protected static $data_types = [
-      'size' => [GPDataTypes::GP_STRING, GPDataTypes::INDEXED],
-    ];
+    protected static function getDataTypesImpl() {
+      return [
+        new GPDataType('size', GPDataType::GP_STRING, true),
+      ];
+    }
 
     protected static function getEdgeTypesImpl() {
       return [
