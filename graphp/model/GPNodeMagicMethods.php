@@ -33,7 +33,7 @@ trait GPNodeMagicMethods {
     }
 
     if (substr_compare($method, 'set', 0, 3) === 0) {
-      assert_equals(count($args), 1, 'GPBadArgException');
+      assert_equals(count($args), 1, 'GPException');
       return $this->setDataX(mb_strtolower(mb_substr($method, 3)), idx0($args));
     }
 
@@ -60,7 +60,9 @@ trait GPNodeMagicMethods {
       return $this->unsetDataX(mb_strtolower(mb_substr($method, 5)));
     }
 
-    throw new GPBadMethodCallException();
+    throw new GPException(
+      'Method '.$method.' not found in '.get_called_class()
+    );
   }
 
   private function handleGet($method, $args) {
@@ -77,7 +79,7 @@ trait GPNodeMagicMethods {
       $nodes = idx($result, $edge->getType(), array());
       return empty($one) ? $nodes : idx0($nodes);
     } else {
-      throw new GPBadMethodCallException(
+      throw new GPException(
         'Getter did not match any data or edge',
         1
       );

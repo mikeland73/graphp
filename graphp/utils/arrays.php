@@ -1,8 +1,5 @@
 <?
 
-class ArrayException extends Exception {}
-class KeyNotInArrayException extends ArrayException {}
-
     /**
      * idxx
      *
@@ -15,7 +12,7 @@ class KeyNotInArrayException extends ArrayException {}
      */
 function idxx(array $array, $key) {
   if (!array_key_exists($key, $array)) {
-    throw new KeyNotInArrayException(
+    throw new GPException(
       $key . ' not in array: ' . json_encode($array)
     );
   }

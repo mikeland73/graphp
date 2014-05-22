@@ -44,14 +44,14 @@ trait GPNodeLoader {
     }
     if (isset($type_name)) {
       $data_type = static::getDataTypeByName($type_name);
-      assert_equals(count($arguments), 1, 'GPBadArgException');
+      assert_equals(count($arguments), 1, 'GPException');
       $results = self::getByIndexData(
         $data_type->getIndexedType(),
         head($arguments)
       );
       return $only_one ? idx0($results) : $results;
     }
-    throw new GPBadMethodCallException();
+    throw new GPException('Method '.$name.' not found in '.get_called_class());
   }
 
   public static function getAll($limit = 100, $offset = 0) {

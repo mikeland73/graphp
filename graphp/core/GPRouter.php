@@ -17,7 +17,7 @@ class GPRouter extends GPObject {
     $uri = str_replace('index.php', '', $uri);
     $uri = preg_replace(['/\?.*/', '#[/]+$#'], '', $uri);
     if (!$uri && isset(self::$routes['__default__'])) {
-      return self::$routes[$uri];
+      return self::$routes['__default__'];
     }
     foreach (array_keys(self::$routes) as $regex) {
       $matches = [];

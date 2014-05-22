@@ -1,27 +1,31 @@
 <?
 
-function assert_true($var, $exception_class = 'Exception') {
+function assert_true($var, $message = '') {
   if (!$var) {
-    throw new $exception_class();
+    throw new GPException(
+      'Failed asserting that '.$var.' is true - '.$message
+    );
   }
 }
 
-function assert_false($var, $exception_class = 'Exception') {
+function assert_false($var, $message = '') {
   if ($var) {
-    throw new $exception_class();
+    throw new GPException(
+      'Failed asserting that '.$var.' is false - '.$message
+    );
   }
 }
 
 function assert_equals($var, $val, $message = '') {
   if ($var !== $val) {
-    throw new Exception(
+    throw new GPException(
       'Failed asserting that '.$var.' is equal to '.$val.' - '.$message
     );
   }
 }
 
-function assert_in_array($idx, array $array, $exception_class = 'Exception') {
+function assert_in_array($idx, array $array, $message = '') {
   if (!array_key_exists($idx, $array)) {
-    throw new $exception_class($idx.' not in '.json_encode($array));
+    throw new GPException($idx.' not in '.json_encode($array));
   }
 }

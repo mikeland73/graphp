@@ -4,6 +4,7 @@
 require_once ROOT_PATH.'graphp/core/GPObject.php';
 require_once ROOT_PATH.'graphp/lib/GPSingletonTrait.php';
 require_once ROOT_PATH.'third_party/libphutil/src/__phutil_library_init__.php';
+class GPException extends Exception {}
 
 class GPLoader extends GPObject {
 
@@ -39,7 +40,6 @@ class GPLoader extends GPObject {
     // TODO turn into classes for smarter autoloading
     'arrays' => true,
     'assert' => true,
-    'Exceptions' => true,
     'STRUtils' => true,
   ];
 
@@ -80,7 +80,7 @@ class GPLoader extends GPObject {
   public static function loadController($controller_name) {
     $file = ROOT_PATH.'app/controllers/' . $controller_name . '.php';
     if (!file_exists($file)) {
-      throw new GPControllerNotFoundException();
+      throw new GPException('Controller "'.$controller_name.'"" not found');
     }
     require_once $file;
   }
@@ -88,7 +88,7 @@ class GPLoader extends GPObject {
   public static function view($view_name, array $_data = [], $return = false) {
     $file = ROOT_PATH.'app/views/' . $view_name . '.php';
     if (!file_exists($file)) {
-      throw new GPViewNotFoundException();
+      throw new GPException('View "'.$view_name.'"" not found');
     }
     ob_start();
     extract($_data);
@@ -107,9 +107,6 @@ class GPLoader extends GPObject {
 }
 
 class_alias('GPLoader', 'GP');
-class GPLoaderException extends Exception {}
-class GPControllerNotFoundException extends GPLoaderException {}
-class GPViewNotFoundException extends GPLoaderException {}
 
 // To instanciate a new GPLoader we need to call this once.
 GP::init();
