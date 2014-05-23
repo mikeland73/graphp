@@ -20,6 +20,7 @@
       <div>
         This is a work in progress, please
         <a href="https://github.com/mikeland86/graphp">contribute</a>
+        <a href="<?=Admin::getURI()?>">admin</a>
       </div>
       <? if (!empty($arg1)): ?>
         <div>

@@ -10,20 +10,24 @@ require_once ROOT_PATH.'third_party/libphutil/src/__phutil_library_init__.php';
 
 class GPLoader extends GPObject {
 
-  private static $map;
+  private static $graphpMap;
+  private static $controllerMap;
 
   public static function init() {
-    self::$map = new GPFileMap(ROOT_PATH.'graphp');
+    self::$graphpMap = new GPFileMap(ROOT_PATH.'graphp', 'graphp');
+    self::$controllerMap =
+      new GPFileMap(ROOT_PATH.'app/controllers', 'controllers');
     self::registerGPAutoloader();
   }
 
   private static function registerGPAutoloader() {
     spl_autoload_register('GPLoader::GPAutoloader');
     spl_autoload_register('GPLoader::GPNodeAutoloader');
+    spl_autoload_register('GPLoader::GPControllerAutoloader');
   }
 
   private static function GPAutoloader($class_name) {
-    $path = self::$map->getPath($class_name);
+    $path = self::$graphpMap->getPath($class_name);
     if ($path) {
       require_once $path;
     }
@@ -36,12 +40,11 @@ class GPLoader extends GPObject {
     }
   }
 
-  public static function loadController($controller_name) {
-    $file = ROOT_PATH.'app/controllers/' . $controller_name . '.php';
-    if (!file_exists($file)) {
-      throw new GPException('Controller "'.$controller_name.'"" not found');
+  private static function GPControllerAutoloader($class_name) {
+    $path = self::$controllerMap->getPath($class_name);
+    if ($path) {
+      require_once $path;
     }
-    require_once $file;
   }
 
   public static function view($view_name, array $_data = [], $return = false) {
