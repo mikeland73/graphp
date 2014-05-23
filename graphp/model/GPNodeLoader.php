@@ -44,7 +44,7 @@ trait GPNodeLoader {
     }
     if (isset($type_name)) {
       $data_type = static::getDataTypeByName($type_name);
-      assert_equals(count($arguments), 1, 'GPException');
+      Assert::equals(count($arguments), 1, 'GPException');
       $results = self::getByIndexData(
         $data_type->getIndexedType(),
         head($arguments)

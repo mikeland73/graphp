@@ -23,4 +23,10 @@ class GPController extends GPObject {
     // TODO support directories (in loader class)
     return '/'.strtolower($name).'/'.implode('/', $args);
   }
+
+  public function __destruct() {
+    if (class_exists('GPDatabase', false)) {
+      GPDatabase::disposeGuardIfNeeded();
+    }
+  }
 }

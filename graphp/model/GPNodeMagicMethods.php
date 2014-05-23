@@ -33,7 +33,7 @@ trait GPNodeMagicMethods {
     }
 
     if (substr_compare($method, 'set', 0, 3) === 0) {
-      assert_equals(count($args), 1, 'GPException');
+      Assert::equals(count($args), 1, 'GPException');
       return $this->setDataX(mb_strtolower(mb_substr($method, 3)), idx0($args));
     }
 

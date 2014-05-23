@@ -111,7 +111,7 @@ abstract class GPNode extends GPObject {
   }
 
   private function addPendingNodes($var, GPEdge $edge, array $nodes) {
-    assert_equals(
+    Assert::equals(
       count($nodes), count(mfilter($nodes, 'getID')),
       'You can\'t add nodes that have not been saved'
     );

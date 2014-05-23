@@ -1,79 +1,38 @@
 <?
 
 // We load a couple of things up front. Everything else gets loaded on demand.
+class GPException extends Exception {}
+require_once ROOT_PATH.'graphp/utils/arrays.php';
 require_once ROOT_PATH.'graphp/core/GPObject.php';
 require_once ROOT_PATH.'graphp/lib/GPSingletonTrait.php';
+require_once ROOT_PATH.'graphp/core/GPFileMap.php';
 require_once ROOT_PATH.'third_party/libphutil/src/__phutil_library_init__.php';
-class GPException extends Exception {}
 
 class GPLoader extends GPObject {
 
-  use
-    GPSingletonTrait;
+  private static $map;
 
-  private $core = [
-    'GPConfig' => true,
-    'GPController' => true,
-    'GPDatabase' => true,
-    'GPLoader' => true,
-    'GPObject' => true,
-    'GPRouter' => true,
-    'GPRequestData' => true,
-    'GPSecurity' => true,
-    'GPSession' => true,
-  ];
-
-  private $lib = [
-    'GPSingletonTrait' => true,
-  ];
-
-  private $model = [
-    'GPDataType' => true,
-    'GPEdge' => true,
-    'GPNode' => true,
-    'GPNodeLoader' => true,
-    'GPNodeMagicMethods' => true,
-    'GPNodeMap' => true,
-  ];
-
-  private $utils = [
-    // TODO turn into classes for smarter autoloading
-    'arrays' => true,
-    'assert' => true,
-    'STRUtils' => true,
-  ];
-
-  public function __construct() {
-    $this->registerGPAutoloader();
-    $this->loadUtils();
+  public static function init() {
+    self::$map = new GPFileMap(ROOT_PATH.'graphp');
+    self::registerGPAutoloader();
   }
 
-  private function registerGPAutoloader() {
-    spl_autoload_register([$this, 'GPAutoloader']);
-    spl_autoload_register([$this, 'GPNodeAutoloader']);
+  private static function registerGPAutoloader() {
+    spl_autoload_register('GPLoader::GPAutoloader');
+    spl_autoload_register('GPLoader::GPNodeAutoloader');
   }
 
-  private function GPAutoloader($class_name) {
-    // TODO optimize by saving this into map the first time it is called.
-    foreach ($this as $folder => $map) {
-      if (array_key_exists($class_name, $map)) {
-        require_once
-          ROOT_PATH.'graphp/' . $folder . '/' . $class_name . '.php';
-        return;
-      }
+  private static function GPAutoloader($class_name) {
+    $path = self::$map->getPath($class_name);
+    if ($path) {
+      require_once $path;
     }
   }
 
-  private function GPNodeAutoloader($class_name) {
+  private static function GPNodeAutoloader($class_name) {
     // TODO allow nested dir
     if (GPNodeMap::isNode($class_name)) {
       require_once ROOT_PATH.'app/models/' . $class_name . '.php';
-    }
-  }
-
-  private function loadUtils() {
-    foreach ($this->utils as $file_name => $_) {
-      require_once ROOT_PATH.'graphp/utils/' . $file_name . '.php';
     }
   }
 

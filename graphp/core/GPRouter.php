@@ -33,7 +33,7 @@ class GPRouter extends GPObject {
   private static function route() {
     $controller_name = ucfirst(idxx(self::$parts, 0));
     $method_name = idx(self::$parts, 1, 'index');
-    GPLoader::sharedInstance()->loadController($controller_name);
+    GPLoader::loadController($controller_name);
     $controller = new $controller_name();
     $args = array_slice(self::$parts, 2);
     call_user_func_array([$controller, $method_name], $args);

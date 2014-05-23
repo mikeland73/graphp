@@ -14,7 +14,7 @@ class GPDatabase extends GPObject {
       if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         throw new Exception(
           'You can only write to the database on post requests. If you need to
-           make writes on get request, use GPDatabase::beginUnguardedWrites()',
+           make writes on get request, use GPDatabase::get()->beginUnguardedWrites()',
           1
         );
       }
@@ -209,8 +209,14 @@ class GPDatabase extends GPObject {
     );
   }
 
+  public static function disposeGuardIfNeeded() {
+    if (self::$sharedInstance && self::$sharedInstance->guard->isGuardActive()) {
+      self::$sharedInstance->guard->dispose();
+    }
+  }
+
   public function __destruct() {
-    $this->guard->dispose();
+    $this->guard->isGuardActive() ? $this->guard->dispose() : null;
   }
 
 }
