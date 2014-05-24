@@ -1,5 +1,5 @@
 <?
 
-class BankAccount extends GPNode {
+final class BankAccount extends GPNode {
 
 }

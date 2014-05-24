@@ -8,9 +8,9 @@ class GPEdgeType extends GPObject {
     $name,
     $storageKey;
 
-  public function __construct($from_type, $to_type, $name, $storage_key = '') {
-    $this->fromType = $from_type;
-    $this->toType = $to_type;
+  public function __construct($from, $to, $name, $storage_key = '') {
+    $this->fromType = $from::getType();
+    $this->toType = $to::getType();
     $this->name = $name;
     $this->storageKey = $storage_key;
   }

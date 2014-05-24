@@ -1,6 +1,6 @@
 <?
 
-class User extends GPNode {
+final class User extends GPNode {
 
   protected static function getDataTypesImpl() {
     return [
@@ -10,7 +10,7 @@ class User extends GPNode {
 
   protected static function getEdgeTypesImpl() {
     return [
-      new GPEdgeType(static::getType(), BankAccount::getType(), 'BankAccount'),
+      new GPEdgeType(get_called_class(), BankAccount::class, 'BankAccount'),
     ];
   }
 
