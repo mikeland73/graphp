@@ -14,10 +14,10 @@ class GPFileMap extends GPObject {
   }
 
   public function getPath($file) {
-    // TODO deal gracefully with files that are moved.
-    if (!isset($this->map[$file])) {
+    if (!isset($this->map[$file]) || !file_exists($this->map[$file])) {
       $this->regenMap();
     }
+
     return idx($this->map, $file);
   }
 

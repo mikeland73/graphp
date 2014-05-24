@@ -1,6 +1,5 @@
 <?
 
-$start = microtime();
 define('ROOT_PATH', __DIR__.'/../');
 
 try {
@@ -14,5 +13,3 @@ try {
   // Propagate exception so that it gets logged
   throw $e;
 }
-
-var_dump(microtime() - $start);

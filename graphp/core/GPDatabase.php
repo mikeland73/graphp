@@ -14,7 +14,8 @@ class GPDatabase extends GPObject {
       if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         throw new Exception(
           'You can only write to the database on post requests. If you need to
-           make writes on get request, use GPDatabase::get()->beginUnguardedWrites()',
+           make writes on get request,
+           use GPDatabase::get()->beginUnguardedWrites()',
           1
         );
       }
@@ -173,7 +174,7 @@ class GPDatabase extends GPObject {
       mpull($from_nodes, 'getID'),
       $types
     );
-    $ordered = [];
+    $ordered = array_fill_keys($types, []);
     foreach ($results as $result) {
       $ordered[$result['type']] = idx($ordered, $result['type'], []);
       $ordered[$result['type']][$result['to_node_id']] = $result['to_node_id'];
@@ -210,7 +211,10 @@ class GPDatabase extends GPObject {
   }
 
   public static function disposeGuardIfNeeded() {
-    if (self::$sharedInstance && self::$sharedInstance->guard->isGuardActive()) {
+    if (
+      self::$sharedInstance &&
+      self::$sharedInstance->guard->isGuardActive()
+    ) {
       self::$sharedInstance->guard->dispose();
     }
   }

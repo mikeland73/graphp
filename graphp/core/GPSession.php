@@ -52,8 +52,8 @@ class GPSession extends GPObject {
       self::$config->cookie_name,
       $json_with_hash,
       time() + self::$config->cookie_exp,
-      '/'
-      //self::$config->domain TODO
+      '/',
+      self::$config->cookie_domain
     );
     if (!$result) {
       throw new Exception(
