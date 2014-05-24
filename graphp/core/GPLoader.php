@@ -10,13 +10,9 @@ require_once ROOT_PATH.'third_party/libphutil/src/__phutil_library_init__.php';
 
 class GPLoader extends GPObject {
 
-  private static $graphpMap;
-  private static $controllerMap;
+  private static $maps = [];
 
   public static function init() {
-    self::$graphpMap = new GPFileMap(ROOT_PATH.'graphp', 'graphp');
-    self::$controllerMap =
-      new GPFileMap(ROOT_PATH.'app/controllers', 'controllers');
     self::registerGPAutoloader();
   }
 
@@ -26,22 +22,34 @@ class GPLoader extends GPObject {
     spl_autoload_register('GPLoader::GPControllerAutoloader');
   }
 
+  private static function getMap($path, $name) {
+    if (!isset(self::$maps[$name])) {
+      self::$maps[$name] = new GPFileMap($path, $name);
+    }
+    return self::$maps[$name];
+  }
+
+  public static function getModelsMap() {
+    return self::getMap(ROOT_PATH.'app/models', 'models');
+  }
+
   private static function GPAutoloader($class_name) {
-    $path = self::$graphpMap->getPath($class_name);
+    $path = self::getMap(ROOT_PATH.'graphp', 'graphp')->getPath($class_name);
     if ($path) {
       require_once $path;
     }
   }
 
   private static function GPNodeAutoloader($class_name) {
-    // TODO allow nested dir
-    if (GPNodeMap::isNode($class_name)) {
-      require_once ROOT_PATH.'app/models/' . $class_name . '.php';
+    $path = self::getModelsMap()->getPath($class_name);
+    if ($path) {
+      require_once $path;
     }
   }
 
   private static function GPControllerAutoloader($class_name) {
-    $path = self::$controllerMap->getPath($class_name);
+    $map = self::getMap(ROOT_PATH.'app/controllers', 'controllers');
+    $path = $map->getPath($class_name);
     if ($path) {
       require_once $path;
     }

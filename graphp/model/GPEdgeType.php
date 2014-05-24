@@ -1,7 +1,6 @@
 <?
 
-// TODO rename to edgetype
-class GPEdge extends GPObject {
+class GPEdgeType extends GPObject {
 
   private
     $fromType,

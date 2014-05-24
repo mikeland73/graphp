@@ -55,25 +55,12 @@ class GPNodeMap extends GPObject {
     self::$map = [];
     self::$inverseMap = [];
     $file = "<?\nreturn [\n";
-    foreach (self::findNodesInDir() as $class) {
+    foreach (GP::getModelsMap()->getAllFileNames() as $class) {
       $file .= '  '.$class::getType().' => \''.$class."',\n";
       self::$map[$class::getType()] = $class;
       self::$inverseMap[$class] = $class::getType();
     }
     $file .= "];\n";
     file_put_contents(ROOT_PATH.'graphp/maps/node', $file);
-  }
-
-  private static function findNodesInDir() {
-    // TODO allow nested dir
-    $files = scandir(ROOT_PATH.'app/models');
-    $nodes = [];
-    foreach ($files as $file) {
-      if (substr_compare($file, '.php', -4) === 0) {
-        require_once ROOT_PATH.'app/models/'.$file;
-        $nodes[] = substr($file, 0, -4);
-      }
-    }
-    return $nodes;
   }
 }

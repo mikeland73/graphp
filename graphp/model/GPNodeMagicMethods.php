@@ -5,8 +5,9 @@ trait GPNodeMagicMethods {
   // Magic API:
   //
   // getX() should only work if the node has a GPDataType with the name x
-  // returned by getDataTypeImpl() or if the node has a GPEdge with that name
-  // that has previously loaded. Calling getX on an unloaded edge will throw.
+  // returned by getDataTypeImpl() or if the node has a GPEdgeType with that
+  // name that has previously loaded. Calling getX on an unloaded edge will
+  // throw.
   //
   // setY() should only work if y is defined in data_types. (Not for edges)
   //

@@ -34,6 +34,11 @@ class GPFileMap extends GPObject {
     $this->writeMap();
   }
 
+  public function getAllFileNames() {
+    $this->regenMap();
+    return array_keys($this->map);
+  }
+
   private function writeMap() {
     $map_file = "<?\nreturn [\n";
     foreach ($this->map as $file => $path) {

@@ -18,9 +18,14 @@ class GPController extends GPObject {
   public static function getURI($method = '') {
     $name = get_called_class();
     $args = func_get_args();
-    // TODO support loading controllers (use map)
-    // TODO do validation (method should exist and have correct number of args)
-    // TODO support directories (in loader class)
+    if ($method) {
+      if (
+        !method_exists($name, $method) ||
+        !(new ReflectionMethod($name, $method))->isPublic()
+      ) {
+        throw new GPException($name.' does not have a public method '.$method);
+      }
+    }
     return '/'.strtolower($name).'/'.implode('/', $args);
   }
 

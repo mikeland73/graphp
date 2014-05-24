@@ -2,10 +2,10 @@
 return [
   GPSingletonTrait => '/home/mike/dev/graphp/public/../graphp/lib/GPSingletonTrait.php',
   newnode => '/home/mike/dev/graphp/public/../graphp/scripts/newnode.php',
+  GPEdgeType => '/home/mike/dev/graphp/public/../graphp/model/GPEdgeType.php',
   GPNodeMagicMethods => '/home/mike/dev/graphp/public/../graphp/model/GPNodeMagicMethods.php',
   GPNodeMap => '/home/mike/dev/graphp/public/../graphp/model/GPNodeMap.php',
   GPNodeLoader => '/home/mike/dev/graphp/public/../graphp/model/GPNodeLoader.php',
-  GPEdge => '/home/mike/dev/graphp/public/../graphp/model/GPEdge.php',
   GPNode => '/home/mike/dev/graphp/public/../graphp/model/GPNode.php',
   GPDataType => '/home/mike/dev/graphp/public/../graphp/model/GPDataType.php',
   GPConfig => '/home/mike/dev/graphp/public/../graphp/core/GPConfig.php',

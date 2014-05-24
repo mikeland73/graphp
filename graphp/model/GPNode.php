@@ -97,11 +97,11 @@ abstract class GPNode extends GPObject {
     return $this;
   }
 
-  public function addPendingConnectedNodes(GPEdge $edge, array $nodes) {
+  public function addPendingConnectedNodes(GPEdgeType $edge, array $nodes) {
     return $this->addPendingNodes('pendingConnectedNodes', $edge, $nodes);
   }
 
-  public function addPendingRemovalNodes(GPEdge $edge, array $nodes) {
+  public function addPendingRemovalNodes(GPEdgeType $edge, array $nodes) {
     return $this->addPendingNodes('pendingRemovalNodes', $edge, $nodes);
   }
 
@@ -110,7 +110,7 @@ abstract class GPNode extends GPObject {
     return $this;
   }
 
-  private function addPendingNodes($var, GPEdge $edge, array $nodes) {
+  private function addPendingNodes($var, GPEdgeType $edge, array $nodes) {
     Assert::equals(
       count($nodes), count(mfilter($nodes, 'getID')),
       'You can\'t add nodes that have not been saved'
