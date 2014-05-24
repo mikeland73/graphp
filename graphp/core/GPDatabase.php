@@ -40,6 +40,14 @@ class GPDatabase extends GPObject {
     AphrontWriteGuard::endUnguardedWrites();
   }
 
+  public function startTransaction() {
+    queryfx($this->connection, 'START TRANSACTION;');
+  }
+
+  public function commit() {
+    queryfx($this->connection, 'COMMIT;');
+  }
+
   public function insertNode(GPNode $node) {
     queryfx(
       $this->connection,

@@ -80,8 +80,8 @@ abstract class GPNode extends GPObject {
   }
 
   public function save() {
-    // TODO transaction
     $db = GPDatabase::get();
+    $db->startTransaction();
     if ($this->id) {
       $db->updateNodeData($this);
     } else {
@@ -91,6 +91,7 @@ abstract class GPNode extends GPObject {
     $db->saveEdges($this, $this->pendingConnectedNodes);
     $db->deleteEdges($this, $this->pendingRemovalNodes);
     $db->deleteAllEdges($this, $this->pendingRemovalAllNodes);
+    $db->commit();
     $this->pendingConnectedNodes = [];
     $this->pendingRemovalNodes = [];
     $this->pendingRemovalAllNodes = [];
