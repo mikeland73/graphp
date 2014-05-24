@@ -113,8 +113,14 @@ abstract class GPNode extends GPObject {
 
   private function addPendingNodes($var, GPEdgeType $edge, array $nodes) {
     Assert::equals(
-      count($nodes), count(mfilter($nodes, 'getID')),
+      count($nodes),
+      count(mfilter($nodes, 'getID')),
       'You can\'t add nodes that have not been saved'
+    );
+    Assert::allEquals(
+      mpull($nodes, 'getType'),
+      $edge->getToType(),
+      'Trying to add nodes of the wrong type.'
     );
     if (!array_key_exists($edge->getType(), $this->$var)) {
       $this->{$var}[$edge->getType()] = [];
