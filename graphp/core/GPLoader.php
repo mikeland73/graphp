@@ -19,6 +19,7 @@ class GPLoader extends GPObject {
   private static function registerGPAutoloader() {
     spl_autoload_register('GPLoader::GPAutoloader');
     spl_autoload_register('GPLoader::GPNodeAutoloader');
+    spl_autoload_register('GPLoader::GPLibraryAutoloader');
     spl_autoload_register('GPLoader::GPControllerAutoloader');
   }
 
@@ -42,6 +43,14 @@ class GPLoader extends GPObject {
 
   private static function GPNodeAutoloader($class_name) {
     $path = self::getModelsMap()->getPath($class_name);
+    if ($path) {
+      require_once $path;
+    }
+  }
+
+  private static function GPLibraryAutoloader($class_name) {
+    $map = self::getMap(ROOT_PATH.'app/libraries', 'libraries');
+    $path = $map->getPath($class_name);
     if ($path) {
       require_once $path;
     }

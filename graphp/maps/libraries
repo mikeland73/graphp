@@ -1,0 +1,4 @@
+<?
+return [
+  DoSomeStuffLib => '/home/mike/dev/graphp/public/../app/libraries/DoSomeStuffLib.php',
+];

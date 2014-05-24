@@ -1,0 +1,5 @@
+<?
+
+class DoSomeStuffLib extends GPObject {
+
+}
