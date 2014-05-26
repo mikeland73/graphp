@@ -11,6 +11,7 @@ require_once ROOT_PATH.'third_party/libphutil/src/__phutil_library_init__.php';
 class GPLoader extends GPObject {
 
   private static $maps = [];
+  private static $viewData = [];
 
   public static function init() {
     self::registerGPAutoloader();
@@ -69,10 +70,18 @@ class GPLoader extends GPObject {
     if (!file_exists($file)) {
       throw new GPException('View "'.$view_name.'"" not found');
     }
+    $new_data = array_diff_key($_data, self::$viewData);
+    $replaced_data = array_intersect_key(self::$viewData, $_data);
+    self::$viewData = array_merge_by_keys(self::$viewData, $_data);
     ob_start();
-    extract($_data);
+    extract(self::$viewData);
     require $file;
-    if ($return) {;
+    // Return $viewData to the previous state to avoid view data bleeding.
+    self::$viewData = array_merge_by_keys(
+      array_diff_key(self::$viewData, $new_data),
+      $replaced_data
+    );
+    if ($return) {
       $buffer = ob_get_contents();
       @ob_end_clean();
       return $buffer;
