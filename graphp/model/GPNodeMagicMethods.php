@@ -73,7 +73,7 @@ trait GPNodeMagicMethods {
     }
     $name = mb_strtolower(mb_substr($method, 3));
 
-    if (array_key_exists($name, static::$data_types)) {
+    if (static::getDataTypeByName($name)) {
       return $this->getDataX($name);
     } else if (($edge = static::getEdgeType($name))) {
       $result = $this->getConnectedNodes(array($edge));

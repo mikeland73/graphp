@@ -10,7 +10,7 @@ class GPSession extends GPObject {
   public static function init() {
     self::$config = GPConfig::get();
     $json_with_hash = idx($_COOKIE, self::$config->cookie_name, '');
-    $json = json_encode([base64_encode(microtime().mt_rand())]);
+    $json = '[]';
     if ($json_with_hash) {
       $json = mb_substr($json_with_hash, 0, -40);
       $hash = mb_substr($json_with_hash, -40);
