@@ -1,4 +1,4 @@
-<a href="<?=Admin::getURI('node_type', $node->getType())?>">
+<a href="<?=Admin::getURI('node_type', $node::getType())?>">
   back to <?= get_class($node) ?> list
 </a>
 <h2><?= get_class($node) ?> ID <?= $node->getID() ?></h2>
@@ -58,19 +58,19 @@
       </tr>
     </thead>
     <tbody>
-      <? foreach ($node->getConnectedNodes($node->getEdgeTypes())
+      <? foreach ($node->getConnectedNodes($node::getEdgeTypes())
            as $e => $nodes): ?>
         <? foreach ($nodes as $conn_node): ?>
           <tr>
             <th scope="row">
-              <code><?=$node->getEdgeTypeByType($e)->getName().' - '.$e?></code>
+              <code><?=$node::getEdgeTypeByType($e)->getName().' - '.$e?></code>
             </th>
             <th scope="row">
               <a href="<?=Admin::getURI('node', $conn_node->getID())?>">
                 <?=$conn_node->getID()?>
               </a>
               type:
-              <a href="<?=Admin::getURI('node_type', $conn_node->getType())?>">
+              <a href="<?=Admin::getURI('node_type', $conn_node::getType())?>">
                 <?=get_class($conn_node)?>
               </a>
             </th>

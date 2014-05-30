@@ -52,7 +52,7 @@ class GPDatabase extends GPObject {
     queryfx(
       $this->connection,
       'INSERT INTO node (type, data) VALUES (%d, %s)',
-      $node->getType(),
+      $node::getType(),
       $node->getJSONData()
     );
     return $this->connection->getInsertID();
@@ -101,7 +101,7 @@ class GPDatabase extends GPObject {
     foreach ($node->getIndexedData() as $name => $val) {
       $parts[] = '(%d, %d, %s)';
       $values[] = $node->getID();
-      $values[] = $node->getDataTypeByName($name)->getIndexedType();
+      $values[] = $node::getDataTypeByName($name)->getIndexedType();
       $values[] = $val;
     }
     if (!$parts) {

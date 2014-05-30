@@ -29,6 +29,7 @@ abstract class GPNode extends GPObject {
   }
 
   public static function getType() {
+    // TODO replace all static function calls with ::
     return STRUtils::to64BitInt(static::getStorageKey());
   }
 
@@ -37,7 +38,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function setDataX($key, $value) {
-    $data_type = static::getDataTypeByName($key);
+    $data_type = self::getDataTypeByName($key);
     $data_type->assertValueIsOfType($value);
     return $this->setData($key, $value);
   }
@@ -48,7 +49,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function getDataX($key) {
-    $this->getDataTypeByName($key);
+    self::getDataTypeByName($key);
     return $this->getData($key);
   }
 
@@ -65,12 +66,12 @@ abstract class GPNode extends GPObject {
   }
 
   public function getIndexedData() {
-    $keys = array_keys(mfilter($this->getDataTypes(), 'isIndexed'));
+    $keys = array_keys(mfilter(self::getDataTypes(), 'isIndexed'));
     return array_select_keys($this->data, $keys);
   }
 
   public function unsetDataX($key) {
-    $this->getDataTypeByName($key);
+    self::getDataTypeByName($key);
     return $this->unsetData($key);
   }
 
@@ -182,13 +183,13 @@ abstract class GPNode extends GPObject {
     return static::$edge_types[$class];
   }
 
-  public static function getEdgeType($name) {
-    return idxx(static::getEdgeTypes(), mb_strtolower($name));
+  final public static function getEdgeType($name) {
+    return idxx(self::getEdgeTypes(), mb_strtolower($name));
   }
 
-  public static function getEdgeTypeByType($type) {
+  final public static function getEdgeTypeByType($type) {
     $class = get_called_class();
-    isset(static::$edge_types_by_type[$class]) ?: static::getEdgeTypes();
+    isset(static::$edge_types_by_type[$class]) ?: self::getEdgeTypes();
     return idxx(static::$edge_types_by_type[$class], $type);
   }
 
@@ -196,15 +197,15 @@ abstract class GPNode extends GPObject {
     return [];
   }
 
-  public static function getDataTypes() {
+  final public static function getDataTypes() {
     if (!static::$data_types) {
       static::$data_types = mpull(static::getDataTypesImpl(), null, 'getName');
     }
     return static::$data_types;
   }
 
-  public static function getDataTypeByName($name) {
-    $data_types = static::getDataTypes();
+  final public static function getDataTypeByName($name) {
+    $data_types = self::getDataTypes();
     return idxx($data_types, mb_strtolower($name));
   }
 }

@@ -38,7 +38,7 @@ class Admin extends GPController {
       $node->unsetData($key_to_unset)->save();
     }
     if ($this->post->getInt('edge_type') && $this->post->getInt('to_id')) {
-      $edge = $node->getEdgeTypeByType($this->post->getInt('edge_type'));
+      $edge = $node::getEdgeTypeByType($this->post->getInt('edge_type'));
       $other_node = GPNode::getByID($this->post->getInt('to_id'));
       if ($this->post->getExists('delete')) {
         $node->addPendingRemovalNodes($edge, [$other_node]);
@@ -47,7 +47,7 @@ class Admin extends GPController {
       }
       $node->save();
     }
-    $node->loadConnectedNodes($node->getEdgeTypes());
+    $node->loadConnectedNodes($node::getEdgeTypes());
     GP::viewWithLayout('admin/node_view', 'layout/main', ['node' => $node]);
   }
 
