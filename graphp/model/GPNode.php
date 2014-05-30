@@ -49,7 +49,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function getDataX($key) {
-    self::getDataTypeByName($key);
+    Assert::truthy(self::getDataTypeByName($key));
     return $this->getData($key);
   }
 
@@ -71,7 +71,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function unsetDataX($key) {
-    self::getDataTypeByName($key);
+    Assert::truthy(self::getDataTypeByName($key));
     return $this->unsetData($key);
   }
 
@@ -206,6 +206,6 @@ abstract class GPNode extends GPObject {
 
   final public static function getDataTypeByName($name) {
     $data_types = self::getDataTypes();
-    return idxx($data_types, mb_strtolower($name));
+    return idx($data_types, mb_strtolower($name));
   }
 }

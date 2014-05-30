@@ -3,6 +3,14 @@
 class Assert extends GPObject {
 
   public static function true($var, $message = '') {
+    if ($var !== true) {
+      throw new GPException(
+        'Failed asserting that '.$var.' is true - '.$message
+      );
+    }
+  }
+
+  public static function truthy($var, $message = '') {
     if (!$var) {
       throw new GPException(
         'Failed asserting that '.$var.' is true - '.$message
@@ -11,7 +19,7 @@ class Assert extends GPObject {
   }
 
   public static function false($var, $message = '') {
-    if ($var) {
+    if ($var !== false) {
       throw new GPException(
         'Failed asserting that '.$var.' is false - '.$message
       );
