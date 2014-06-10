@@ -13,7 +13,12 @@ class GPRouter extends GPObject {
   }
 
   private static function getParts() {
-    $uri = $_SERVER['REQUEST_URI'];
+    if (GP::isCLI()) {
+      global $argv;
+      $uri = idx($argv, 1, '');
+    } else {
+      $uri = $_SERVER['REQUEST_URI'];
+    }
     $uri = str_replace('index.php', '', $uri);
     $uri = preg_replace(['/\?.*/', '#[/]+$#'], '', $uri);
     if (!$uri && isset(self::$routes['__default__'])) {

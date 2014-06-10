@@ -92,6 +92,10 @@ class GPLoader extends GPObject {
   public static function viewWithLayout($view, $layout, array $data = []) {
     GP::view($layout, ['content' => GP::view($view, $data, true)]);
   }
+
+  public static function isCLI() {
+    return php_sapi_name() === 'cli';
+  }
 }
 
 class_alias('GPLoader', 'GP');

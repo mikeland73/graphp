@@ -45,7 +45,10 @@ class GPFileMap extends GPObject {
       $map_file .= '  '.$file.' => \''.$path."',\n";
     }
     $map_file .= "];\n";
-    file_put_contents(ROOT_PATH.'graphp/maps/'.$this->name, $map_file);
+    $file_path = ROOT_PATH.'graphp/maps/'.$this->name;
+    file_put_contents($file_path, $map_file);
+    // TODO this is probably not safe
+    @chmod($file_path, 0666);
   }
 
 }
