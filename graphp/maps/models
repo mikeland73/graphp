@@ -1,6 +1,0 @@
-<?
-return [
-  User => '/home/mike/dev/graphp/public/../app/models/User.php',
-  Wallet => '/home/mike/dev/graphp/public/../app/models/Wallet.php',
-  BankAccount => '/home/mike/dev/graphp/public/../app/models/BankAccount.php',
-];

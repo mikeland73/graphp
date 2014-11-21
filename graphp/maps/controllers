@@ -1,5 +1,0 @@
-<?
-return [
-  Admin => '/home/mike/dev/graphp/public/../app/controllers/admin/Admin.php',
-  Welcome => '/home/mike/dev/graphp/public/../app/controllers/Welcome.php',
-];
