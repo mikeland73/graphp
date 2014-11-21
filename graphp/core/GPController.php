@@ -26,7 +26,8 @@ class GPController extends GPObject {
         throw new GPException($name.' does not have a public method '.$method);
       }
     }
-    return '/'.strtolower($name).'/'.implode('/', $args);
+    $index = GPConfig::get()->use_index_php ? '/index.php' : '';
+    return $index . '/'.strtolower($name).'/'.implode('/', $args);
   }
 
   public static function redirect($method = '') {

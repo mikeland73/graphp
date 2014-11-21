@@ -15,6 +15,11 @@ class GPLoader extends GPObject {
 
   public static function init() {
     self::registerGPAutoloader();
+    if(!file_exists(ROOT_PATH.'graphp/maps')) {
+      throw new GPException(
+        'Please create graphp/maps dir and make sure it is writable'
+      );
+    }
   }
 
   private static function registerGPAutoloader() {
