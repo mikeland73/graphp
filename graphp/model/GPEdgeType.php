@@ -8,11 +8,14 @@ class GPEdgeType extends GPObject {
     $name,
     $storageKey;
 
-  public function __construct($from, $to, $name, $storage_key = '') {
-    $this->fromType = $from::getType();
+  public function __construct($to, $name = '', $storage_key = '') {
     $this->toType = $to::getType();
-    $this->name = $name;
+    $this->name = $name ? $name : $to;
     $this->storageKey = $storage_key;
+  }
+
+  public function setFromClass($from_class) {
+    $this->fromType = $from_class::getType();
   }
 
   public function getType() {
@@ -33,7 +36,7 @@ class GPEdgeType extends GPObject {
 
   private function getStorageKey() {
     if ($this->storageKey) {
-      $this->storageKey;
+      return $this->storageKey;
     }
     return $this->fromType.$this->toType.$this->name;
   }

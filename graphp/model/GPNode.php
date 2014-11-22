@@ -177,6 +177,9 @@ abstract class GPNode extends GPObject {
     $class = get_called_class();
     if (!isset(static::$edge_types[$class])) {
       $edges = static::getEdgeTypesImpl();
+      foreach ($edges as $edge) {
+        $edge->setFromClass(get_called_class());
+      }
       static::$edge_types[$class] = mpull($edges, null, 'getName');
       static::$edge_types_by_type[$class] = mpull($edges, null, 'getType');
     }

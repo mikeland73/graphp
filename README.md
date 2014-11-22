@@ -29,11 +29,15 @@ class User extends GPNode {
   }
   protected static function getEdgeTypesImpl() {
     return [
-      new GPEdgeType(get_called_class(), BankAccount::class, 'BankAccount'),
+      new GPEdgeType(BankAccount::class),
     ];
   }
 }
+```
 
+Define a model for bank account
+
+```
 // No need to declare data if you don't want to index it.
 class BankAccount extends GPNode {}
 ```

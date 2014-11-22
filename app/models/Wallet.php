@@ -10,7 +10,7 @@ final class Wallet extends GPNode {
 
     protected static function getEdgeTypesImpl() {
       return [
-        new GPEdgeType(get_called_class(), User::class, 'Owner'),
+        new GPEdgeType(User::class, 'Owner'),
       ];
   }
 

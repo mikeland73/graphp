@@ -10,7 +10,7 @@ final class User extends GPNode {
 
   protected static function getEdgeTypesImpl() {
     return [
-      new GPEdgeType(get_called_class(), BankAccount::class, 'BankAccount'),
+      new GPEdgeType(BankAccount::class),
     ];
   }
 
