@@ -45,9 +45,11 @@ trait GPNodeLoader {
     if (isset($type_name)) {
       $data_type = static::getDataTypeByName($type_name);
       Assert::equals(count($arguments), 1);
+      $arg = idx0($arguments);
+      $data_type->assertValueIsOfType($arg);
       $results = self::getByIndexData(
         $data_type->getIndexedType(),
-        head($arguments)
+        $arg
       );
       return $only_one ? idx0($results) : $results;
     }

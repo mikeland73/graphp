@@ -21,6 +21,11 @@ abstract class GPNode extends GPObject {
     $edge_types_by_type = [];
 
   public function __construct(array $data = []) {
+    foreach (self::getDataTypes() as $data_type) {
+      if (array_key_exists($data_type->getName(), $data)) {
+        $data_type->assertValueIsOfType($data[$data_type->getName()]);
+      }
+    }
     $this->data = $data;
   }
 

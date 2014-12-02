@@ -4,7 +4,7 @@ class TestModel extends GPNode {
   protected static function getDataTypesImpl() {
     return [
       new GPDataType('name', GPDataType::GP_STRING, true),
-      new GPDataType('age', GPDataType::GP_STRING),
+      new GPDataType('age', GPDataType::GP_INT),
     ];
   }
 }
@@ -48,10 +48,33 @@ class ModelTest extends PHPUnit_Framework_TestCase {
    * @expectedException GPException
    */
   public function testLoadByAge() {
-    $model = new TestModel(['name' => 'name', 'age' => '18']);
+    $model = new TestModel(['name' => 'name', 'age' => 18]);
     $this->assertEmpty($model->getID());
     $model->save();
-    TestModel::getByAge('18');
+    TestModel::getByAge(18);
+  }
+
+  public function testGetData() {
+    $model = new TestModel(['name' => 'Foo', 'age' => 18]);
+    $this->assertEquals($model->getName(), 'Foo');
+    $this->assertEquals($model->getAge(), 18);
+    $model->save();
+    $model::clearCache();
+    $loaded_model = TestModel::getByID($model->getID());
+    $this->assertEquals(
+      $model->getDataArray(),
+      ['name' => 'Foo', 'age' => 18]
+    );
+  }
+
+  public function testSetData() {
+    $model = new TestModel();
+    $model->setName('Bar');
+    $model->setAge(25);
+    $this->assertEquals(
+      $model->getDataArray(),
+      ['name' => 'Bar', 'age' => 25]
+    );
   }
 
   public static function tearDownAfterClass() {

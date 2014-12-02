@@ -1,12 +1,16 @@
 <?
 
+// This is used to bootstrap the framework without routing. 
+// It is useful for tests and other require() cases.
+// For cli, you can use public/index.php and provide a controller and method
+// as arguments.
+
 define('ROOT_PATH', __DIR__.'/../../');
 
 try {
   require_once ROOT_PATH.'graphp/core/GPLoader.php';
   GPRouter::init();
 } catch(Exception $e) {
-  // TODO (mikeland86) make this better (maybe a pretty html error or something)
   echo ' There was an exception: <br />';
   echo $e->getMessage() . '<br />';
   echo str_replace("\n", '<br />', $e->getTraceAsString())  . '<br /><br />';

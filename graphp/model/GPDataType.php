@@ -5,7 +5,7 @@ class GPDataType extends GPObject {
   const GP_INT = 'is_int';
   const GP_NODE_ID = 'is_int';
   const GP_FLOAT = 'is_float';
-  const GP_NUMBER = 'is_number';
+  const GP_NUMBER = 'is_numeric';
   const GP_ARRAY = 'is_array';
   const GP_STRING = 'is_string';
   const GP_BOOL = 'is_bool';
@@ -21,7 +21,7 @@ class GPDataType extends GPObject {
     $is_indexed = false
   ) {
     $this->name = mb_strtolower($name);
-    $this->type;
+    $this->type = $type;
     $this->isIndexed = $is_indexed;
   }
 
