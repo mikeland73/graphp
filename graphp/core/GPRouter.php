@@ -9,7 +9,14 @@ class GPRouter extends GPObject {
   public static function init() {
     self::$routes = require_once ROOT_PATH.'config/routes.php';
     self::$parts = self::getParts();
-    self::route();
+  }
+
+  public static function route() {
+    $controller_name = ucfirst(idxx(self::$parts, 0));
+    $method_name = idx(self::$parts, 1, 'index');
+    $controller = new $controller_name();
+    $args = array_slice(self::$parts, 2);
+    call_user_func_array([$controller, $method_name], $args);
   }
 
   private static function getParts() {
@@ -33,13 +40,5 @@ class GPRouter extends GPObject {
       }
     }
     return array_values(array_filter(explode('/', $uri)));
-  }
-
-  private static function route() {
-    $controller_name = ucfirst(idxx(self::$parts, 0));
-    $method_name = idx(self::$parts, 1, 'index');
-    $controller = new $controller_name();
-    $args = array_slice(self::$parts, 2);
-    call_user_func_array([$controller, $method_name], $args);
   }
 }

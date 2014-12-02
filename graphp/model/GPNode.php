@@ -29,7 +29,6 @@ abstract class GPNode extends GPObject {
   }
 
   public static function getType() {
-    // TODO replace all static function calls with ::
     return STRUtils::to64BitInt(static::getStorageKey());
   }
 
@@ -87,6 +86,7 @@ abstract class GPNode extends GPObject {
       $db->updateNodeData($this);
     } else {
       $this->id = $db->insertNode($this);
+      self::$cache[$this->id] = $this;
     }
     $db->updateNodeIndexedData($this);
     $db->saveEdges($this, $this->pendingConnectedNodes);
@@ -170,6 +170,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function delete() {
+    unset(self::$cache[$this->getID()]);
     GPDatabase::get()->deleteNodes([$this]);
   }
 

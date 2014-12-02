@@ -44,7 +44,7 @@ trait GPNodeLoader {
     }
     if (isset($type_name)) {
       $data_type = static::getDataTypeByName($type_name);
-      Assert::equals(count($arguments), 1, 'GPException');
+      Assert::equals(count($arguments), 1);
       $results = self::getByIndexData(
         $data_type->getIndexedType(),
         head($arguments)
@@ -63,6 +63,10 @@ trait GPNodeLoader {
       }
     }
     return array_select_keys(self::$cache, ipull($node_datas, 'id'));
+  }
+
+  public static function clearCache() {
+    self::$cache = [];
   }
 
   private static function getByIndexData($data_type, $data) {

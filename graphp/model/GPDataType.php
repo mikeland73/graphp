@@ -43,6 +43,7 @@ class GPDataType extends GPObject {
   }
 
   public function getIndexedType() {
+    Assert::true($this->isIndexed());
     return STRUtils::to64BitInt($this->name);
   }
 

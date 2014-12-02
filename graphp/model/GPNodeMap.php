@@ -51,6 +51,11 @@ class GPNodeMap extends GPObject {
     return self::getMap();
   }
 
+  public static function addToMapForTest($class) {
+    // TODO: Assert dev env
+    self::$map[$class::getType()] = $class;
+  }
+
   private static function regenMap() {
     self::$map = [];
     self::$inverseMap = [];
