@@ -1,0 +1,5 @@
+<?
+
+class GPEnv extends GPObject {
+
+}

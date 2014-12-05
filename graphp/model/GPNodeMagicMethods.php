@@ -40,17 +40,17 @@ trait GPNodeMagicMethods {
 
     if (substr_compare($method, 'add', 0, 3) === 0) {
       $edge = static::getEdgeType(mb_substr($method, 3));
-      return $this->addPendingConnectedNodes($edge, $args);
-    }
-
-    if (substr_compare($method, 'remove', 0, 6) === 0) {
-      $edge = static::getEdgeType(mb_substr($method, 6));
-      return $node->addPendingRemovalNodes($edge, idx0($args));
+      return $this->addPendingConnectedNodes($edge, make_array(idx0($args)));
     }
 
     if (substr_compare($method, 'removeAll', 0, 9) === 0) {
       $edge = static::getEdgeType(mb_substr($method, 9));
-      return $node->addPendingRemovalAllNodes($edge);
+      return $this->addPendingRemovalAllNodes($edge);
+    }
+
+    if (substr_compare($method, 'remove', 0, 6) === 0) {
+      $edge = static::getEdgeType(mb_substr($method, 6));
+      return $this->addPendingRemovalNodes($edge, make_array(idx0($args)));
     }
 
     if (substr_compare($method, 'load', 0, 4) === 0) {
@@ -71,12 +71,22 @@ trait GPNodeMagicMethods {
       $method = str_ireplace('one', '', $method);
       $one = true;
     }
+
+    if (substr_compare($method, 'IDs', -3) === 0) {
+      $method = str_ireplace('IDs', '', $method);
+      $ids_only = true;
+    }
+
     $name = mb_strtolower(mb_substr($method, 3));
 
     if (static::getDataTypeByName($name)) {
       return $this->getDataX($name);
     } else if (($edge = static::getEdgeType($name))) {
-      $result = $this->getConnectedNodes(array($edge));
+      if (empty($ids_only)) {
+        $result = $this->getConnectedNodes(array($edge));
+      } else {
+        $result = $this->getConnectedIDs(array($edge));
+      }
       $nodes = idx($result, $edge->getType(), array());
       return empty($one) ? $nodes : idx0($nodes);
     } else {
@@ -89,7 +99,7 @@ trait GPNodeMagicMethods {
 
   private function handleLoad($method, $args) {
     if (substr_compare($method, 'IDs', -3) === 0) {
-      $edge_name = mb_substr($method, 4, strlen($method) - 16);
+      $edge_name = mb_substr($method, 4, -3);
       $edge = static::getEdgeType($edge_name);
       return $this->loadConnectedIDs(array($edge));
     } else {

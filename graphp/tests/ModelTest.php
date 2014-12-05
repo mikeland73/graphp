@@ -1,6 +1,6 @@
 <?
 
-class TestModel extends GPNode {
+class GPTestModel extends GPNode {
   protected static function getDataTypesImpl() {
     return [
       new GPDataType('name', GPDataType::GP_STRING, true),
@@ -9,58 +9,58 @@ class TestModel extends GPNode {
   }
 }
 
-class ModelTest extends PHPUnit_Framework_TestCase {
+class GPNodeTest extends PHPUnit_Framework_TestCase {
 
   public static function setUpBeforeClass() {
     GPDatabase::get()->beginUnguardedWrites();
-    GPNodeMap::addToMapForTest(TestModel::class);
+    GPNodeMap::addToMapForTest(GPTestModel::class);
   }
 
   public function testCreate() {
-    $model = new TestModel();
+    $model = new GPTestModel();
     $this->assertEmpty($model->getID());
     $model->save();
     $this->assertNotEmpty($model->getID());
   }
 
   public function testLoadByID() {
-    $model = new TestModel();
+    $model = new GPTestModel();
     $this->assertEmpty($model->getID());
     $model->save();
     $model::clearCache();
-    $this->assertNotEmpty(TestModel::getByID($model->getID()));
+    $this->assertNotEmpty(GPTestModel::getByID($model->getID()));
     // And from cache
-    $this->assertNotEmpty(TestModel::getByID($model->getID()));
+    $this->assertNotEmpty(GPTestModel::getByID($model->getID()));
   }
 
   public function testLoadByName() {
     $name = 'Weirds Name';
-    $model = new TestModel(['name' => $name]);
+    $model = new GPTestModel(['name' => $name]);
     $this->assertEmpty($model->getID());
     $model->save();
     $model::clearCache();
-    $this->assertNotEmpty(TestModel::getByName($name));
+    $this->assertNotEmpty(GPTestModel::getByName($name));
     // From cache
-    $this->assertNotEmpty(TestModel::getByName($name));
+    $this->assertNotEmpty(GPTestModel::getByName($name));
   }
 
   /**
    * @expectedException GPException
    */
   public function testLoadByAge() {
-    $model = new TestModel(['name' => 'name', 'age' => 18]);
+    $model = new GPTestModel(['name' => 'name', 'age' => 18]);
     $this->assertEmpty($model->getID());
     $model->save();
-    TestModel::getByAge(18);
+    GPTestModel::getByAge(18);
   }
 
   public function testGetData() {
-    $model = new TestModel(['name' => 'Foo', 'age' => 18]);
+    $model = new GPTestModel(['name' => 'Foo', 'age' => 18]);
     $this->assertEquals($model->getName(), 'Foo');
     $this->assertEquals($model->getAge(), 18);
     $model->save();
     $model::clearCache();
-    $loaded_model = TestModel::getByID($model->getID());
+    $loaded_model = GPTestModel::getByID($model->getID());
     $this->assertEquals(
       $model->getDataArray(),
       ['name' => 'Foo', 'age' => 18]
@@ -68,7 +68,7 @@ class ModelTest extends PHPUnit_Framework_TestCase {
   }
 
   public function testSetData() {
-    $model = new TestModel();
+    $model = new GPTestModel();
     $model->setName('Bar');
     $model->setAge(25);
     $this->assertEquals(
@@ -78,10 +78,12 @@ class ModelTest extends PHPUnit_Framework_TestCase {
   }
 
   public static function tearDownAfterClass() {
-    foreach (TestModel::getAll() as $model) {
+    foreach (GPTestModel::getAll() as $model) {
       $model->delete();
     }
     GPDatabase::get()->endUnguardedWrites();
+    // temporary
+    GPDatabase::disposeGuardIfNeeded();
   }
 
 }
