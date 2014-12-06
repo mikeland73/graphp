@@ -12,7 +12,7 @@ A couple of things that describe graphp:
 * No migrations. Team members can add new models independently without conflicts
 * No DB queries, unless you want to. Transparent model makes it easy to see what happens under the hood.
 * DB API is designed for fast performance. No implicit joins or other magic, but expressive enough for nice readable code.
-* No CLI.
+* No CLI needed (but supported for cron and tests).
 * All classes are loaded on demand when used for the first time.
 * PHP 5.5
 
@@ -37,7 +37,7 @@ class User extends GPNode {
 
 Define a model for bank account
 
-```
+```php
 // No need to declare data if you don't want to index it.
 class BankAccount extends GPNode {}
 ```
@@ -55,7 +55,7 @@ and load them later:
 
 ```php
 $user = User::getOneByName('Jane Doe');
-$account = $user->loadBankAccount()->getBankAccount();
+$account = $user->loadBankAccount()->getOneBankAccount();
 echo $account->getData('balance'); // 125.05
 ```
 
