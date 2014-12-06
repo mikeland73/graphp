@@ -18,7 +18,8 @@ A couple of things that describe graphp:
 
 A simple example:
 
-Define nodes (your model) with minimum boilerplate:
+Define nodes (your model) with minimum boilerplate
+=
 
 ```php
 class User extends GPNode {
@@ -57,6 +58,30 @@ and load them later:
 $user = User::getOneByName('Jane Doe');
 $account = $user->loadBankAccount()->getOneBankAccount();
 echo $account->getData('balance'); // 125.05
+```
+
+Controllers
+=
+```php
+class MyController extends GPController {
+
+  public function helloWorld() {
+    GP::view('admin/explore_view', ['title' => 'Hello World']);
+  }
+}
+```
+
+Views
+=
+```html
+<html>
+  <title>
+    <?= $title ?>
+  </title?
+  <body>
+    <a href="<?= OtherController::getURI('some method') ?>">Go to other controller</a>
+  </body>
+<html>
 ```
 
 Set up instructions
