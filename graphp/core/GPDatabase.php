@@ -5,9 +5,9 @@ class GPDatabase extends GPObject {
   use
     GPSingletonTrait;
 
-  private
-    $connection,
-    $guard;
+  private $connection;
+  private $guard;
+  private $nestedTransactions = 0;
 
   public function __construct() {
     $this->guard = new AphrontWriteGuard(function() {
@@ -41,11 +41,17 @@ class GPDatabase extends GPObject {
   }
 
   public function startTransaction() {
-    queryfx($this->connection, 'START TRANSACTION;');
+    if ($this->nestedTransactions === 0) {
+      queryfx($this->connection, 'START TRANSACTION;');
+    }
+    $this->nestedTransactions++;
   }
 
   public function commit() {
-    queryfx($this->connection, 'COMMIT;');
+    $this->nestedTransactions--;
+    if ($this->nestedTransactions === 0) {
+      queryfx($this->connection, 'COMMIT;');
+    }
   }
 
   public function insertNode(GPNode $node) {

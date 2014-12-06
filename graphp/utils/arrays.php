@@ -79,3 +79,9 @@ function array_select_keysx(array $dict, array $keys) {
   }
   return $result;
 }
+
+function array_unset_keys(array & $array, array $keys) {
+  foreach ($keys as $key) {
+    unset($array[$key]);
+  }
+}

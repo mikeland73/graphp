@@ -90,12 +90,8 @@ class GPEdgeTest extends GPTest {
   }
 
   public static function tearDownAfterClass() {
-    foreach (GPTestModel1::getAll() as $model) {
-      $model->delete();
-    }
-    foreach (GPTestModel2::getAll() as $model) {
-      $model->delete();
-    }
+    GPNode::simpleBatchDelete(GPTestModel1::getAll());
+    GPNode::simpleBatchDelete(GPTestModel2::getAll());
     GPDatabase::get()->endUnguardedWrites();
   }
 

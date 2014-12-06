@@ -4,6 +4,7 @@ abstract class GPNode extends GPObject {
 
   use GPNodeLoader;
   use GPNodeMagicMethods;
+  use GPBatch;
 
   private
     $data,

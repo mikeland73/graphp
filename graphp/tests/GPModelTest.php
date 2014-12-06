@@ -78,9 +78,7 @@ class GPNodeTest extends GPTest {
   }
 
   public static function tearDownAfterClass() {
-    foreach (GPTestModel::getAll() as $model) {
-      $model->delete();
-    }
+    GPNode::simpleBatchDelete(GPTestModel::getAll());
     GPDatabase::get()->endUnguardedWrites();
   }
 
