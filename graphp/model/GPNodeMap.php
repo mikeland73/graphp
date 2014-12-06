@@ -52,7 +52,7 @@ class GPNodeMap extends GPObject {
   }
 
   public static function addToMapForTest($class) {
-    // TODO: Assert dev env
+    GPEnv::assertTestEnv();
     self::$map[$class::getType()] = $class;
   }
 

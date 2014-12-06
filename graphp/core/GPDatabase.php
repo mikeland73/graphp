@@ -11,7 +11,7 @@ class GPDatabase extends GPObject {
 
   public function __construct() {
     $this->guard = new AphrontWriteGuard(function() {
-      if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+      if (idx($_SERVER, 'REQUEST_METHOD') !== 'POST') {
         throw new Exception(
           'You can only write to the database on post requests. If you need to
            make writes on get request,
@@ -216,15 +216,6 @@ class GPDatabase extends GPObject {
       'DELETE FROM node WHERE id IN (%Ld);',
       mpull($nodes, 'getID')
     );
-  }
-
-  public static function disposeGuardIfNeeded() {
-    if (
-      self::$sharedInstance &&
-      self::$sharedInstance->guard->isGuardActive()
-    ) {
-      self::$sharedInstance->guard->dispose();
-    }
   }
 
   public function __destruct() {

@@ -12,7 +12,7 @@ class GPTestModel2 extends GPNode {
 
 }
 
-class GPEdgeTest extends PHPUnit_Framework_TestCase {
+class GPEdgeTest extends GPTest {
 
   public static function setUpBeforeClass() {
     GPDatabase::get()->beginUnguardedWrites();

@@ -9,7 +9,7 @@ class GPTestModel extends GPNode {
   }
 }
 
-class GPNodeTest extends PHPUnit_Framework_TestCase {
+class GPNodeTest extends GPTest {
 
   public static function setUpBeforeClass() {
     GPDatabase::get()->beginUnguardedWrites();
@@ -82,8 +82,6 @@ class GPNodeTest extends PHPUnit_Framework_TestCase {
       $model->delete();
     }
     GPDatabase::get()->endUnguardedWrites();
-    // temporary
-    GPDatabase::disposeGuardIfNeeded();
   }
 
 }

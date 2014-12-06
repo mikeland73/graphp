@@ -35,10 +35,4 @@ class GPController extends GPObject {
     header('Location: '.$uri, true, 302);
     die();
   }
-
-  public function __destruct() {
-    if (class_exists('GPDatabase', false)) {
-      GPDatabase::disposeGuardIfNeeded();
-    }
-  }
 }
