@@ -23,6 +23,7 @@ class Admin extends GPController {
       'name' => $name,
       'nodes' => $name::getAll(),
     ];
+    GPDatabase::get()->dispose();
     GP::viewWithLayout('admin/node_type_view', 'layout/main', $data);
   }
 

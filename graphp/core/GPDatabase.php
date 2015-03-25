@@ -224,8 +224,12 @@ class GPDatabase extends GPObject {
     );
   }
 
-  public function __destruct() {
+  public function dispose() {
     $this->guard->isGuardActive() ? $this->guard->dispose() : null;
+  }
+
+  public function __destruct() {
+    $this->dispose();
   }
 
 }
