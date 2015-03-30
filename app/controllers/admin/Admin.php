@@ -2,6 +2,13 @@
 
 class Admin extends GPController {
 
+  public function __construct() {
+    if (!GPConfig::get()->admin_enabled) {
+      http_response_code(404);
+      die('404'); // TODO make nice 404 page.
+    }
+  }
+
   public function index() {
     $data = [
       'types' => GPNodeMap::regenAndGetAllTypes(),
