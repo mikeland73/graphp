@@ -27,6 +27,10 @@ abstract class GPNode extends GPObject {
         $data_type->assertValueIsOfType($data[$data_type->getName()]);
       }
     }
+    $this->data = [];
+    foreach ($data as $key => $value) {
+      $this->data[mb_strtolower($key)] = $value;
+    }
     $this->data = $data;
   }
 

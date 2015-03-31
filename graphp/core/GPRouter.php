@@ -15,6 +15,7 @@ class GPRouter extends GPObject {
     $controller_name = ucfirst(idxx(self::$parts, 0));
     $method_name = idx(self::$parts, 1, 'index');
     $controller = new $controller_name();
+    $controller->init();
     $args = array_slice(self::$parts, 2);
     call_user_func_array([$controller, $method_name], $args);
   }

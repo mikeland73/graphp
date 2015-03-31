@@ -14,6 +14,7 @@ class Admin extends GPController {
       'types' => GPNodeMap::regenAndGetAllTypes(),
       'counts' => ipull(GPDatabase::get()->getTypeCounts(), 'count', 'type'),
     ];
+    GPDatabase::get()->dispose();
     GP::viewWithLayout('admin/explore_view', 'layout/main', $data);
   }
 

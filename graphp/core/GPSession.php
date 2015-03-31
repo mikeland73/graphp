@@ -33,12 +33,22 @@ class GPSession extends GPObject {
     self::updateCookie();
   }
 
-  public static function unsett($key) {
+  public static function delete($key) {
     unset(self::$session[$key]);
     self::updateCookie();
   }
 
-  public static function updateCookie() {
+  public static function destroy() {
+    setcookie(
+      self::$config->cookie_name,
+      '',
+      0,
+      '/',
+      self::$config->cookie_domain
+    );
+  } 
+
+  private static function updateCookie() {
     $json = json_encode(self::$session);
     $json_with_hash = $json.sha1($json.self::$config->salt);
     if (strlen($json_with_hash) > 4093) {

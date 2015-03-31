@@ -6,7 +6,7 @@ class GPController extends GPObject {
     $post,
     $get;
 
-  public function __construct() {
+  public function init() {
     $this->post = new GPRequestData($_POST);
     $this->get = new GPRequestData($_GET);
   }
