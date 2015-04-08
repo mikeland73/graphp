@@ -14,6 +14,7 @@ class GPFileMap extends GPObject {
   }
 
   public function getPath($file) {
+    $file = strtolower($file);
     if (!isset($this->map[$file]) || !file_exists($this->map[$file])) {
       $this->regenMap();
     }
@@ -28,7 +29,7 @@ class GPFileMap extends GPObject {
     foreach ($iter as $key => $file) {
       if ($file->getExtension() === 'php') {
         list($name) = explode('.', $file->getFileName());
-        $this->map[$name] = $key;
+        $this->map[strtolower($name)] = $key;
       }
     }
     $this->writeMap();
