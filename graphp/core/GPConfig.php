@@ -27,6 +27,6 @@ class GPConfig extends GPObject {
     if (isset($this->config[$name])) {
       return $this->config[$name];
     }
-    throw new Exception($name.' does not is not in '.$this->name.' config' , 1);
+    throw new Exception($name.' is not in '.$this->name.' config' , 1);
   }
 }

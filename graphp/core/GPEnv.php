@@ -15,4 +15,8 @@ final class GPEnv extends GPObject {
   public static function assertTestEnv() {
     Assert::true(self::isTestEnv());
   }
+
+  public static function isDevEnv() {
+    return GPConfig::get()->is_dev;
+  }
 }

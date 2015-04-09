@@ -29,4 +29,8 @@ trait GPSingletonTrait {
     return self::sharedInstance();
   }
 
+  public static function exists() {
+    return (bool) self::$sharedInstance;
+  }
+
 }

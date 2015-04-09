@@ -71,6 +71,12 @@ class GPLoader extends GPObject {
   }
 
   public static function view($view_name, array $_data = [], $return = false) {
+    if (
+      GPConfig::get('database')->disallow_view_db_access && 
+      GPDatabase::exists()
+    ) {
+      GPDatabase::get()->dispose();
+    }
     $file = ROOT_PATH.'app/views/' . $view_name . '.php';
     if (!file_exists($file)) {
       throw new GPException('View "'.$view_name.'"" not found');
@@ -100,6 +106,11 @@ class GPLoader extends GPObject {
 
   public static function isCLI() {
     return php_sapi_name() === 'cli';
+  }
+
+  public static function return404() {
+    http_response_code(404);
+    die('404'); // TODO make nice 404 page.
   }
 }
 

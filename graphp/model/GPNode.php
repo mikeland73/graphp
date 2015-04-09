@@ -31,7 +31,6 @@ abstract class GPNode extends GPObject {
     foreach ($data as $key => $value) {
       $this->data[mb_strtolower($key)] = $value;
     }
-    $this->data = $data;
   }
 
   public function getID() {
@@ -212,10 +211,12 @@ abstract class GPNode extends GPObject {
   }
 
   final public static function getDataTypes() {
-    if (!static::$data_types) {
-      static::$data_types = mpull(static::getDataTypesImpl(), null, 'getName');
+    $class = get_called_class();
+    if (!array_key_exists($class, self::$data_types)) {
+      self::$data_types[$class] = 
+        mpull(static::getDataTypesImpl(), null, 'getName');
     }
-    return static::$data_types;
+    return self::$data_types[$class];
   }
 
   final public static function getDataTypeByName($name) {

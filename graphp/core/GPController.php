@@ -12,7 +12,10 @@ class GPController extends GPObject {
   }
 
   public function __call($method_name, $args) {
-    echo 'Method "' . $method_name . '" is not in ' . get_called_class();
+    if (GPEnv::isDevEnv()) {
+      echo 'Method "' . $method_name . '" is not in ' . get_called_class();
+    }
+    GP::return404();
   }
 
   public static function getURI($method = '') {
@@ -34,5 +37,11 @@ class GPController extends GPObject {
     $uri = static::getURI($method);
     header('Location: '.$uri, true, 302);
     die();
+  }
+
+  public function __destruct() {
+    if (GPDatabase::exists()) {
+      GPDatabase::get()->dispose();
+    }
   }
 }

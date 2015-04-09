@@ -17,7 +17,7 @@ class GPSecurity extends GPObject {
   }
 
   public static function csrf() {
-    $token = self::getNewCSRFToken(GPSession::get(GPSession::UID));
+    $token = self::getNewCSRFToken();
     return '<input name="csrf" type="hidden" value="'.$token.'" />';
   }
 
