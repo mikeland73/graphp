@@ -16,13 +16,17 @@ class GPRequestData extends GPObject {
     return $this->get($key, 'is_string');
   }
 
-  public function getExists($key) {
-    return isset($this->data[$key]);
+  public function getArray($key) {
+    return $this->get($key, 'is_array');
   }
 
-  private function get($key, callable $validator) {
-    $value = strip_tags(trim(idx($this->data, $key, '')));
-    if ($validator($value)) {
+  public function getExists($key) {
+    return array_key_exists($key, $this->data);
+  }
+
+  public function get($key, callable $validator = null) {
+    $value = idx($this->data, $key);
+    if ($validator === null || $validator($value)) {
       return $value;
     }
     return null;
