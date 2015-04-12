@@ -199,12 +199,7 @@ class GPDatabase extends GPObject {
     $ordered = [];
     foreach ($results as $result) {
       if (!array_key_exists($result['from_node_id'], $ordered)) {
-        $ordered[$result['from_node_id']] = [];
-      }
-      if (
-        !array_key_exists($result['type'], $ordered[$result['from_node_id']])
-      ) {
-        $ordered[$result['from_node_id']][$result['type']] = [];
+        $ordered[$result['from_node_id']] = array_fill_keys($types, []);
       }
       $ordered[$result['from_node_id']][$result['type']][$result['to_node_id']]
         = $result['to_node_id'];
