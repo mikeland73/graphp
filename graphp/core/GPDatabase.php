@@ -177,21 +177,37 @@ class GPDatabase extends GPObject {
     );
   }
 
-  public function getConnectedIDs(array $from_nodes, array $types) {
+  public function getConnectedIDs(GPNode $from_node, array $types) {
+    return idx(
+      $this->multiGetConnectedIDs([$from_node], $types),
+      $from_node->getID(),
+      array_fill_keys($types, [])
+    );
+  }
+
+  public function multiGetConnectedIDs(array $from_nodes, array $types) {
     if (!$types || !$from_nodes) {
       return [];
     }
     $results = queryfx_all(
       $this->connection,
-      'SELECT to_node_id, type FROM edge '.
+      'SELECT from_node_id, to_node_id, type FROM edge '.
       'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC;',
       mpull($from_nodes, 'getID'),
       $types
     );
-    $ordered = array_fill_keys($types, []);
+    $ordered = [];
     foreach ($results as $result) {
-      $ordered[$result['type']] = idx($ordered, $result['type'], []);
-      $ordered[$result['type']][$result['to_node_id']] = $result['to_node_id'];
+      if (!array_key_exists($result['from_node_id'], $ordered)) {
+        $ordered[$result['from_node_id']] = [];
+      }
+      if (
+        !array_key_exists($result['type'], $ordered[$result['from_node_id']])
+      ) {
+        $ordered[$result['from_node_id']][$result['type']] = [];
+      }
+      $ordered[$result['from_node_id']][$result['type']][$result['to_node_id']]
+        = $result['to_node_id'];
     }
     return $ordered;
   }

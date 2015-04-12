@@ -144,7 +144,7 @@ abstract class GPNode extends GPObject {
 
   private function loadConnectedIDs(array $edges) {
     $types = mpull($edges, 'getType');
-    $ids = GPDatabase::get()->getConnectedIDs(array($this), $types);
+    $ids = GPDatabase::get()->getConnectedIDs($this, $types);
     $this->connectedNodeIDs = array_merge_by_keys(
       $this->connectedNodeIDs,
       $ids
@@ -213,7 +213,7 @@ abstract class GPNode extends GPObject {
   final public static function getDataTypes() {
     $class = get_called_class();
     if (!array_key_exists($class, self::$data_types)) {
-      self::$data_types[$class] = 
+      self::$data_types[$class] =
         mpull(static::getDataTypesImpl(), null, 'getName');
     }
     return self::$data_types[$class];
