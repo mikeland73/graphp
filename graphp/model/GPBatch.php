@@ -34,7 +34,8 @@ trait GPBatch {
     array $edge_types
   ) {
     $nodes = mpull($nodes, null, 'getID');
-    $ids = GPDatabase::get()->multiGetConnectedIDs($nodes, $edge_types);
+    $raw_edge_types = mpull($edge_types, 'getType');
+    $ids = GPDatabase::get()->multiGetConnectedIDs($nodes, $raw_edge_types);
     $to_nodes = self::multiGetByID(array_flatten($ids));
     foreach ($ids as $from_id => $type_ids) {
       foreach ($type_ids as $edge_type => & $ids_for_edge_type) {

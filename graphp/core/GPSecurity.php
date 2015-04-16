@@ -5,6 +5,7 @@ class GPSecurity extends GPObject {
   const EXPIRATION = 86400;
 
   private static $config;
+  private static $token;
 
   public static function init() {
     self::$config = GPConfig::get();
@@ -17,8 +18,10 @@ class GPSecurity extends GPObject {
   }
 
   public static function csrf() {
-    $token = self::getNewCSRFToken();
-    return '<input name="csrf" type="hidden" value="'.$token.'" />';
+    if (self::$token === null) {
+      self::$token = self::getNewCSRFToken();
+    }
+    return '<input name="csrf" type="hidden" value="'.self::$token.'" />';
   }
 
   public static function isCSFRTokenValid($token) {

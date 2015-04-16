@@ -19,6 +19,9 @@ trait GPNodeLoader {
   public static function getByID($id) {
     if (!array_key_exists($id, self::$cache)) {
       $node_data = GPDatabase::get()->getNodeByID($id);
+      if ($node_data === null) {
+        return null;
+      }
       self::$cache[$id] = self::nodeFromArray($node_data);
     }
     return self::$cache[$id];

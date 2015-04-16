@@ -72,7 +72,7 @@ class GPLoader extends GPObject {
 
   public static function view($view_name, array $_data = [], $return = false) {
     if (
-      GPConfig::get('database')->disallow_view_db_access && 
+      GPConfig::get('database')->disallow_view_db_access &&
       GPDatabase::exists()
     ) {
       GPDatabase::get()->dispose();
@@ -100,8 +100,17 @@ class GPLoader extends GPObject {
     ob_end_flush();
   }
 
-  public static function viewWithLayout($view, $layout, array $data = []) {
-    GP::view($layout, ['content' => GP::view($view, $data, true)]);
+  public static function viewWithLayout(
+    $view,
+    $layout,
+    array $data = [],
+    array $layout_data = []
+  ) {
+    if (array_key_exists('content', $layout_data)) {
+      throw new GPException('Key: \'content\' cannot be int layout_data');
+    }
+    $layout_data['content'] = GP::view($view, $data, true);
+    GP::view($layout, $layout_data);
   }
 
   public static function isCLI() {

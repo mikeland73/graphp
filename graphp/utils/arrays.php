@@ -85,3 +85,12 @@ function array_unset_keys(array & $array, array $keys) {
     unset($array[$key]);
   }
 }
+
+function array_append(array $array, $elem, $key = null) {
+  if ($key === null) {
+    $array[] = $elem;
+  } else {
+    $array[$key] = $elem;
+  }
+  return $array;
+}

@@ -92,8 +92,8 @@ class GPBatchTest extends GPTest {
     GPNode::batchLoadConnectedNodes(
       [$m1, $m2, $m3],
       array_merge(
-        mpull(GPTestBatchModel::getEdgeTypes(), 'getType'),
-        mpull(GPTestBatchModel2::getEdgeTypes(), 'getType')
+        GPTestBatchModel::getEdgeTypes(),
+        GPTestBatchModel2::getEdgeTypes()
       )
     );
     $this->assertNotEmpty($m1->getGPTestBatchModel2());
