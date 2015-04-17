@@ -47,6 +47,13 @@ abstract class GPNode extends GPObject {
 
   public function setDataX($key, $value) {
     $data_type = self::getDataTypeByName($key);
+    if ($data_type === null) {
+      throw new GPException(
+        '\''.$key.'\' is not a declared data type on '.get_class($this).
+        '. Possible data types are ['.
+        implode(', ', mpull(self::getDataTypes(), 'getName')).']'
+      );
+    }
     $data_type->assertValueIsOfType($value);
     return $this->setData($key, $value);
   }
