@@ -15,6 +15,7 @@ class GPSession extends GPObject {
       $json = mb_substr($json_with_hash, 0, -40);
       $hash = mb_substr($json_with_hash, -40);
       if (sha1($json.self::$config->salt) !== $hash) {
+        self::destroy();
         throw new Exception('Cookie hash missmatch. Possible attack', 1);
       }
     }
@@ -46,7 +47,7 @@ class GPSession extends GPObject {
       '/',
       self::$config->cookie_domain
     );
-  } 
+  }
 
   private static function updateCookie() {
     $json = json_encode(self::$session);

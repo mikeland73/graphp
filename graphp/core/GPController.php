@@ -34,7 +34,7 @@ class GPController extends GPObject {
   }
 
   public static function redirect($method = '') {
-    $uri = static::getURI($method);
+    $uri = call_user_func_array([self, 'getURI'], func_get_args());
     header('Location: '.$uri, true, 302);
     die();
   }
