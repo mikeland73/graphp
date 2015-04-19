@@ -121,6 +121,16 @@ class GPLoader extends GPObject {
     http_response_code(404);
     die('404'); // TODO make nice 404 page.
   }
+
+  public static function ajax(array $data) {
+    header('Expires: 0');
+    header(
+      'Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0'
+    );
+    header('Pragma: no-cache');
+    header('Content-type: application/json');
+    echo json_encode($data);
+  }
 }
 
 class_alias('GPLoader', 'GP');
