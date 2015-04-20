@@ -118,6 +118,7 @@ class GPLoader extends GPObject {
   }
 
   public static function return404() {
+    GPDatabase::get()->dispose();
     http_response_code(404);
     die('404'); // TODO make nice 404 page.
   }

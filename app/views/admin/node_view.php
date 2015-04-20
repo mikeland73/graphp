@@ -17,7 +17,7 @@
       <? foreach($node->getDataArray() as $key => $value): ?>
         <tr>
           <th scope="row"><code><?=$key?></code></th>
-          <th scope="row"><?=$value?></th>
+          <th scope="row"><?=is_array($value) ? json_encode($value) : $value?></th>
           <th scope="row">
             <?=idx($node->getIndexedData(), $key) ? 'yes' : 'no'?>
           </th>
