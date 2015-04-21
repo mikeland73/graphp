@@ -40,6 +40,13 @@ class Admin extends GPController {
     $val = $this->post->getString('data_val');
     $key_to_unset = $this->post->getString('data_key_to_unset');
     if ($key && $val) {
+      $data_type = $node::getDataTypeByName($key);
+      if (
+        $data_type !== null &&
+        $data_type->getType() === GPDataType::GP_ARRAY
+      ) {
+        $val = json_decode($val, true);
+      }
       $node->setData($key, $val)->save();
     }
     if ($key_to_unset) {

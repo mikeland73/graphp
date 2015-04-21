@@ -51,4 +51,8 @@ class GPDataType extends GPObject {
     return $this->isIndexed;
   }
 
+  public function getType() {
+    return $this->type;
+  }
+
 }
