@@ -52,8 +52,11 @@ class Admin extends GPController {
     if ($key_to_unset) {
       $node->unsetData($key_to_unset)->save();
     }
-    if ($this->post->getInt('edge_type') && $this->post->getInt('to_id')) {
-      $edge = $node::getEdgeTypeByType($this->post->getInt('edge_type'));
+    $edge_type = $this->post->get('edge_type');
+    if ($edge_type && $this->post->getInt('to_id')) {
+      $edge = is_numeric($edge_type) ?
+        $node::getEdgeTypeByType($edge_type) :
+        $node::getEdgeType($edge_type);
       $other_node = GPNode::getByID($this->post->getInt('to_id'));
       if ($this->post->getExists('delete')) {
         $node->addPendingRemovalNodes($edge, [$other_node]);
