@@ -178,7 +178,17 @@ abstract class GPNode extends GPObject {
 
   public function getConnectedNodes(array $edges) {
     $types = mpull($edges, 'getType');
-    return array_select_keysx($this->connectedNodes, $types);
+    return array_select_keysx(
+      $this->connectedNodes,
+      $types,
+      function() use ($edges) {
+        $ids = array_keys($this->connectedNodes);
+        throw new GPException(
+          GPErrorText::missingEdges($edges, $this, $ids),
+          1
+        );
+      }
+    );
   }
 
   protected static function getEdgeTypesImpl() {

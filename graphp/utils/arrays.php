@@ -68,13 +68,17 @@ function make_array($val) {
   return is_array($val) ? $val : [$val];
 }
 
-function array_select_keysx(array $dict, array $keys) {
+function array_select_keysx(array $dict, array $keys, $custom_error = null) {
   $result = array();
   foreach ($keys as $key) {
     if (array_key_exists($key, $dict)) {
       $result[$key] = $dict[$key];
     } else {
-      throw new Exception('Missing key '.$key, 1);
+      if (is_callable($custom_error)) {
+        $custom_error();
+      } else {
+        throw new GPException('Missing key '.$key, 1);
+      }
     }
   }
   return $result;
