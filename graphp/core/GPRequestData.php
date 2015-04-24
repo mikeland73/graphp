@@ -9,15 +9,18 @@ class GPRequestData extends GPObject {
   }
 
   public function getInt($key, $default = null) {
-    return $this->get($key, 'is_numeric') ?: $default;
+    $val = $this->get($key, 'is_numeric');
+    return  $val !== null ? $val : $default;
   }
 
   public function getString($key, $default = null) {
-    return $this->get($key, 'is_string') ?: $default;
+    $val = $this->get($key, 'is_string');
+    return  $val !== null ? $val : $default;
   }
 
   public function getArray($key, $default = null) {
-    return $this->get($key, 'is_array') ?: $default;
+    $val = $this->get($key, 'is_array');
+    return  $val !== null ? $val : $default;
   }
 
   public function getExists($key) {
