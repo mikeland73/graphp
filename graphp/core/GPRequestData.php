@@ -8,16 +8,16 @@ class GPRequestData extends GPObject {
     $this->data = $data;
   }
 
-  public function getInt($key) {
-    return $this->get($key, 'is_numeric');
+  public function getInt($key, $default = null) {
+    return $this->get($key, 'is_numeric') ?: $default;
   }
 
-  public function getString($key) {
-    return $this->get($key, 'is_string');
+  public function getString($key, $default = null) {
+    return $this->get($key, 'is_string') ?: $default;
   }
 
-  public function getArray($key) {
-    return $this->get($key, 'is_array');
+  public function getArray($key, $default = null) {
+    return $this->get($key, 'is_array') ?: $default;
   }
 
   public function getExists($key) {

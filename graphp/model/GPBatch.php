@@ -46,5 +46,17 @@ trait GPBatch {
       $nodes[$from_id]->connectedNodes =
         array_merge_by_keys($nodes[$from_id]->connectedNodes, $type_ids);
     }
+    foreach ($nodes as $id => $node) {
+      $types_for_node = $node::getEdgeTypes();
+      foreach ($edge_types as $type) {
+        if (
+          !array_key_exists($id, $ids) &&
+          !array_key_exists($type->getType(), $nodes[$id]->connectedNodes) &&
+          array_key_exists($type->getName(), $types_for_node)
+        ) {
+          $nodes[$id]->connectedNodes[$type->getType()] = [];
+        }
+      }
+    }
   }
 }
