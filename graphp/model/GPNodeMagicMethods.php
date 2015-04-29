@@ -75,6 +75,9 @@ trait GPNodeMagicMethods {
     if (substr_compare($method, 'IDs', -3) === 0) {
       $method = str_ireplace('IDs', '', $method);
       $ids_only = true;
+    } else if (substr_compare($method, 'ID', -2) === 0) {
+      $method = str_ireplace('ID', '', $method);
+      $ids_only = true;
     }
 
     $name = mb_strtolower(mb_substr($method, 3));
@@ -82,6 +85,9 @@ trait GPNodeMagicMethods {
     if (static::getDataTypeByName($name)) {
       return $this->getDataX($name);
     } else if (($edge = static::getEdgeType($name))) {
+      if ($name === $edge->getSingleNodeName()) {
+        $one = true;
+      }
       if (empty($ids_only)) {
         $result = $this->getConnectedNodes(array($edge));
       } else {

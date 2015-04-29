@@ -2,11 +2,11 @@
 
 class GPEdgeType extends GPObject {
 
-  private
-    $fromType,
-    $toType,
-    $name,
-    $storageKey;
+  private $fromType;
+  private $toType;
+  private $name;
+  private $storageKey;
+  private $singleNodeName;
 
   public function __construct($to, $name = '', $storage_key = '') {
     $this->toType = $to::getType();
@@ -32,6 +32,15 @@ class GPEdgeType extends GPObject {
 
   public function getFromType() {
     return $this->fromType;
+  }
+
+  public function setSingleNodeName($name) {
+    $this->singleNodeName = $name;
+    return $this;
+  }
+
+  public function getSingleNodeName() {
+    return mb_strtolower($this->singleNodeName);
   }
 
   private function getStorageKey() {

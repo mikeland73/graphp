@@ -3,7 +3,7 @@
 class GPTestModel1 extends GPNode {
   protected static function getEdgeTypesImpl() {
     return [
-      new GPEdgeType(GPTestModel2::class),
+      (new GPEdgeType(GPTestModel2::class))->setSingleNodeName('Foo'),
     ];
   }
 }
@@ -26,6 +26,18 @@ class GPEdgeTest extends GPTest {
     $model1->addGPTestModel2($model2)->save();
     $model1->loadGPTestModel2();
     $this->assertEquals($model1->getOneGPTestModel2(), $model2);
+    $this->assertEquals(
+      $model1->getGPTestModel2(),
+      [$model2->getID() => $model2]
+    );
+  }
+
+  public function testAddingAndGettingSingle() {
+    $model1 = (new GPTestModel1())->save();
+    $model2 = (new GPTestModel2())->save();
+    $model1->addGPTestModel2($model2)->save();
+    $model1->loadGPTestModel2();
+    $this->assertEquals($model1->getFoo(), $model2);
     $this->assertEquals(
       $model1->getGPTestModel2(),
       [$model2->getID() => $model2]
