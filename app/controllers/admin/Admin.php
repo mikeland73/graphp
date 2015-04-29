@@ -46,6 +46,11 @@ class Admin extends GPController {
         $data_type->getType() === GPDataType::GP_ARRAY
       ) {
         $val = json_decode($val, true);
+      } else if (
+        $data_type !== null &&
+        $data_type->getType() === GPDataType::GP_BOOL
+      ) {
+        $val = (bool)$val;
       }
       $node->setData($key, $val)->save();
     }
