@@ -67,12 +67,11 @@
             </th>
             <th scope="row">
               <a href="<?=Admin::getURI('node', $conn_node->getID())?>">
-                <?=$conn_node->getID()?>
+                Link
               </a>
-              type:
-              <a href="<?=Admin::getURI('node_type', $conn_node::getType())?>">
-                <?=get_class($conn_node)?>
-              </a>
+              ID: <?=$conn_node->getID()?>
+              type: <?=get_class($conn_node)?>
+              <?=method_exists( $conn_node, '__toString' ) ? ' - '.$conn_node : ''?>
             </th>
             <th scope="row">
               <form
