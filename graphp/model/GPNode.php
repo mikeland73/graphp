@@ -37,6 +37,10 @@ abstract class GPNode extends GPObject {
     return (int) $this->id;
   }
 
+  public function getUpdated() {
+    return $this->updated;
+  }
+
   public static function getType() {
     return STRUtils::to64BitInt(static::getStorageKey());
   }
@@ -102,6 +106,7 @@ abstract class GPNode extends GPObject {
       $db->updateNodeData($this);
     } else {
       $this->id = $db->insertNode($this);
+      $this->updated = date('Y-m-d H-i-s');
       self::$cache[$this->id] = $this;
     }
     $db->updateNodeIndexedData($this);

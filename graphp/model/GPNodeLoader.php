@@ -13,6 +13,7 @@ trait GPNodeLoader {
     $class = GPNodeMap::getClass($data['type']);
     $node = new $class(json_decode($data['data'], true));
     $node->id = $data['id'];
+    $node->updated = $data['updated'];
     return $node;
   }
 

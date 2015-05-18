@@ -40,6 +40,11 @@ class GPRouter extends GPObject {
         return $parts;
       }
     }
-    return array_values(array_filter(explode('/', $uri)));
+    return array_values(array_filter(
+      explode('/', $uri),
+      function($part) {
+        return mb_strlen($part) > 0; // Stupid PHP filters out '0'
+      }
+    ));
   }
 }

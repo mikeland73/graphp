@@ -15,6 +15,7 @@
       <tr>
         <th>ID</th>
         <th>Data</th>
+        <th>Updated</th>
         <th>Edit</th>
         <th>Delete</th>
       </tr>
@@ -27,7 +28,8 @@
               <?=$node->getID()?>
             </a>
           </td>
-          <td><?=$node->getJSONData()?></td>
+          <td><?=substr($node->getJSONData(), 0, 128)?></td>
+          <td><?=$node->getUpdated()?></td>
           <td>
             <a
               class="btn btn-sm btn-default active"
