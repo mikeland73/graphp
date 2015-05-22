@@ -31,7 +31,7 @@ trait GPNodeLoader {
   public static function multiGetByID(array $ids) {
     $ids = key_by_value($ids);
     $to_fetch = array_diff_key($ids, self::$cache);
-    $node_datas = GPDatabase::get()->multigetNodeByID($ids);
+    $node_datas = GPDatabase::get()->multigetNodeByID($to_fetch);
     foreach ($node_datas as $node_data) {
       self::$cache[$node_data['id']] = self::nodeFromArray($node_data);
     }
