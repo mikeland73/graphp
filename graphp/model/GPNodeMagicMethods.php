@@ -30,7 +30,15 @@ trait GPNodeMagicMethods {
   public function __call($method, $args) {
 
     if (substr_compare($method, 'get', 0, 3) === 0) {
-      return $this->handleGet($method, $args);
+      return $this->handleGet(mb_substr($method, 3), $args);
+    }
+
+    if (substr_compare($method, 'is', 0, 2) === 0) {
+      $name = mb_substr($method, 2);
+      $type = static::getDataTypeByName($name);
+      if ($type && $type->getType() === GPDataType::GP_BOOL) {
+        return $this->handleGet(mb_substr($method, 2), $args);
+      }
     }
 
     if (substr_compare($method, 'set', 0, 3) === 0) {
@@ -66,25 +74,27 @@ trait GPNodeMagicMethods {
     );
   }
 
-  private function handleGet($method, $args) {
-    if (substr_compare($method, 'one', 3, 3, true) === 0) {
-      $method = str_ireplace('one', '', $method);
+  private function handleGet($name, $args) {
+    $name = mb_strtolower($name);
+    // Default to checking data first.
+    if (static::getDataTypeByName($name)) {
+      return $this->getDataX($name);
+    }
+
+    if (substr_compare($name, 'one', 0, 3, true) === 0) {
+      $name = str_ireplace('one', '', $name);
       $one = true;
     }
 
-    if (substr_compare($method, 'IDs', -3) === 0) {
-      $method = str_ireplace('IDs', '', $method);
+    if (substr_compare($name, 'IDs', -3) === 0) {
+      $name = str_ireplace('IDs', '', $name);
       $ids_only = true;
-    } else if (substr_compare($method, 'ID', -2) === 0) {
-      $method = str_ireplace('ID', '', $method);
+    } else if (substr_compare($name, 'ID', -2) === 0) {
+      $name = str_ireplace('ID', '', $name);
       $ids_only = true;
     }
 
-    $name = mb_strtolower(mb_substr($method, 3));
-
-    if (static::getDataTypeByName($name)) {
-      return $this->getDataX($name);
-    } else if (($edge = static::getEdgeType($name))) {
+    if (($edge = static::getEdgeType($name))) {
       if ($name === $edge->getSingleNodeName()) {
         $one = true;
       }

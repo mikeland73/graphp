@@ -52,6 +52,13 @@ function array_concat_in_place(& $arr1, $arr2) {
   }
 }
 
+function array_concat($arr1, $arr2) {
+  foreach ($arr2 as $key => $value) {
+    $arr1[] = $value;
+  }
+  return $arr1;
+}
+
 function array_flatten(array $array) {
   $result = array();
   foreach ($array as $key => $value) {

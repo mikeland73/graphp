@@ -33,8 +33,12 @@ class GPController extends GPObject {
     return $index . '/'.strtolower($name).'/'.implode('/', $args);
   }
 
+  public static function getURL($method = '') {
+    return GPConfig::get()->domain.static::getURL($method);
+  }
+
   public static function redirect($method = '') {
-    $uri = call_user_func_array([self, 'getURI'], func_get_args());
+    $uri = call_user_func_array(get_called_class().'::getURI', func_get_args());
     header('Location: '.$uri, true, 302);
     die();
   }
