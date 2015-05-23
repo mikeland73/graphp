@@ -24,7 +24,7 @@
           <th scope="row">
             <form
               class="text-center"
-              action="<?=Admin::getURI('node', $node->getID())?>"
+              action="<?=AdminAjax::getURI('save', $node->getID())?>"
               method="POST">
               <?=GPSecurity::csrf()?>
               <input name="data_key_to_unset" type="hidden" value="<?=$key?>">
@@ -38,7 +38,7 @@
     </tbody>
   </table>
 </div>
-<form action="<?=Admin::getURI('node', $node->getID())?>" method="POST">
+<form action="<?=AdminAjax::getURI('save', $node->getID())?>" method="POST">
   <?=GPSecurity::csrf()?>
   <input name="data_key" type="text" placeholder="key">
   <input name="data_val" type="text" placeholder="val">
@@ -96,7 +96,7 @@
     </tbody>
   </table>
 </div>
-<form action="<?=Admin::getURI('node', $node->getID())?>" method="POST">
+<form action="<?=AdminAjax::getURI('save', $node->getID())?>" method="POST">
   <?=GPSecurity::csrf()?>
   <input name="edge_type" type="text" placeholder="edge type">
   <input name="to_id" type="text" placeholder="To node ID">

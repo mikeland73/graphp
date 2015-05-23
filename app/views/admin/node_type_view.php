@@ -1,5 +1,5 @@
 <h3>
-  <form action="<?=Admin::getURI('node_type', $type)?>" method="POST">
+  <form action="<?=AdminAjax::getURI('create', $type)?>" method="POST">
     <?=GPSecurity::csrf()?>
     <?=$name?>
     <button class="btn btn-primary">
@@ -38,7 +38,7 @@
             </a>
           </td>
           <td>
-            <form action="<?=Admin::getURI('node_type', $type)?>" method="POST">
+            <form action="<?=AdminAjax::getURI('delete', $type)?>" method="POST">
               <?=GPSecurity::csrf()?>
               <input
                 name="delete_node_id"

@@ -8,6 +8,10 @@ class GPRequestData extends GPObject {
     $this->data = $data;
   }
 
+  public function getData() {
+    return $this->data;
+  }
+
   public function getInt($key, $default = null) {
     $val = $this->get($key, 'is_numeric');
     return  $val !== null ? $val : $default;
@@ -33,5 +37,9 @@ class GPRequestData extends GPObject {
       return $value;
     }
     return null;
+  }
+
+  public function serialize() {
+    return json_encode($this->data);
   }
 }
