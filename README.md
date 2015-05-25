@@ -14,7 +14,7 @@ A couple of things that describe graphp:
 * DB API is designed for fast performance. No implicit joins or other magic, but expressive enough for nice readable code.
 * No CLI needed (but supported for cron and tests).
 * All classes are loaded on demand when used for the first time.
-* PHP 5.5
+* PHP 5.5+
 
 A simple example:
 
@@ -43,12 +43,14 @@ Define a model for bank account
 class BankAccount extends GPNode {}
 ```
 
-Create instances:
+Create instances and edges between them:
 
 ```php
-$user = (new User(['name' => 'Jane Doe']))->save();
-$bank_account = new BankAccount(['accountNumber' => 123, 'balance' => 125.05]);
-$bank_account->save();
+$user = (new User())->setName('Jane Doe')->save();
+$bank_account = (new BankAccount())
+  ->setData('accountNumber', 123)
+  ->setData('balance', 125.05)
+  ->save();
 $user->addBankAccount($bank_account)->save();
 ```
 
@@ -68,6 +70,11 @@ class MyController extends GPController {
   public function helloWorld() {
     GP::view('admin/explore_view', ['title' => 'Hello World']);
   }
+
+  public function doStuff() {
+    // Do stuff and redirect
+    OtherController::redirect();
+  }
 }
 ```
 
@@ -79,7 +86,7 @@ Views
     <?= $title ?>
   </title?
   <body>
-    <a href="<?= OtherController::getURI('some method') ?>">Go to other controller</a>
+    <a href="<?= OtherController::getURI('someMethod') ?>">Go to other controller</a>
   </body>
 <html>
 ```
@@ -87,9 +94,9 @@ Views
 Set up instructions
 ======
 
-TODO (mikeland86) :P
+TODO
 
 FAQ
 ======
-#### Why PHP?
-Great question. Inertia, I guess. The good news is we are using php 5.5 which has some cool features like traits and short array syntax.
+
+TODO
