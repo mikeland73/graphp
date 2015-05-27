@@ -81,8 +81,8 @@ class GPEdgeTest extends GPTest {
     $model1->addGPTestModel2([$model2, $model3])->save();
     $model1->loadGPTestModel2();
     $model1->removeGPTestModel2($model2)->save();
-    // loading again should reset the edges
-    $model1->loadGPTestModel2();
+    // force loading should reset the edges
+    $model1->forceLoadGPTestModel2();
     $this->assertEquals(
       $model1->getGPTestModel2(),
       [$model3->getID() => $model3]
@@ -96,8 +96,8 @@ class GPEdgeTest extends GPTest {
     $model1->addGPTestModel2([$model2, $model3])->save();
     $model1->loadGPTestModel2();
     $model1->removeAllGPTestModel2()->save();
-    // loading again should reset the edges
-    $model1->loadGPTestModel2();
+    // force loading should reset the edges
+    $model1->forceLoadGPTestModel2();
     $this->assertEmpty($model1->getGPTestModel2());
   }
 
