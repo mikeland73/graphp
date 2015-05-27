@@ -68,7 +68,7 @@ Controllers
 class MyController extends GPController {
 
   public function helloWorld() {
-    GP::view('admin/explore_view', ['title' => 'Hello World']);
+    GP::view('hello_world_view', ['title' => 'Hello World']);
   }
 
   public function doStuff() {
