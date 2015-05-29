@@ -50,7 +50,9 @@ trait GPNodeLoader {
       $data_type = static::getDataTypeByName($type_name);
       Assert::equals(count($arguments), 1);
       $arg = idx0($arguments);
-      $data_type->assertValueIsOfType($arg);
+      foreach (make_array($arg) as $val) {
+        $data_type->assertValueIsOfType($val);
+      }
       $results = self::getByIndexData(
         $data_type->getIndexedType(),
         $arg
@@ -77,7 +79,7 @@ trait GPNodeLoader {
 
   private static function getByIndexData($data_type, $data) {
     $db = GPDatabase::get();
-    $node_ids = $db->getNodeIDsByTypeData($data_type, $data);
+    $node_ids = $db->getNodeIDsByTypeData($data_type, make_array($data));
     return self::multiGetByID($node_ids);
   }
 

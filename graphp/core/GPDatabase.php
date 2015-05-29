@@ -11,6 +11,9 @@ class GPDatabase extends GPObject {
 
   public function __construct() {
     $this->guard = new AphrontWriteGuard(function() {
+      if (GP::isCLI()) {
+        return;
+      }
       if (idx($_SERVER, 'REQUEST_METHOD') !== 'POST') {
         throw new Exception(
           'You can only write to the database on post requests. If you need to
@@ -92,10 +95,13 @@ class GPDatabase extends GPObject {
     );
   }
 
-  public function getNodeIDsByTypeData($type, $data) {
+  public function getNodeIDsByTypeData($type, array $data) {
+    if (!$data) {
+      return [];
+    }
     return ipull(queryfx_all(
       $this->connection,
-      'SELECT node_id FROM node_data WHERE type = %d AND data = %s;',
+      'SELECT node_id FROM node_data WHERE type = %d AND data IN (%Ls);',
       $type,
       $data
     ), 'node_id');
