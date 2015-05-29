@@ -35,14 +35,19 @@ trait GPBatch {
     $force = false
   ) {
     $nodes = mpull($nodes, null, 'getID');
+    $raw_edge_types = mpull($edge_types, 'getType');
     if (!$force) {
+      $names = mpull($edge_types, 'getName');
       foreach ($nodes as $key => $node) {
-        if ($node->isLoaded($edge_types)) {
+        $valid_edge_types = array_select_keys(
+          $node::getEdgeTypesByType(),
+          $raw_edge_types
+        );
+        if ($node->isLoaded($valid_edge_types)) {
           unset($nodes[$key]);
         }
       }
     }
-    $raw_edge_types = mpull($edge_types, 'getType');
     $ids = GPDatabase::get()->multiGetConnectedIDs($nodes, $raw_edge_types);
     $to_nodes = self::multiGetByID(array_flatten($ids));
     foreach ($ids as $from_id => $type_ids) {

@@ -243,6 +243,11 @@ abstract class GPNode extends GPObject {
     return idxx(static::$edge_types_by_type[$class], $type);
   }
 
+  final public static function getEdgeTypesByType() {
+    self::getEdgeTypes();
+    return static::$edge_types_by_type[get_called_class()];
+  }
+
   protected static function getDataTypesImpl() {
     return [];
   }
