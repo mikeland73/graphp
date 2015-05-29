@@ -30,6 +30,9 @@ class Admin extends GPController {
 
   public function node($id) {
     $node = GPNode::getByID($id);
+    if (!$node) {
+      self::redirect();
+    }
     $node->loadConnectedNodes($node::getEdgeTypes());
     GP::viewWithLayout('admin/node_view', 'layout/main', ['node' => $node]);
   }

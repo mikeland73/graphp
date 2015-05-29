@@ -202,6 +202,13 @@ abstract class GPNode extends GPObject {
     );
   }
 
+  private function isLoaded($edge_or_edges) {
+    $edges = make_array($edge_or_edges);
+    $types = mpull($edges, 'getType');
+    return
+      count(array_select_keys($this->connectedNodes, $types)) === count($types);
+  }
+
   protected static function getEdgeTypesImpl() {
     return [];
   }

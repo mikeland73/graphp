@@ -31,20 +31,32 @@ trait GPBatch {
 
   public static function batchLoadConnectedNodes(
     array $nodes,
-    array $edge_types
+    array $edge_types,
+    $force = false
   ) {
     $nodes = mpull($nodes, null, 'getID');
+    if (!$force) {
+      foreach ($nodes as $key => $node) {
+        if ($node->isLoaded($edge_types)) {
+          unset($nodes[$key]);
+        }
+      }
+    }
     $raw_edge_types = mpull($edge_types, 'getType');
     $ids = GPDatabase::get()->multiGetConnectedIDs($nodes, $raw_edge_types);
     $to_nodes = self::multiGetByID(array_flatten($ids));
     foreach ($ids as $from_id => $type_ids) {
-      foreach ($type_ids as $edge_type => & $ids_for_edge_type) {
-        foreach ($ids_for_edge_type as $key => $id) {
-          $ids_for_edge_type[$key] = $to_nodes[$id];
-        }
+      $loaded_nodes_for_type = [];
+      foreach ($type_ids as $edge_type => $ids_for_edge_type) {
+        $loaded_nodes_for_type[$edge_type] = array_select_keys(
+          $to_nodes,
+          $ids_for_edge_type
+        );
       }
+      $nodes[$from_id]->connectedNodeIDs =
+        array_merge_by_keys($nodes[$from_id]->connectedNodeIDs, $type_ids);
       $nodes[$from_id]->connectedNodes =
-        array_merge_by_keys($nodes[$from_id]->connectedNodes, $type_ids);
+        array_merge_by_keys($nodes[$from_id]->connectedNodes, $loaded_nodes_for_type);
     }
     foreach ($nodes as $id => $node) {
       $types_for_node = $node::getEdgeTypes();
@@ -54,6 +66,7 @@ trait GPBatch {
           !array_key_exists($type->getType(), $nodes[$id]->connectedNodes) &&
           array_key_exists($type->getName(), $types_for_node)
         ) {
+          $nodes[$id]->connectedNodeIDs[$type->getType()] = [];
           $nodes[$id]->connectedNodes[$type->getType()] = [];
         }
       }
