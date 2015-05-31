@@ -65,7 +65,7 @@ function array_flatten(array $array) {
     if (is_array($value)){
       array_concat_in_place($result, array_flatten($value));
     } else {
-      $result[$key] = $value;
+      $result[] = $value;
     }
   }
   return $result;
