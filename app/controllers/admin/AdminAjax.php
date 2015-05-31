@@ -1,4 +1,4 @@
-<?
+<?php
 
 class AdminAjax extends GPController {
 

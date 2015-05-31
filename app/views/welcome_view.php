@@ -22,11 +22,11 @@
         <a href="https://github.com/mikeland86/graphp">contribute</a>
         <a href="<?=Admin::getURI()?>">admin</a>
       </div>
-      <? if (!empty($arg1)): ?>
+      <?php if (!empty($arg1)): ?>
         <div>
           arg1 is <?= $arg1 ?>
         </div>
-      <? endif; ?>
+      <?php endif; ?>
     </div>
   </body>
 </html>

@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GPTestBatchModel extends GPNode {
 

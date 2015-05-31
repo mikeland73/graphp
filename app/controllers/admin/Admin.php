@@ -1,4 +1,4 @@
-<?
+<?php
 
 class Admin extends GPController {
 

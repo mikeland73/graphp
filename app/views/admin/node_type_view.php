@@ -21,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <? foreach ($nodes as $node): ?>
+      <?php foreach ($nodes as $node): ?>
         <tr>
           <td>
             <a href="<?=Admin::getURI('node', $node->getID())?>">
@@ -49,7 +49,7 @@
             </form>
           </td>
         </tr>
-      <? endforeach; ?>
+      <?php endforeach; ?>
     <tbody>
   </table>
 </div>

@@ -1,8 +1,8 @@
-<?
+<?php
 
 return [
   'is_dev'        => true,
-  
+
   'domain'        => 'localhost',
   'use_index_php' => true, // To avoid this, you need to configure your server
 

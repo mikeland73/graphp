@@ -1,4 +1,4 @@
-<?
+<?php
 
 trait GPBatchLoader {
 

@@ -1,4 +1,4 @@
-<?
+<?php
 
 final class User extends GPNode {
 

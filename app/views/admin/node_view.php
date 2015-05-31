@@ -14,7 +14,7 @@
       </tr>
     </thead>
     <tbody>
-      <? foreach($node->getDataArray() as $key => $value): ?>
+      <?php foreach($node->getDataArray() as $key => $value): ?>
         <tr>
           <th scope="row"><code><?=$key?></code></th>
           <th scope="row"><?=is_array($value) ? json_encode($value) : $value?></th>
@@ -34,7 +34,7 @@
             </form>
           </th>
         </tr>
-      <? endforeach; ?>
+      <?php endforeach; ?>
     </tbody>
   </table>
 </div>
@@ -58,9 +58,9 @@
       </tr>
     </thead>
     <tbody>
-      <? foreach ($node->getConnectedNodes($node::getEdgeTypes())
+      <?php foreach ($node->getConnectedNodes($node::getEdgeTypes())
            as $e => $nodes): ?>
-        <? foreach ($nodes as $conn_node): ?>
+        <?php foreach ($nodes as $conn_node): ?>
           <tr>
             <th scope="row">
               <code><?=$node::getEdgeTypeByType($e)->getName().' - '.$e?></code>
@@ -91,8 +91,8 @@
               </form>
             </th>
           </tr>
-        <? endforeach; ?>
-      <? endforeach; ?>
+        <?php endforeach; ?>
+      <?php endforeach; ?>
     </tbody>
   </table>
 </div>

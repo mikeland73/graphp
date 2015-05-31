@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GPSession extends GPObject {
 

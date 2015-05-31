@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GPTestModel extends GPNode {
   protected static function getDataTypesImpl() {

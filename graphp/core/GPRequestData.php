@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GPRequestData extends GPObject {
 

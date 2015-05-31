@@ -9,13 +9,13 @@
       </tr>
     </thead>
     <tbody>
-      <? foreach ($types as $id => $name): ?>
+      <?php foreach ($types as $id => $name): ?>
         <tr>
           <td><a href="<?=Admin::getURI('node_type', $id)?>"><?=$id?></a></td>
           <td><a href="<?=Admin::getURI('node_type', $id)?>"><?=$name?></a></td>
           <td><?=idx($counts, $id, 0)?></td>
         </tr>
-      <? endforeach; ?>
+      <?php endforeach; ?>
     <tbody>
   </table>
 </div>

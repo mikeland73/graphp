@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GPFileMap extends GPObject {
 
@@ -41,7 +41,7 @@ class GPFileMap extends GPObject {
   }
 
   private function writeMap() {
-    $map_file = "<?\nreturn [\n";
+    $map_file = "<?php\nreturn [\n";
     foreach ($this->map as $file => $path) {
       $map_file .= '  '.$file.' => \''.$path."',\n";
     }

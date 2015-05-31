@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GPTestModel1 extends GPNode {
   protected static function getEdgeTypesImpl() {

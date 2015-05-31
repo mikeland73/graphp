@@ -1,4 +1,4 @@
-<?
+<?php
 
 // We load a couple of things up front. Everything else gets loaded on demand.
 class GPException extends Exception {}

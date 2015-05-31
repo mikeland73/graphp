@@ -1,4 +1,4 @@
-<?
+<?php
 
 abstract class GPTest extends PHPUnit_Framework_TestCase {
 

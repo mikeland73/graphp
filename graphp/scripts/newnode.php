@@ -1,5 +1,5 @@
 #!/usr/bin/env php
-<?
+<?php
 
 // input argument should be of the form "nodeName[args]" where args are 0
 // or more comma separated strings of arguments that will be indexed.

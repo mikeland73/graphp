@@ -1,4 +1,4 @@
-<?
+<?php
 
 return [
   // default route. You can rmeove if you don't want one.

@@ -1,4 +1,4 @@
-<?
+<?php
 
 class Assert extends GPObject {
 

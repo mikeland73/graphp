@@ -1,4 +1,4 @@
-<?
+<?php
 
 // This is used to bootstrap the framework without routing.
 // It is useful for tests and other require() cases.

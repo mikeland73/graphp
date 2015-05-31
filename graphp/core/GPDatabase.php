@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GPDatabase extends GPObject {
 

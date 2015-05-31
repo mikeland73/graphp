@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GPController extends GPObject {
 

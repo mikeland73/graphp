@@ -1,4 +1,4 @@
-<?
+<?php
 
 class GPNodeMap extends GPObject {
 
@@ -59,7 +59,7 @@ class GPNodeMap extends GPObject {
   private static function regenMap() {
     self::$map = [];
     self::$inverseMap = [];
-    $file = "<?\nreturn [\n";
+    $file = "<?php\nreturn [\n";
     foreach (GP::getModelsMap()->getAllFileNames() as $class) {
       $file .= '  '.$class::getType().' => \''.$class."',\n";
       self::$map[$class::getType()] = $class;
