@@ -6,7 +6,7 @@ final class GPBatch extends GPObject {
   private $classes = [];
   private $lazy;
   private $lazyEdges = [];
-  private $lazyForce = true;
+  private $lazyForce = false;
 
   public function __construct(array $nodes, $lazy) {
     $this->nodes = $nodes;
@@ -53,7 +53,7 @@ final class GPBatch extends GPObject {
     );
     $this->lazyEdges = [];
     $this->lazyForce = false;
-    return;
+    return $this;
   }
 
   private function handleLoad($method, $args, $force = false) {
