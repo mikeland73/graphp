@@ -48,7 +48,7 @@ class GPBatchTest extends GPTest {
   public function testBatchSave() {
     $m1 = new GPTestBatchModel();
     $m2 = new GPTestBatchModel();
-    GPNode::batchSave([$m1, $m2]);
+    batch($m1, $m2)->save();
     $this->assertNotEmpty($m1->getID());
     $this->assertNotEmpty($m2->getID());
   }
@@ -57,10 +57,10 @@ class GPBatchTest extends GPTest {
     GPTestBatchModel::$customDelete = false;
     $m1 = new GPTestBatchModel();
     $m2 = new GPTestBatchModel();
-    GPNode::batchSave([$m1, $m2]);
+    batch($m1, $m2)->save();
     $this->assertNotEmpty($m1->getID());
     $this->assertNotEmpty($m2->getID());
-    GPNode::batchDelete([$m1, $m2]);
+    batch($m1, $m2)->delete();
     $results = GPNode::multiGetByID([$m1->getID(), $m2->getID()]);
     $this->assertEmpty($results);
     $this->assertTrue(GPTestBatchModel::$customDelete);
@@ -70,7 +70,7 @@ class GPBatchTest extends GPTest {
     GPTestBatchModel::$customDelete = false;
     $m1 = new GPTestBatchModel();
     $m2 = new GPTestBatchModel();
-    GPNode::batchSave([$m1, $m2]);
+    batch([$m1, $m2])->save();
     $this->assertNotEmpty($m1->getID());
     $this->assertNotEmpty($m2->getID());
     GPNode::simpleBatchDelete([$m1, $m2]);
@@ -84,18 +84,35 @@ class GPBatchTest extends GPTest {
     $m2 = new GPTestBatchModel2();
     $m3 = new GPTestBatchModel3();
     $m4 = new GPTestBatchModel4();
-    GPNode::batchSave([$m1, $m2, $m3, $m4]);
+    batch($m1, $m2, $m3, $m4)->save();
     $m1->addGPTestBatchModel2($m2);
     $m2->addGPTestBatchModel3($m3);
     $m2->addGPTestBatchModel4($m4);
-    GPNode::batchSave([$m1, $m2]);
-    GPNode::batchLoadConnectedNodes(
-      [$m1, $m2, $m3],
-      array_merge(
-        GPTestBatchModel::getEdgeTypes(),
-        GPTestBatchModel2::getEdgeTypes()
-      )
-    );
+    batch($m1, $m2)->save();
+    batch($m1, $m2, $m3)
+      ->loadGPTestBatchModel2()
+      ->loadGPTestBatchModel3()
+      ->loadGPTestBatchModel4();
+    $this->assertNotEmpty($m1->getGPTestBatchModel2());
+    $this->assertNotEmpty($m2->getGPTestBatchModel3());
+    $this->assertNotEmpty($m2->getGPTestBatchModel4());
+  }
+
+  public function testBatchLazyLoad() {
+    $m1 = new GPTestBatchModel();
+    $m2 = new GPTestBatchModel2();
+    $m3 = new GPTestBatchModel3();
+    $m4 = new GPTestBatchModel4();
+    batch($m1, $m2, $m3, $m4)->save();
+    $m1->addGPTestBatchModel2($m2);
+    $m2->addGPTestBatchModel3($m3);
+    $m2->addGPTestBatchModel4($m4);
+    batch($m1, $m2)->save();
+    lazy($m1, $m2, $m3)
+      ->loadGPTestBatchModel2()
+      ->loadGPTestBatchModel3()
+      ->loadGPTestBatchModel4()
+      ->load();
     $this->assertNotEmpty($m1->getGPTestBatchModel2());
     $this->assertNotEmpty($m2->getGPTestBatchModel3());
     $this->assertNotEmpty($m2->getGPTestBatchModel4());

@@ -1,80 +1,96 @@
 <?
 
-trait GPBatch {
+final class GPBatch extends GPObject {
 
-  public static function batchSave(array $nodes) {
-    $db = GPDatabase::get();
-    $db->startTransaction();
-    foreach ($nodes as $node) {
-      $node->save();
+  private $nodes = [];
+  private $classes = [];
+  private $lazy;
+  private $lazyEdges = [];
+  private $lazyForce = true;
+
+  public function __construct(array $nodes, $lazy) {
+    $this->nodes = $nodes;
+    $this->classes = array_unique(array_map(
+      function($node) { return get_class($node); },
+      $nodes
+    ));
+    $this->lazy = $lazy;
+  }
+
+  public function delete() {
+    GPNode::batchDelete($this->nodes);
+  }
+
+  public function save() {
+    GPNode::batchSave($this->nodes);
+    return $this;
+  }
+
+  public function __call($method, $args) {
+
+    if (substr_compare($method, 'forceLoad', 0, 9) === 0) {
+      if ($this->lazy) {
+        $this->lazyForce = true;
+      }
+      return $this->handleLoad(mb_substr($method, 5), $args, true);
     }
-    $db->commit();
-  }
 
-  public static function batchDelete(array $nodes) {
-    $db = GPDatabase::get();
-    $db->startTransaction();
-    foreach ($nodes as $node) {
-      $node->delete();
+    if (substr_compare($method, 'load', 0, 4) === 0) {
+      return $this->handleLoad($method, $args);
     }
-    $db->commit();
+
+    throw new GPException(
+      'Method '.$method.' not found in '.get_called_class()
+    );
   }
 
-  /**
-    * Deletes nodes, but ignores overriden delete() methods. More efficient but
-    * won't do fancy recursive deletes.
-    */
-  public static function simpleBatchDelete(array $nodes) {
-    GPDatabase::get()->deleteNodes($nodes);
-    array_unset_keys(self::$cache, mpull($nodes, 'getID'));
+  public function load() {
+    Assert::true($this->lazy, 'Cannot call load on non lazy batch loader');
+    GPNode::batchLoadConnectedNodes(
+      $this->nodes,
+      $this->lazyEdges,
+      $this->lazyForce
+    );
+    $this->lazyEdges = [];
+    $this->lazyForce = false;
+    return;
   }
 
-  public static function batchLoadConnectedNodes(
-    array $nodes,
-    array $edge_types,
-    $force = false
-  ) {
-    $nodes = mpull($nodes, null, 'getID');
-    $raw_edge_types = mpull($edge_types, 'getType');
-    if (!$force) {
-      $names = mpull($edge_types, 'getName');
-      foreach ($nodes as $key => $node) {
-        $valid_edge_types = array_select_keys(
-          $node::getEdgeTypesByType(),
-          $raw_edge_types
+  private function handleLoad($method, $args, $force = false) {
+    if (substr_compare($method, 'IDs', -3) === 0) {
+      if ($this->lazy) {
+        throw new GPException('Lazy ID loading is not supported');
+      } else {
+        GPNode::batchLoadConnectedNodes(
+          $this->nodes,
+          $this->getEdges(mb_substr($method, 4, -3)),
+          $force,
+          true
         );
-        if ($node->isLoaded($valid_edge_types)) {
-          unset($nodes[$key]);
-        }
       }
-    }
-    $ids = GPDatabase::get()->multiGetConnectedIDs($nodes, $raw_edge_types);
-    $to_nodes = self::multiGetByID(array_flatten($ids));
-    foreach ($ids as $from_id => $type_ids) {
-      $loaded_nodes_for_type = [];
-      foreach ($type_ids as $edge_type => $ids_for_edge_type) {
-        $loaded_nodes_for_type[$edge_type] = array_select_keys(
-          $to_nodes,
-          $ids_for_edge_type
+    } else {
+      if ($this->lazy) {
+        $this->lazyEdges +=
+          mpull($this->getEdges(mb_substr($method, 4)), null, 'getType');
+      } else {
+        GPNode::batchLoadConnectedNodes(
+          $this->nodes,
+          $this->getEdges(mb_substr($method, 4)),
+          $force
         );
       }
-      $nodes[$from_id]->connectedNodeIDs =
-        array_merge_by_keys($nodes[$from_id]->connectedNodeIDs, $type_ids);
-      $nodes[$from_id]->connectedNodes =
-        array_merge_by_keys($nodes[$from_id]->connectedNodes, $loaded_nodes_for_type);
     }
-    foreach ($nodes as $id => $node) {
-      $types_for_node = $node::getEdgeTypes();
-      foreach ($edge_types as $type) {
-        if (
-          !array_key_exists($id, $ids) &&
-          !array_key_exists($type->getType(), $nodes[$id]->connectedNodes) &&
-          array_key_exists($type->getName(), $types_for_node)
-        ) {
-          $nodes[$id]->connectedNodeIDs[$type->getType()] = [];
-          $nodes[$id]->connectedNodes[$type->getType()] = [];
-        }
-      }
-    }
+    return $this;
+  }
+
+  private function getEdges($edge_name) {
+    return array_filter(array_map(
+      function($class) use ($edge_name) {
+        return $class::isEdgeType($edge_name) ?
+          $class::getEdgeType($edge_name) :
+          null;
+      },
+      $this->classes
+    ));
   }
 }

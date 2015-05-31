@@ -4,7 +4,7 @@ abstract class GPNode extends GPObject {
 
   use GPNodeLoader;
   use GPNodeMagicMethods;
-  use GPBatch;
+  use GPBatchLoader;
 
   private
     $data,
@@ -237,6 +237,10 @@ abstract class GPNode extends GPObject {
     return idxx(self::getEdgeTypes(), mb_strtolower($name));
   }
 
+  final public static function isEdgeType($name) {
+    return (bool) idx(self::getEdgeTypes(), mb_strtolower($name));
+  }
+
   final public static function getEdgeTypeByType($type) {
     $class = get_called_class();
     isset(static::$edge_types_by_type[$class]) ?: self::getEdgeTypes();
@@ -265,4 +269,12 @@ abstract class GPNode extends GPObject {
     $data_types = self::getDataTypes();
     return idx($data_types, mb_strtolower($name));
   }
+}
+
+function batch(/*array of nodes, single nodes, arrays of arrays of nodes*/) {
+  return new GPBatch(array_flatten(func_get_args()), false /*lazy*/);
+}
+
+function lazy(/*array of nodes, single nodes, arrays of arrays of nodes*/) {
+  return new GPBatch(array_flatten(func_get_args()), true /*lazy*/);
 }
