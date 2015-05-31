@@ -93,10 +93,38 @@ Views
 
 Set up instructions
 ======
+* Install php-5.5+ mysql php-mysqli
+* Run `mysql -u db_user < graphp/db/mysql_schema.sql` to create the database.
+* Create maps folder and open permissions: `mkdir graphp/maps; chmod 777 graphp/maps`
+* Point your webserver to public directory.
+* Modify config files to suit your environment.
 
-TODO
 
 FAQ
 ======
 
-TODO
+**What is a graph database and why should I use it?**
+
+A graph db is a database that uses graph structures for semantic queries with nodes, edges and properties to represent and store data (wikipedia). By giving our nodes, edges, and data nice human readable names we can write pretty, easy to understand code while storing the data in a way that is much more intuitive than relational dbs or key value stores. The flexible schema makes it easy to make structural changes to objects without having to write migrations or make any db changes.
+
+
+**What is a human readable graph? How does this lead to nicer code?**
+
+The following code loads friends and city for a user and all her friends:
+```php
+$friends = $user->loadCity()->loadFriends()->getFriends();
+batch($friends)->loadFriends()->loadCity();
+```
+
+
+**What are magic methods, and what do you mean no boilerplate?**
+
+In graphp, node methods are defined by the graph structure. So if you create a user node with a friend edge and a city edge, you automatically can do things like:
+```php
+$user->addFriend($friend)->save();
+$city = $user->loadCity()->getCity();
+$user->removeAllFriends()->save();
+```
+There are no cli commands to create the node, there is no autogen code, and there is no copy paste boilerplace. All of these methods will work using the minimal node and edge information you provide.
+
+
