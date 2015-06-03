@@ -7,6 +7,7 @@ class GPEdgeType extends GPObject {
   private $name;
   private $storageKey;
   private $singleNodeName;
+  private $inverse;
 
   public function __construct($to, $name = '', $storage_key = '') {
     $this->toType = $to::getType();
@@ -41,6 +42,17 @@ class GPEdgeType extends GPObject {
 
   public function getSingleNodeName() {
     return mb_strtolower($this->singleNodeName);
+  }
+
+  public function inverse($inverse) {
+    $this->inverse = $inverse;
+    $inverse->inverse = $this;
+    $inverse->fromType = $this->toType;
+    return $this;
+  }
+
+  public function getInverse() {
+    return $this->inverse;
   }
 
   private function getStorageKey() {

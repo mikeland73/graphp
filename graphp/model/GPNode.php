@@ -15,7 +15,9 @@ abstract class GPNode extends GPObject {
     $connectedNodes = [],
     $pendingConnectedNodes = [],
     $pendingRemovalNodes = [],
-    $pendingRemovalAllNodes = [];
+    $pendingRemovalAllNodes = [],
+    $pendingRemovalAllInverseNodes = [],
+    $nodesWithInverse = [];
 
   protected static
     $data_types = [],
@@ -114,22 +116,51 @@ abstract class GPNode extends GPObject {
     $db->saveEdges($this, $this->pendingConnectedNodes);
     $db->deleteEdges($this, $this->pendingRemovalNodes);
     $db->deleteAllEdges($this, $this->pendingRemovalAllNodes);
+    $db->deleteAllInverseEdges($this, $this->pendingRemovalAllInverseNodes);
+    batch($this->nodesWithInverse)->save();
     $db->commit();
     $this->pendingConnectedNodes = [];
     $this->pendingRemovalNodes = [];
     $this->pendingRemovalAllNodes = [];
+    $this->pendingRemovalAllInverseNodes = [];
+    $this->nodesWithInverse = [];
     return $this;
   }
 
   public function addPendingConnectedNodes(GPEdgeType $edge, array $nodes) {
+    if ($edge->getInverse()) {
+      $this->nodesWithInverse += mpull($nodes, null, 'getID');
+      foreach ($nodes as $node) {
+        $node->addPendingNodes(
+          'pendingConnectedNodes',
+          $edge->getInverse(),
+          [$this]
+        );
+      }
+    }
     return $this->addPendingNodes('pendingConnectedNodes', $edge, $nodes);
   }
 
   public function addPendingRemovalNodes(GPEdgeType $edge, array $nodes) {
+    if ($edge->getInverse()) {
+      $this->nodesWithInverse += mpull($nodes, null, 'getID');
+      foreach ($nodes as $key => $node) {
+        $node->addPendingNodes(
+          'pendingRemovalNodes',
+          $edge->getInverse(),
+          [$this]
+        );
+      }
+    }
     return $this->addPendingNodes('pendingRemovalNodes', $edge, $nodes);
   }
 
   public function addPendingRemovalAllNodes($edge) {
+    if ($edge->getInverse()) {
+      // This can be slow :( there is no index on (to_node_id, type)
+      $this->pendingRemovalAllInverseNodes[$edge->getInverse()->getType()] =
+        $edge->getInverse()->getType();
+    }
     $this->pendingRemovalAllNodes[$edge->getType()] = $edge->getType();
     return $this;
   }

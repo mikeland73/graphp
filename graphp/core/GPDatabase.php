@@ -165,19 +165,31 @@ class GPDatabase extends GPObject {
     );
   }
 
-  public function deleteAllEdges(GPNode $from_node, array $edge_types) {
+  public function deleteAllEdges(GPNode $node, array $edge_types) {
+    return $this->deleteAllEdgesInternal($node, $edge_types, 'from_node_id');
+  }
+
+  public function deleteAllInverseEdges(GPNode $node, array $edge_types) {
+    return $this->deleteAllEdgesInternal($node, $edge_types, 'to_node_id');
+  }
+
+  private function deleteAllEdgesInternal(
+    GPNode $node,
+    array $edge_types,
+    $col
+  ) {
     $values = [];
     $parts = [];
     foreach ($edge_types as $edge_type) {
       $parts[] = '(%d, %d)';
-      array_push($values, $from_node->getID(), $edge_type);
+      array_push($values, $node->getID(), $edge_type);
     }
     if (!$parts) {
       return;
     }
     vqueryfx(
       $this->connection,
-      'DELETE FROM edge WHERE (from_node_id, type) IN ('.
+      'DELETE FROM edge WHERE ('.$col.', type) IN ('.
       implode(',', $parts) . ');',
       $values
     );
