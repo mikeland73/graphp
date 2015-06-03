@@ -120,14 +120,18 @@ trait GPNodeMagicMethods {
   }
 
   private function handleLoad($method, $args, $force = false) {
+    $limit = null;
+    if (count($args) === 1) {
+      $limit = idx0($args);
+    }
     if (substr_compare($method, 'IDs', -3) === 0) {
       $edge_name = mb_substr($method, 4, -3);
       $edge = static::getEdgeType($edge_name);
-      return $this->loadConnectedIDs([$edge], $force);
+      return $this->loadConnectedIDs([$edge], $force, $limit);
     } else {
       $edge_name = mb_substr($method, 4);
       $edge = static::getEdgeType($edge_name);
-      return $this->loadConnectedNodes([$edge], $force);
+      return $this->loadConnectedNodes([$edge], $force, $limit);
     }
   }
 

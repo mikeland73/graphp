@@ -183,24 +183,36 @@ class GPDatabase extends GPObject {
     );
   }
 
-  public function getConnectedIDs(GPNode $from_node, array $types) {
+  public function getConnectedIDs(
+    GPNode $from_node,
+    array $types,
+    $limit = null
+  ) {
     return idx(
-      $this->multiGetConnectedIDs([$from_node], $types),
+      $this->multiGetConnectedIDs([$from_node], $types, $limit),
       $from_node->getID(),
       array_fill_keys($types, [])
     );
   }
 
-  public function multiGetConnectedIDs(array $from_nodes, array $types) {
+  public function multiGetConnectedIDs(
+    array $from_nodes,
+    array $types,
+    $limit = null
+  ) {
     if (!$types || !$from_nodes) {
       return [];
     }
-    $results = queryfx_all(
+    $args = [mpull($from_nodes, 'getID'), $types];
+    if ($limit !== null) {
+      $args[] = $limit;
+    }
+    $results = vqueryfx_all(
       $this->connection,
       'SELECT from_node_id, to_node_id, type FROM edge '.
-      'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC;',
-      mpull($from_nodes, 'getID'),
-      $types
+      'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
+      ($limit === null ? '' : ' LIMIT %d').';',
+      $args
     );
     $ordered = [];
     foreach ($results as $result) {
