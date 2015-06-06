@@ -18,15 +18,9 @@
     <div class="box">
       <h2 class="header">Welcome to the GraPHP framework</h2>
       <div>
-        This is a work in progress, please
-        <a href="https://github.com/mikeland86/graphp">contribute</a>
-        <a href="<?=Admin::getURI()?>">admin</a>
+        This is a work in progress, contribute on
+        <a href="https://github.com/mikeland86/graphp" target="_blank">github</a>
       </div>
-      <?php if (!empty($arg1)): ?>
-        <div>
-          arg1 is <?= $arg1 ?>
-        </div>
-      <?php endif; ?>
     </div>
   </body>
 </html>

@@ -47,8 +47,14 @@ trait GPNodeLoader {
       $only_one = true;
     }
     if (isset($type_name)) {
+      $class = get_called_class();
       $data_type = static::getDataTypeByName($type_name);
-      Assert::equals(count($arguments), 1);
+      Assert::truthy($data_type, $name.' is not a method on '.$class);
+      Assert::equals(
+        count($arguments),
+        1,
+        GPErrorText::wrongArgs($class, $name, 1, count($arguments))
+      );
       $arg = idx0($arguments);
       foreach (make_array($arg) as $val) {
         $data_type->assertValueIsOfType($val);

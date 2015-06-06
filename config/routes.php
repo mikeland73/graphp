@@ -8,5 +8,5 @@ return [
   // you want non slash to match (or use /?). Use capture groups for arguments:
   // '^/id/(\d+)/?$' => ['Controller', 'index'], passes the capture group match
   // into Controller::index method call.
-  '^/user/([ab]+)/?$' => ['welcome', 'index'],
+  '^/user/([0-9]+)/?$' => ['welcome', 'index'],
 ];

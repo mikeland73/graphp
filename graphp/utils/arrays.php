@@ -10,10 +10,10 @@
  *
  * @return mixed Value.
  */
-function idxx(array $array, $key) {
+function idxx(array $array, $key, $message = '') {
   if (!array_key_exists($key, $array)) {
     throw new GPException(
-      $key . ' not in array: ' . json_encode($array)
+      $message ?: $key . ' not in array: ' . json_encode($array)
     );
   }
   return $array[$key];

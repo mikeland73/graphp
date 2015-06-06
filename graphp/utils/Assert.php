@@ -5,7 +5,7 @@ class Assert extends GPObject {
   public static function true($var, $message = '') {
     if ($var !== true) {
       throw new GPException(
-        'Failed asserting that '.$var.' is true - '.$message
+        $message ?: 'Failed asserting that '.$var.' is true - '
       );
     }
   }
@@ -13,7 +13,7 @@ class Assert extends GPObject {
   public static function truthy($var, $message = '') {
     if (!$var) {
       throw new GPException(
-        'Failed asserting that '.$var.' is true - '.$message
+        $message ?: 'Failed asserting that '.$var.' is true - '
       );
     }
   }
@@ -21,7 +21,7 @@ class Assert extends GPObject {
   public static function false($var, $message = '') {
     if ($var !== false) {
       throw new GPException(
-        'Failed asserting that '.$var.' is false - '.$message
+        $message ?: 'Failed asserting that '.$var.' is false - '
       );
     }
   }
@@ -29,14 +29,14 @@ class Assert extends GPObject {
   public static function equals($var, $val, $message = '') {
     if ($var !== $val) {
       throw new GPException(
-        'Failed asserting that '.$var.' is equal to '.$val.' - '.$message
+        $message ?: 'Failed asserting that '.$var.' is equal to '.$val.' - '
       );
     }
   }
 
   public static function inArray($idx, array $array, $message = '') {
     if (!array_key_exists($idx, $array)) {
-      throw new GPException($idx.' not in '.json_encode($array));
+      throw new GPException($message ?: $idx.' not in '.json_encode($array));
     }
   }
 
@@ -44,7 +44,7 @@ class Assert extends GPObject {
     foreach ($vars as $var) {
       if ($var !== $val) {
         throw new GPException(
-          'Failed asserting that '.$var.' is equal to '.$val.' - '.$message
+          $message ?: 'Failed asserting that '.$var.' is equal to '.$val.' - '
         );
       }
     }

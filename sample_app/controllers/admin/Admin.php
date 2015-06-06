@@ -14,7 +14,7 @@ class Admin extends GPController {
       'counts' => ipull(GPDatabase::get()->getTypeCounts(), 'count', 'type'),
     ];
     GPDatabase::get()->dispose();
-    GP::viewWithLayout('admin/explore_view', 'layout/main', $data);
+    GP::viewWithLayout('admin/explore_view', 'layout/admin_layout', $data);
   }
 
   public function node_type($type) {
@@ -25,7 +25,7 @@ class Admin extends GPController {
       'nodes' => $name::getAll(),
     ];
     GPDatabase::get()->dispose();
-    GP::viewWithLayout('admin/node_type_view', 'layout/main', $data);
+    GP::viewWithLayout('admin/node_type_view', 'layout/admin_layout', $data);
   }
 
   public function node($id) {
@@ -34,7 +34,11 @@ class Admin extends GPController {
       self::redirect();
     }
     $node->loadConnectedNodes($node::getEdgeTypes());
-    GP::viewWithLayout('admin/node_view', 'layout/main', ['node' => $node]);
+    GP::viewWithLayout(
+      'admin/node_view',
+      'layout/admin_layout',
+      ['node' => $node]
+    );
   }
 
   public function edges() {
@@ -43,6 +47,10 @@ class Admin extends GPController {
     foreach ($node_classes as $class) {
       array_concat_in_place($edges, $class::getEdgeTypes());
     }
-    GP::viewWithLayout('admin/edge_view', 'layout/main', ['edges' => $edges]);
+    GP::viewWithLayout(
+      'admin/edge_view',
+      'layout/admin_layout',
+      ['edges' => $edges]
+    );
   }
 }

@@ -3,7 +3,7 @@
 class Welcome extends GPController {
 
   public function index() {
-    GP::view('welcome_view');
+    GP::view('login_view');
   }
 
 }

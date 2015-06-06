@@ -289,7 +289,15 @@ abstract class GPNode extends GPObject {
   }
 
   final public static function getEdgeType($name) {
-    return idxx(self::getEdgeTypes(), mb_strtolower($name));
+    return idxx(
+      self::getEdgeTypes(),
+      mb_strtolower($name),
+      GPErrorText::missingEdgeType(
+        get_called_class(),
+        $name,
+        self::getEdgeTypes()
+      )
+    );
   }
 
   final public static function isEdgeType($name) {

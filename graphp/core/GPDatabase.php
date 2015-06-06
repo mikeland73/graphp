@@ -2,14 +2,23 @@
 
 class GPDatabase extends GPObject {
 
-  use
-    GPSingletonTrait;
-
+  private static $dbs = [];
   private $connection;
   private $guard;
   private $nestedTransactions = 0;
 
-  public function __construct() {
+  public static function get($name = 'database') {
+    if (!isset(self::$dbs[$name])) {
+      self::$dbs[$name] = new GPDatabase($name);
+    }
+    return self::$dbs[$name];
+  }
+
+  public static function exists($name = 'database') {
+    return array_key_exists($name, self::$dbs);
+  }
+
+  public function __construct($config_name) {
     $this->guard = new AphrontWriteGuard(function() {
       if (GP::isCLI()) {
         return;
@@ -31,7 +40,7 @@ class GPDatabase extends GPObject {
         );
       }
     });
-    $config = GPConfig::get('database');
+    $config = GPConfig::get($config_name);
     $this->connection = new AphrontMySQLiDatabaseConnection($config->toArray());
   }
 
