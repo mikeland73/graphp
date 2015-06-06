@@ -2,24 +2,47 @@
 
 final class GPProfiler {
 
-  private $data = [];
+  private static $enabled = false;
+  private static $queryData = [];
+  private static $marks = [];
 
   public static function enable() {
-    $profiler = new GPProfiler();
-    PhutilServiceProfiler::getInstance()->addListener([$profiler, 'format']);
+    if (self::$enabled) {
+      return;
+    }
+    self::$enabled = true;
+    self::$marks[] = [
+      'uri' => idx($_SERVER, 'REQUEST_URI', ''),
+      'name' => 'enabled',
+      'microtime' => microtime(true),
+    ];
+    PhutilServiceProfiler::getInstance()->addListener('GPProfiler::format');
   }
 
-  public function getData() {
-    return $this->data;
+  public static function getQueryData() {
+    return self::$queryData;
   }
 
-  public function format($type, $id, $data) {
+  public static function getMarks() {
+    return self::$marks;
+  }
+
+  public static function format($type, $id, $data) {
     $data['id'] = $id;
     $data['stage'] = $type;
-    $this->data[] = $data;
+    self::$queryData[] = $data;
   }
 
-  public function __destruct() {
-    var_dump($this->data);
+  public static function mark($name = '') {
+    if (!self::$enabled) {
+      return;
+    }
+    $name = $name?: 'Mark '.count(self::$marks);
+    self::$marks[] = ['name' => $name, 'microtime' => microtime(true)];
+    $count = count(self::$marks);
+    self::$marks[$count - 1]['duration'] =
+        self::$marks[$count - 1]['microtime'] -
+        self::$marks[$count - 2]['microtime'];
   }
+
 }

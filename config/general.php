@@ -13,4 +13,7 @@ return [
   'cookie_exp'    => '1209600', // Two weeks in seconds
   'cookie_domain' => '',
   'cookie_name'   => 'session',
+
+  'view_404'      => '',
+  'layout_404'    => '',
 ];

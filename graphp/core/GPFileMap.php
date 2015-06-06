@@ -9,7 +9,7 @@ class GPFileMap extends GPObject {
   public function __construct($dir, $name) {
     $this->dir = $dir;
     $this->name = $name;
-    $map = @include ROOT_PATH.'graphp/maps/'.$this->name;
+    $map = @include ROOT_PATH.'maps/'.$this->name;
     $this->map = $map ?: [];
   }
 
@@ -46,7 +46,7 @@ class GPFileMap extends GPObject {
       $map_file .= '  '.$file.' => \''.$path."',\n";
     }
     $map_file .= "];\n";
-    $file_path = ROOT_PATH.'graphp/maps/'.$this->name;
+    $file_path = ROOT_PATH.'maps/'.$this->name;
     file_put_contents($file_path, $map_file);
     // TODO this is probably not safe
     @chmod($file_path, 0666);

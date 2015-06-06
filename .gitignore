@@ -1,3 +1,4 @@
 config/web_server/20-mike_graphp.config
 graphp/maps/
+maps
 *.DS_Store

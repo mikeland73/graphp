@@ -15,9 +15,9 @@ class GPLoader extends GPObject {
 
   public static function init() {
     self::registerGPAutoloader();
-    if(!file_exists(ROOT_PATH.'graphp/maps')) {
+    if(!file_exists(ROOT_PATH.'maps')) {
       throw new GPException(
-        'Please create graphp/maps dir and make sure it is writable'
+        'Please create maps dir and make sure it is writable'
       );
     }
   }
@@ -120,7 +120,15 @@ class GPLoader extends GPObject {
   public static function return404() {
     GPDatabase::get()->dispose();
     http_response_code(404);
-    die('404'); // TODO make nice 404 page.
+    $config = GPConfig::get();
+    if ($config->view_404 && $config->layout_404) {
+      GP::viewWithLayout($config->view_404, $config->layout_404);
+    } else if ($config->view_404) {
+      GP::view($config->view_404);
+    } else {
+      die('404');
+    }
+    die();
   }
 
   public static function ajax(array $data) {

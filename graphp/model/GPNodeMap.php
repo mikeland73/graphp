@@ -8,7 +8,7 @@ class GPNodeMap extends GPObject {
 
   private static function getMap() {
     if (!self::$map) {
-      self::$map = @include ROOT_PATH.'graphp/maps/node';
+      self::$map = @include ROOT_PATH.'maps/node';
     }
     return self::$map ?: [];
   }
@@ -66,9 +66,9 @@ class GPNodeMap extends GPObject {
       self::$inverseMap[$class] = $class::getType();
     }
     $file .= "];\n";
-    $file_path = ROOT_PATH.'graphp/maps/node';
+    $file_path = ROOT_PATH.'maps/node';
     file_put_contents($file_path, $file);
     // TODO this is probably not safe
-    @chmod(ROOT_PATH.'graphp/maps/node', 0666);
+    @chmod(ROOT_PATH.'maps/node', 0666);
   }
 }

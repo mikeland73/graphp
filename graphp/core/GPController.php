@@ -6,6 +6,10 @@ class GPController extends GPObject {
     $post,
     $get;
 
+  public function __construct() {
+    parent::__construct();
+  }
+
   public function init() {
     $this->post = new GPRequestData($_POST);
     $this->get = new GPRequestData($_GET);
@@ -34,13 +38,18 @@ class GPController extends GPObject {
   }
 
   public static function getURL($method = '') {
-    return GPConfig::get()->domain.static::getURL($method);
+    return GPConfig::get()->domain.static::getURI($method);
   }
 
   public static function redirect($method = '') {
     $uri = call_user_func_array(get_called_class().'::getURI', func_get_args());
     header('Location: '.$uri, true, 302);
     die();
+  }
+
+  public static function runAsync($method='') {
+    $uri = call_user_func_array(get_called_class().'::getURI', func_get_args());
+    execx('php index.php %s &> /dev/null &', $uri);
   }
 
   public function __destruct() {

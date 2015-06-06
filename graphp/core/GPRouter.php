@@ -13,6 +13,9 @@ class GPRouter extends GPObject {
 
   public static function route() {
     $controller_name = ucfirst(idxx(self::$parts, 0));
+    if (!class_exists($controller_name)) {
+      GP::return404();
+    }
     $method_name = idx(self::$parts, 1, 'index');
     $controller = new $controller_name();
     $controller->init();

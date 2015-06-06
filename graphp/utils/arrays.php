@@ -52,9 +52,14 @@ function array_concat_in_place(& $arr1, $arr2) {
   }
 }
 
-function array_concat($arr1, $arr2) {
-  foreach ($arr2 as $key => $value) {
-    $arr1[] = $value;
+function array_concat(array $arr1 /*array2, ...*/) {
+  $args = func_get_args();
+  foreach ($args as $key => $arr2) {
+    if ($key !== 0) {
+      foreach ($arr2 as $key => $value) {
+        $arr1[] = $value;
+      }
+    }
   }
   return $arr1;
 }

@@ -35,6 +35,10 @@ class GPDatabase extends GPObject {
     $this->connection = new AphrontMySQLiDatabaseConnection($config->toArray());
   }
 
+  public function getConnection() {
+    return $this->connection;
+  }
+
   public function beginUnguardedWrites() {
     AphrontWriteGuard::beginUnguardedWrites();
   }

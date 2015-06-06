@@ -102,6 +102,13 @@ abstract class GPNode extends GPObject {
     return $this;
   }
 
+  public function unsafeSave() {
+    GPDatabase::get()->beginUnguardedWrites();
+    $ret = $this->save();
+    GPDatabase::get()->endUnguardedWrites();
+    return $ret;
+  }
+
   public function save() {
     $db = GPDatabase::get();
     $db->startTransaction();
@@ -269,7 +276,14 @@ abstract class GPNode extends GPObject {
       static::$edge_types[$class] =
         mpull($edges, null, 'getName') +
         mpull($edges, null, 'getSingleNodeName');
+      unset(static::$edge_types[$class]['']);
       static::$edge_types_by_type[$class] = mpull($edges, null, 'getType');
+      foreach ($edges as $edge) {
+        if (!array_key_exists($edge->getTo(), static::$edge_types)) {
+          $to = $edge->getTo();
+          $to::getEdgeTypes();
+        }
+      }
     }
     return static::$edge_types[$class];
   }
