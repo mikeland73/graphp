@@ -36,7 +36,8 @@ class GPLoader extends GPObject {
   }
 
   public static function getModelsMap() {
-    return self::getMap(ROOT_PATH.'app/models', 'models');
+    $app_folder = GPConfig::get()->app_folder;
+    return self::getMap(ROOT_PATH.$app_folder.'/models', 'models');
   }
 
   private static function GPAutoloader($class_name) {
@@ -54,7 +55,8 @@ class GPLoader extends GPObject {
   }
 
   private static function GPLibraryAutoloader($class_name) {
-    $map = self::getMap(ROOT_PATH.'app/libraries', 'libraries');
+    $app_folder = GPConfig::get()->app_folder;
+    $map = self::getMap(ROOT_PATH.$app_folder.'/libraries', 'libraries');
     $path = $map->getPath($class_name);
     if ($path) {
       require_once $path;
@@ -62,7 +64,8 @@ class GPLoader extends GPObject {
   }
 
   private static function GPControllerAutoloader($class_name) {
-    $map = self::getMap(ROOT_PATH.'app/controllers', 'controllers');
+    $app_folder = GPConfig::get()->app_folder;
+    $map = self::getMap(ROOT_PATH.$app_folder.'/controllers', 'controllers');
     $path = $map->getPath($class_name);
     if ($path) {
       require_once $path;
@@ -76,7 +79,8 @@ class GPLoader extends GPObject {
     ) {
       GPDatabase::get()->dispose();
     }
-    $file = ROOT_PATH.'app/views/' . $view_name . '.php';
+    $file =
+      ROOT_PATH.GPConfig::get()->app_folder.'/views/' . $view_name . '.php';
     if (!file_exists($file)) {
       throw new GPException('View "'.$view_name.'"" not found');
     }

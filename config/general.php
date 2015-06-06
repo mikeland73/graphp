@@ -16,4 +16,6 @@ return [
 
   'view_404'      => '',
   'layout_404'    => '',
+
+  'app_folder'    => 'app',
 ];

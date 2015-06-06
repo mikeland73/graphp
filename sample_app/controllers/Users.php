@@ -29,6 +29,6 @@ final class Users extends GPController {
 
   public function logout() {
     GPSession::destroy();
-    Welcome::redirect();
+    Landing::redirect();
   }
 }

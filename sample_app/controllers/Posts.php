@@ -4,7 +4,7 @@ final class Posts extends GPController {
 
   public function __construct() {
     if (!GPSession::get('user_id')) {
-      Welcome::redirect();
+      Landing::redirect();
     }
   }
 
