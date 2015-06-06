@@ -8,7 +8,7 @@
   <?php foreach ($posts as $post):?>
     <li>
       <a href="<?=Posts::getURI('one', $post->getID())?>">
-        <?=$post->getText()?>
+        <?=StringLibrary::truncate($post->getText(), 10)?>
       </a>
     </li>
   <?php endforeach ?>
