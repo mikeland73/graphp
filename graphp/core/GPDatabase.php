@@ -253,7 +253,7 @@ class GPDatabase extends GPObject {
   public function getAllByType($type, $limit, $offset) {
     return queryfx_all(
       $this->connection,
-      'SELECT * FROM node WHERE type = %d LIMIT %d, %d;',
+      'SELECT * FROM node WHERE type = %d ORDER BY updated DESC LIMIT %d, %d;',
       $type,
       $offset,
       $limit
