@@ -46,6 +46,7 @@ class GPTestLimitLoadTest extends GPTest {
     batch(GPTestLimitLoadModel::getAll())->delete();
     batch(GPTestLimitLoadModel2::getAll())->delete();
     GPDatabase::get()->endUnguardedWrites();
+    GPDatabase::get()->dispose();
   }
 
 }

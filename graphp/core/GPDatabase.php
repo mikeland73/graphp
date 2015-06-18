@@ -250,6 +250,18 @@ class GPDatabase extends GPObject {
     return $ordered;
   }
 
+  public function getConnectedNodeCount(array $nodes, array $edges) {
+    $results = queryfx_all(
+      $this->connection,
+      'SELECT from_node_id, type, count(1) as c FROM edge '.
+      'WHERE from_node_id IN (%Ld) AND type IN (%Ld) group by from_node_id, '.
+        'type;',
+      mpull($nodes, 'getID'),
+      mpull($edges, 'getType')
+    );
+    return igroup($results, 'from_node_id');
+  }
+
   public function getAllByType($type, $limit, $offset) {
     return queryfx_all(
       $this->connection,

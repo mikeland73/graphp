@@ -56,6 +56,14 @@ final class GPBatch extends GPObject {
     return $this;
   }
 
+  public function getConnectedNodeCount(array $edges) {
+    $results = GPDatabase::get()->getConnectedNodeCount($this->nodes, $edges);
+    foreach ($results as $from_node_id => $rows) {
+      $results[$from_node_id] = ipull($rows, 'c', 'type');
+    }
+    return $results;
+  }
+
   private function handleLoad($method, $args, $force = false) {
     if (substr_compare($method, 'IDs', -3) === 0) {
       if ($this->lazy) {

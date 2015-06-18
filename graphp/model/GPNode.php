@@ -250,6 +250,11 @@ abstract class GPNode extends GPObject {
     );
   }
 
+  public function getConnectedNodeCount(array $edges) {
+    $results = GPDatabase::get()->getConnectedNodeCount([$this], $edges);
+    return ipull(idx($results, $this->getID(), []), 'c', 'type');
+  }
+
   private function isLoaded($edge_or_edges) {
     $edges = make_array($edge_or_edges);
     $types = mpull($edges, 'getType');
