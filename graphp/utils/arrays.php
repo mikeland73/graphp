@@ -89,7 +89,7 @@ function array_select_keysx(array $dict, array $keys, $custom_error = null) {
       if (is_callable($custom_error)) {
         $custom_error();
       } else {
-        throw new GPException('Missing key '.$key, 1);
+        throw new GPException('Missing key '.$key.' in '.json_encode($dict), 1);
       }
     }
   }

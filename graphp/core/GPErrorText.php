@@ -10,7 +10,8 @@ final class GPErrorText extends GPObject {
       'getName'
     ));
     if (array_intersect($to_load, $possible) === $to_load) {
-      return 'Unloaded edges: '.json_encode(array_diff($to_load, $loaded)).
+      return 'Unloaded edges on '.get_class($obj).': '.
+        json_encode(array_diff($to_load, $loaded)).
         ' You must load connected nodes before you can use them.';
     }
 

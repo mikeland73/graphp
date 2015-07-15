@@ -52,6 +52,13 @@ class GPController extends GPObject {
     execx('php index.php %s &> /dev/null &', $uri);
   }
 
+  public static function isActive($method = 'index') {
+    $class = get_called_class();
+    return
+      GPRouter::getController() instanceof $class &&
+      strcasecmp(GPRouter::getMethod(), $method) === 0;
+  }
+
   public function __destruct() {
     if (GPDatabase::exists()) {
       GPDatabase::get()->dispose();

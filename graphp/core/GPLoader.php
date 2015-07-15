@@ -11,6 +11,7 @@ class GPLoader extends GPObject {
 
   private static $maps = [];
   private static $viewData = [];
+  private static $globalViewData = [];
 
   public static function init() {
     self::registerGPAutoloader();
@@ -88,6 +89,7 @@ class GPLoader extends GPObject {
     $replaced_data = array_intersect_key(self::$viewData, $_data);
     self::$viewData = array_merge_by_keys(self::$viewData, $_data);
     ob_start();
+    extract(self::$globalViewData);
     extract(self::$viewData);
     require $file;
     // Return $viewData to the previous state to avoid view data bleeding.
@@ -142,6 +144,10 @@ class GPLoader extends GPObject {
     header('Pragma: no-cache');
     header('Content-type: application/json');
     echo json_encode($data);
+  }
+
+  public static function addGlobal($key, $val) {
+    self::$globalViewData[$key] = $val;
   }
 }
 

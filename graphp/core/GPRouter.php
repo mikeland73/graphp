@@ -2,9 +2,10 @@
 
 class GPRouter extends GPObject {
 
-  private static
-    $routes,
-    $parts;
+  private static $routes;
+  private static $parts;
+  private static $controller;
+  private static $method;
 
   public static function init() {
     self::$routes = require_once ROOT_PATH.'config/routes.php';
@@ -16,11 +17,19 @@ class GPRouter extends GPObject {
     if (!class_exists($controller_name)) {
       GP::return404();
     }
-    $method_name = idx(self::$parts, 1, 'index');
-    $controller = new $controller_name();
-    $controller->init();
+    self::$method = idx(self::$parts, 1, 'index');
+    self::$controller = new $controller_name();
+    self::$controller->init();
     $args = array_slice(self::$parts, 2);
-    call_user_func_array([$controller, $method_name], $args);
+    call_user_func_array([self::$controller, self::$method], $args);
+  }
+
+  public static function getController() {
+    return self::$controller;
+  }
+
+  public static function getMethod() {
+    return self::$method;
   }
 
   private static function getParts() {

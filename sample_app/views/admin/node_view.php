@@ -76,7 +76,7 @@
             <th scope="row">
               <form
                 class="text-center"
-                action="<?=Admin::getURI('node', $node->getID())?>"
+                action="<?=AdminAjax::getURI('save', $node->getID())?>"
                 method="POST">
                 <?=GPSecurity::csrf()?>
                 <input name="edge_type" type="hidden" value="<?=$e?>">
