@@ -40,6 +40,9 @@ class GPSession extends GPObject {
   }
 
   public static function destroy() {
+    if (GP::isCLI()) {
+      return;
+    }
     setcookie(
       self::$config->cookie_name,
       '',
@@ -50,6 +53,9 @@ class GPSession extends GPObject {
   }
 
   private static function updateCookie() {
+    if (GP::isCLI()) {
+      return;
+    }
     $json = json_encode(self::$session);
     $json_with_hash = $json.sha1($json.self::$config->salt);
     if (strlen($json_with_hash) > 4093) {
