@@ -8,7 +8,7 @@ class GPNodeMap extends GPObject {
 
   private static function getMap() {
     if (!self::$map) {
-      self::$map = @include ROOT_PATH.'maps/node';
+      self::$map = @include self::buildPath();
     }
     return self::$map ?: [];
   }
@@ -66,9 +66,13 @@ class GPNodeMap extends GPObject {
       self::$inverseMap[$class] = $class::getType();
     }
     $file .= "];\n";
-    $file_path = ROOT_PATH.'maps/node';
+    $file_path = self::buildPath();
     file_put_contents($file_path, $file);
     // TODO this is probably not safe
-    @chmod(ROOT_PATH.'maps/node', 0666);
+    @chmod($file_path, 0666);
+  }
+
+  private static function buildPath() {
+    return ROOT_PATH.'maps/'.GPConfig::get()->app_folder.'_node';
   }
 }

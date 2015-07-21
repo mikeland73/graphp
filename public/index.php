@@ -8,10 +8,15 @@ try {
   GPRouter::init();
   GPRouter::route();
 } catch(Exception $e) {
-  // TODO (mikeland86) make this better (maybe a pretty html error or something)
-  echo ' There was an exception: <br />';
-  echo $e->getMessage() . '<br />';
-  echo str_replace("\n", '<br />', $e->getTraceAsString())  . '<br /><br />';
-  // Propagate exception so that it gets logged
-  throw $e;
+
+  $error = [];
+  $error[] = 'There was an exception:';
+  $error[] = $e->getMessage();
+  $error[] = str_replace("\n", '<br />', $e->getTraceAsString());
+
+  if (GPEnv::isDevEnv()) {
+    echo implode('<br>', $error);
+    throw $e;
+  }
+  error_log(implode("\n", $error));
 }

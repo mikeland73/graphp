@@ -98,7 +98,7 @@ Set up instructions
 * Create maps folder and open permissions: `mkdir maps; chmod 777 maps`
 * Point your webserver to public directory.
 * Modify config files to suit your environment.
-* To check out sample app, change the general config 'app_folder' to "sample_app" and the default controller in routes to be "landing"
+* To check out sample app, change the general config 'app_folder' to "sample_app".
 
 
 FAQ

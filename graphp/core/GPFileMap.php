@@ -9,7 +9,7 @@ class GPFileMap extends GPObject {
   public function __construct($dir, $name) {
     $this->dir = $dir;
     $this->name = $name;
-    $map = @include ROOT_PATH.'maps/'.$this->name;
+    $map = @include $this->buildPath();
     $this->map = $map ?: [];
   }
 
@@ -46,10 +46,14 @@ class GPFileMap extends GPObject {
       $map_file .= '  '.$file.' => \''.$path."',\n";
     }
     $map_file .= "];\n";
-    $file_path = ROOT_PATH.'maps/'.$this->name;
+    $file_path = $this->buildPath();
     file_put_contents($file_path, $map_file);
     // TODO this is probably not safe
     @chmod($file_path, 0666);
+  }
+
+  private function buildPath() {
+    return ROOT_PATH.'maps/'.GPConfig::get()->app_folder.'_'.$this->name;
   }
 
 }

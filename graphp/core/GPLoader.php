@@ -5,6 +5,7 @@ class GPException extends Exception {}
 require_once ROOT_PATH.'graphp/utils/arrays.php';
 require_once ROOT_PATH.'graphp/core/GPObject.php';
 require_once ROOT_PATH.'graphp/core/GPFileMap.php';
+require_once ROOT_PATH.'graphp/core/GPConfig.php';
 require_once ROOT_PATH.'third_party/libphutil/src/__phutil_library_init__.php';
 
 class GPLoader extends GPObject {
