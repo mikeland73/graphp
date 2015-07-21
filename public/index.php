@@ -9,13 +9,14 @@ try {
   GPRouter::route();
 } catch(Exception $e) {
 
-  $error = [];
-  $error[] = 'There was an exception:';
-  $error[] = $e->getMessage();
-  $error[] = str_replace("\n", '<br />', $e->getTraceAsString());
+  $error = [
+    'There was an exception:',
+    $e->getMessage(),
+    $e->getTraceAsString(),
+  ];
 
   if (GPEnv::isDevEnv()) {
-    echo implode('<br>', $error);
+    echo str_replace("\n", '<br>', implode('<br>', $error));
     throw $e;
   }
   error_log(implode("\n", $error));
