@@ -12,12 +12,11 @@ class GPSession extends GPObject {
     $json_with_hash = idx($_COOKIE, self::$config->cookie_name, '');
     $json = '[]';
     if ($json_with_hash) {
-      $json = mb_substr($json_with_hash, 0, -40);
-      $hash = mb_substr($json_with_hash, -40);
-      if (sha1($json.self::$config->salt) !== $hash) {
+      if (!GPSecurity::hmacVerify($json_with_hash, self::$config->salt)) {
         self::destroy();
         throw new Exception('Cookie hash missmatch. Possible attack', 1);
       }
+      $json = mb_substr($json_with_hash, 64, null, '8bit');
     }
     self::$session = json_decode($json, true);
     if (!self::get(self::UID)) {
@@ -57,7 +56,7 @@ class GPSession extends GPObject {
       return;
     }
     $json = json_encode(self::$session);
-    $json_with_hash = $json.sha1($json.self::$config->salt);
+    $json_with_hash = GPSecurity::hmacSign($json, self::$config->salt);
     if (strlen($json_with_hash) > 4093) {
       throw new Exception(
         'Your session cookie is too large. That may break in some browsers.

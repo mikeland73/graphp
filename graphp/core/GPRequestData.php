@@ -14,7 +14,7 @@ class GPRequestData extends GPObject {
 
   public function getInt($key, $default = null) {
     $val = $this->get($key, 'is_numeric');
-    return  $val !== null ? $val : $default;
+    return  $val !== null ? (int) $val : $default;
   }
 
   public function getString($key, $default = null) {

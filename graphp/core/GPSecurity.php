@@ -14,7 +14,7 @@ class GPSecurity extends GPObject {
   public static function getNewCSRFToken() {
     $time = time();
     $id = GPSession::get(GPSession::UID);
-    return sha1($time.self::$config->salt.$id).$time;
+    return self::hmacSign($time, self::$config->salt.$id);
   }
 
   public static function csrf() {
@@ -25,13 +25,25 @@ class GPSecurity extends GPObject {
   }
 
   public static function isCSFRTokenValid($token) {
-    $hash = mb_substr($token, 0, 40);
-    $timestamp = mb_substr($token, 40);
+    $timestamp = mb_substr($token, 64, null, '8bit');
     if ($timestamp < time() - self::EXPIRATION) {
       return false;
     }
     $id = GPSession::get(GPSession::UID);
-    return sha1($timestamp.self::$config->salt.$id) === $hash;
+    return self::hmacVerify($token, self::$config->salt.$id);
+  }
+
+  public static function hmacSign($message, $key) {
+    return hash_hmac('sha256', $message, $key) . $message;
+  }
+
+  public static function hmacVerify($bundle, $key) {
+    $msgMAC = mb_substr($bundle, 0, 64, '8bit');
+    $message = mb_substr($bundle, 64, null, '8bit');
+    return hash_equals(
+      hash_hmac('sha256', $message, $key),
+      $msgMAC
+    );
   }
 
 }
