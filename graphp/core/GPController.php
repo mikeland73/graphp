@@ -38,6 +38,7 @@ class GPController extends GPObject {
   }
 
   public static function redirect($method = '') {
+    GPDatabase::disposeAll();
     $uri = call_user_func_array(get_called_class().'::getURI', func_get_args());
     header('Location: '.$uri, true, 307);
     die();
@@ -45,7 +46,8 @@ class GPController extends GPObject {
 
   public static function runAsync($method='') {
     $uri = call_user_func_array(get_called_class().'::getURI', func_get_args());
-    execx('php index.php %s &> /dev/null &', $uri);
+    $error_log = ini_get('error_log') ?: '/dev/null';
+    execx('php index.php %s >> '.$error_log.' 2>&1 &', $uri);
   }
 
   public static function isActive($method = 'index') {
@@ -56,8 +58,6 @@ class GPController extends GPObject {
   }
 
   public function __destruct() {
-    if (GPDatabase::exists()) {
-      GPDatabase::get()->dispose();
-    }
+    GPDatabase::disposeAll();
   }
 }

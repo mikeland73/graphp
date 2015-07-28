@@ -14,10 +14,6 @@ class GPDatabase extends GPObject {
     return self::$dbs[$name];
   }
 
-  public static function exists($name = 'database') {
-    return array_key_exists($name, self::$dbs);
-  }
-
   public function __construct($config_name) {
     $this->guard = new AphrontWriteGuard(function() {
       if (GP::isCLI()) {
@@ -45,6 +41,7 @@ class GPDatabase extends GPObject {
   }
 
   public function getConnection() {
+    Assert::truthy($this->connection, 'DB Connection no longer exists');
     return $this->connection;
   }
 
@@ -58,7 +55,7 @@ class GPDatabase extends GPObject {
 
   public function startTransaction() {
     if ($this->nestedTransactions === 0) {
-      queryfx($this->connection, 'START TRANSACTION;');
+      queryfx($this->getConnection(), 'START TRANSACTION;');
     }
     $this->nestedTransactions++;
   }
@@ -66,23 +63,23 @@ class GPDatabase extends GPObject {
   public function commit() {
     $this->nestedTransactions--;
     if ($this->nestedTransactions === 0) {
-      queryfx($this->connection, 'COMMIT;');
+      queryfx($this->getConnection(), 'COMMIT;');
     }
   }
 
   public function insertNode(GPNode $node) {
     queryfx(
-      $this->connection,
+      $this->getConnection(),
       'INSERT INTO node (type, data) VALUES (%d, %s)',
       $node::getType(),
       $node->getJSONData()
     );
-    return $this->connection->getInsertID();
+    return $this->getConnection()->getInsertID();
   }
 
   public function updateNodeData(GPNode $node) {
     queryfx(
-      $this->connection,
+      $this->getConnection(),
       'UPDATE  node SET data = %s WHERE id = %d',
       $node->getJSONData(),
       $node->getID()
@@ -91,7 +88,7 @@ class GPDatabase extends GPObject {
 
   public function getNodeByID($id) {
     return queryfx_one(
-      $this->connection,
+      $this->getConnection(),
       'SELECT * FROM node WHERE id = %d;',
       $id
     );
@@ -102,7 +99,7 @@ class GPDatabase extends GPObject {
       return [];
     }
     return queryfx_all(
-      $this->connection,
+      $this->getConnection(),
       'SELECT * FROM node WHERE id IN (%Ld);',
       $ids
     );
@@ -113,7 +110,7 @@ class GPDatabase extends GPObject {
       return [];
     }
     return ipull(queryfx_all(
-      $this->connection,
+      $this->getConnection(),
       'SELECT node_id FROM node_data WHERE type = %d AND data IN (%Ls);',
       $type,
       $data
@@ -133,7 +130,7 @@ class GPDatabase extends GPObject {
       return;
     }
     vqueryfx(
-      $this->connection,
+      $this->getConnection(),
       'INSERT INTO node_data (node_id, type, data) VALUES '.
       implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);',
       $values
@@ -158,7 +155,7 @@ class GPDatabase extends GPObject {
       return;
     }
     vqueryfx(
-      $this->connection,
+      $this->getConnection(),
       'INSERT IGNORE INTO edge (from_node_id, to_node_id, type) VALUES '.
       implode(',', $parts) . ';',
       $values
@@ -171,7 +168,7 @@ class GPDatabase extends GPObject {
       return;
     }
     vqueryfx(
-      $this->connection,
+      $this->getConnection(),
       'DELETE FROM edge WHERE (from_node_id, to_node_id, type) IN ('.
       implode(',', $parts) . ');',
       $values
@@ -201,7 +198,7 @@ class GPDatabase extends GPObject {
       return;
     }
     vqueryfx(
-      $this->connection,
+      $this->getConnection(),
       'DELETE FROM edge WHERE ('.$col.', type) IN ('.
       implode(',', $parts) . ');',
       $values
@@ -233,7 +230,7 @@ class GPDatabase extends GPObject {
       $args[] = $limit;
     }
     $results = vqueryfx_all(
-      $this->connection,
+      $this->getConnection(),
       'SELECT from_node_id, to_node_id, type FROM edge '.
       'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
       ($limit === null ? '' : ' LIMIT %d').';',
@@ -252,7 +249,7 @@ class GPDatabase extends GPObject {
 
   public function getConnectedNodeCount(array $nodes, array $edges) {
     $results = queryfx_all(
-      $this->connection,
+      $this->getConnection(),
       'SELECT from_node_id, type, count(1) as c FROM edge '.
       'WHERE from_node_id IN (%Ld) AND type IN (%Ld) group by from_node_id, '.
         'type;',
@@ -264,7 +261,7 @@ class GPDatabase extends GPObject {
 
   public function getAllByType($type, $limit, $offset) {
     return queryfx_all(
-      $this->connection,
+      $this->getConnection(),
       'SELECT * FROM node WHERE type = %d ORDER BY updated DESC LIMIT %d, %d;',
       $type,
       $offset,
@@ -274,7 +271,7 @@ class GPDatabase extends GPObject {
 
   public function getTypeCounts() {
     return queryfx_all(
-      $this->connection,
+      $this->getConnection(),
       'SELECT type, COUNT(1) AS count FROM node GROUP BY type;'
     );
   }
@@ -284,14 +281,26 @@ class GPDatabase extends GPObject {
       return;
     }
     queryfx(
-      $this->connection,
+      $this->getConnection(),
       'DELETE FROM node WHERE id IN (%Ld);',
       mpull($nodes, 'getID')
     );
   }
 
   public function dispose() {
-    $this->guard->isGuardActive() ? $this->guard->dispose() : null;
+    if ($this->guard->isGuardActive()) {
+      $this->guard->dispose();
+    }
+    if ($this->connection) {
+      $this->connection->close();
+      $this->connection = null;
+    }
+  }
+
+  public static function disposeAll() {
+    foreach (self::$dbs as $db) {
+      $db->dispose();
+    }
   }
 
   public function __destruct() {

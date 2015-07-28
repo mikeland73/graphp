@@ -14,7 +14,7 @@ class STRUtils {
    */
   public static function esc($str) {
     $str = mb_convert_encoding($str, 'UTF-8', 'UTF-8');
-    return htmlentities($str, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
   }
 
 }

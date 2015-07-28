@@ -75,11 +75,8 @@ class GPLoader extends GPObject {
   }
 
   public static function view($view_name, array $_data = [], $return = false) {
-    if (
-      GPConfig::get('database')->disallow_view_db_access &&
-      GPDatabase::exists()
-    ) {
-      GPDatabase::get()->dispose();
+    if (GPConfig::get()->disallow_view_db_access) {
+      GPDatabase::disposeAll();
     }
     $file =
       ROOT_PATH.GPConfig::get()->app_folder.'/views/' . $view_name . '.php';
