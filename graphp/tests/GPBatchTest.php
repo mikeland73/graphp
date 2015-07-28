@@ -118,6 +118,15 @@ class GPBatchTest extends GPTest {
     $this->assertNotEmpty($m2->getGPTestBatchModel4());
   }
 
+  /**
+   * @expectedException GPException
+   */
+  public function testErrorBatchLoad() {
+    $m1 = new GPTestBatchModel();
+    $m2 = new GPTestBatchModel2();
+    batch($m1, $m2)->loadBogus();
+  }
+
   public static function tearDownAfterClass() {
     GPNode::simpleBatchDelete(GPTestBatchModel::getAll());
     GPNode::simpleBatchDelete(GPTestBatchModel2::getAll());

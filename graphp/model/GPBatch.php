@@ -95,7 +95,7 @@ final class GPBatch extends GPObject {
   }
 
   private function getEdges($edge_name) {
-    return array_filter(array_map(
+    $edges = array_filter(array_map(
       function($class) use ($edge_name) {
         return $class::isEdgeType($edge_name) ?
           $class::getEdgeType($edge_name) :
@@ -103,5 +103,7 @@ final class GPBatch extends GPObject {
       },
       $this->classes
     ));
+    Assert::truthy($edges, $edge_name.' is not a valid edge name.');
+    return $edges;
   }
 }
