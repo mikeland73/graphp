@@ -76,7 +76,7 @@ class GPLoader extends GPObject {
 
   public static function view($view_name, array $_data = [], $return = false) {
     if (GPConfig::get()->disallow_view_db_access) {
-      GPDatabase::disposeAll();
+      GPDatabase::incrementViewLock();
     }
     $file =
       ROOT_PATH.GPConfig::get()->app_folder.'/views/' . $view_name . '.php';
@@ -95,6 +95,9 @@ class GPLoader extends GPObject {
       array_diff_key(self::$viewData, $new_data),
       $replaced_data
     );
+    if (GPConfig::get()->disallow_view_db_access) {
+      GPDatabase::decrementViewLock();
+    }
     if ($return) {
       $buffer = ob_get_contents();
       @ob_end_clean();

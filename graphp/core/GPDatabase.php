@@ -7,6 +7,8 @@ class GPDatabase extends GPObject {
   private $guard;
   private $nestedTransactions = 0;
 
+  private static $viewLock = 0;
+
   public static function get($name = 'database') {
     if (!isset(self::$dbs[$name])) {
       self::$dbs[$name] = new GPDatabase($name);
@@ -41,6 +43,11 @@ class GPDatabase extends GPObject {
   }
 
   public function getConnection() {
+    Assert::equals(
+      self::$viewLock,
+      0,
+      'Tried to access DB while view lock is on'
+    );
     Assert::truthy($this->connection, 'DB Connection no longer exists');
     return $this->connection;
   }
@@ -285,6 +292,14 @@ class GPDatabase extends GPObject {
       'DELETE FROM node WHERE id IN (%Ld);',
       mpull($nodes, 'getID')
     );
+  }
+
+  public static function incrementViewLock() {
+    self::$viewLock++;
+  }
+
+  public static function decrementViewLock() {
+    self::$viewLock--;
   }
 
   public function dispose() {
