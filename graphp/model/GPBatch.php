@@ -69,7 +69,7 @@ final class GPBatch extends GPObject {
 
   private function handleLoad($method, $args, $force = false) {
     if (!$this->nodes) {
-      return [];
+      return $this;
     }
     if (substr_compare($method, 'IDs', -3) === 0) {
       if ($this->lazy) {
