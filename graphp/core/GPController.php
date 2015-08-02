@@ -46,8 +46,8 @@ class GPController extends GPObject {
 
   public static function runAsync($method='') {
     $uri = call_user_func_array(get_called_class().'::getURI', func_get_args());
-    $error_log = ini_get('error_log') ?: '/dev/null';
-    execx('php index.php %s >> '.$error_log.' 2>&1 &', $uri);
+    $log = ini_get('error_log') ?: '/dev/null';
+    execx('php '.ROOT_PATH.'public/index.php %s >> '.$log.' 2>&1 &', $uri);
   }
 
   public static function isActive($method = 'index') {

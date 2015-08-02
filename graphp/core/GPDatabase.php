@@ -2,6 +2,8 @@
 
 class GPDatabase extends GPObject {
 
+  const LIMIT = 100;
+
   private static $dbs = [];
   private $connection;
   private $guard;
@@ -121,6 +123,25 @@ class GPDatabase extends GPObject {
       'SELECT node_id FROM node_data WHERE type = %d AND data IN (%Ls);',
       $type,
       $data
+    ), 'node_id');
+  }
+
+  public function getNodeIDsByTypeDataRange(
+    $type,
+    $start,
+    $end,
+    $limit,
+    $offset
+  ) {
+    return ipull(queryfx_all(
+      $this->getConnection(),
+      'SELECT node_id FROM node_data WHERE '.
+        'type = %d AND data >= %s AND data <= %s LIMIT %d, %d;',
+      $type,
+      $start,
+      $end,
+      $offset,
+      $limit
     ), 'node_id');
   }
 
