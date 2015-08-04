@@ -5,6 +5,7 @@ return [
 
   'domain'        => 'localhost',
   'use_index_php' => true, // To avoid this, you need to configure your server
+  'handler_suffix'=> 'ControllerHandler',
 
   // Security
   'salt'          => 'CHANGE THIS TO ANY RANDOM STRING',
