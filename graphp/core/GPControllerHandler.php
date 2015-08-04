@@ -4,7 +4,7 @@
  * Controller handlers give you an easy way of extending controller
  * functionality and syntax without having to modify any core code. This makes
  * controller addons and extensions plug and play. Some basic extensions will be
- * included: URI, URL, Async, redirect (TODO)
+ * included: URI, URL, Async, redirect
  *
  * Some creative uses could be:
  * -> Does user have access to controller/method

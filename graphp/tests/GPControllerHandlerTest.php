@@ -23,4 +23,17 @@ class GPControllerHandlerTest extends GPTest {
     $uri = TestController::URI()->bar('abc');
   }
 
+  public function testURL() {
+    $index = GPConfig::get()->use_index_php ? '/index.php' : '';
+    $domain = GPConfig::get()->domain;
+    $uri = TestController::URL()->foo('abc');
+    $this->assertEquals($uri, $domain.$index.'/testcontroller/foo/abc');
+  }
+
+  public function testRedirect() {
+    $handler = TestController::redirect();
+    $this->assertTrue($handler instanceof GPRedirectControllerHandler);
+  }
+
+
 }

@@ -73,7 +73,7 @@ class MyController extends GPController {
 
   public function doStuff() {
     // Do stuff and redirect
-    OtherController::redirect();
+    OtherController::redirect()->method();
   }
 }
 ```

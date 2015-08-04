@@ -12,14 +12,14 @@ class AdminAjax extends GPController {
     if ($this->post->getExists('create')) {
       GPNode::createFromType($type)->save();
     }
-    Admin::redirect('node_type', $type);
+    Admin::redirect()->node_type($type);
   }
 
   public function delete($type) {
     if ($this->post->getInt('delete_node_id')) {
       GPNode::getByID($this->post->getInt('delete_node_id'))->delete();
     }
-    Admin::redirect('node_type', $type);
+    Admin::redirect()->node_type($type);
   }
 
   public function save($id) {
@@ -58,6 +58,6 @@ class AdminAjax extends GPController {
       }
       $node->save();
     }
-    Admin::redirect('node', $id);
+    Admin::redirect()->node($id);
   }
 }

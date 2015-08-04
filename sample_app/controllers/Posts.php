@@ -4,7 +4,7 @@ final class Posts extends GPController {
 
   public function __construct() {
     if (!GPSession::get('user_id')) {
-      Welcome::redirect();
+      Welcome::redirect()->index();
     }
   }
 
@@ -25,7 +25,7 @@ final class Posts extends GPController {
     $text = $this->post->getString('text');
     $post = (new Post())->setText($text)->save();
     $post->addCreator(User::getByID(GPSession::get('user_id')))->save();
-    Posts::redirect();
+    Posts::redirect()->index();
   }
 
   public function createComment() {
@@ -35,7 +35,7 @@ final class Posts extends GPController {
     $comment = (new Comment())->setText($text)->save();
     $comment->addCreator(User::getByID(GPSession::get('user_id')))->save();
     $post->addComments($comment)->save();
-    Posts::redirect('one', $post_id);
+    Posts::redirect()->one($post_id);
   }
 
 }

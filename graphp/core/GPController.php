@@ -38,13 +38,6 @@ class GPController extends GPObject {
     return GPConfig::get()->domain.static::getURI($method);
   }
 
-  public static function redirect($method = '') {
-    GPDatabase::disposeAll();
-    $uri = call_user_func_array(get_called_class().'::getURI', func_get_args());
-    header('Location: '.$uri, true, 307);
-    die();
-  }
-
   public static function runAsync($method='') {
     $uri = call_user_func_array(get_called_class().'::getURI', func_get_args());
     $log = ini_get('error_log') ?: '/dev/null';
