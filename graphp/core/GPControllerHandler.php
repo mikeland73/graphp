@@ -7,9 +7,10 @@
  * included: URI, URL, Async, redirect
  *
  * Some creative uses could be:
- * -> Does user have access to controller/method
- * -> Get API endpoint of method
+ * -> Return if user has access to controller/method
+ * -> Return API endpoint of method
  * -> Return endpoint as a manipulatable object
+ * -> Return annotations for given controller method
  */
 abstract class GPControllerHandler extends GPObject {
 
