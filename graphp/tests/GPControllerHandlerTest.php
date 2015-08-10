@@ -16,6 +16,12 @@ class GPControllerHandlerTest extends GPTest {
     $this->assertEquals($uri, $index.'/testcontroller/foo/abc');
   }
 
+  public function testShortURI() {
+    $index = GPConfig::get()->use_index_php ? '/index.php' : '';
+    $uri = TestController::URI();
+    $this->assertEquals($uri, $index.'/testcontroller/');
+  }
+
   /**
    * @expectedException GPException
    */
@@ -30,10 +36,17 @@ class GPControllerHandlerTest extends GPTest {
     $this->assertEquals($uri, $domain.$index.'/testcontroller/foo/abc');
   }
 
+  public function testShortURL() {
+    $index = GPConfig::get()->use_index_php ? '/index.php' : '';
+    $domain = GPConfig::get()->domain;
+    $uri = TestController::URL();
+    $this->assertEquals($uri, $domain.$index.'/testcontroller/');
+  }
+
   public function testRedirect() {
     $handler = TestController::redirect();
     $this->assertTrue($handler instanceof GPRedirectControllerHandler);
+    $handler->disableDestructRedirect();
   }
-
 
 }

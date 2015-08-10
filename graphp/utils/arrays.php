@@ -110,3 +110,11 @@ function array_append(array $array, $elem, $key = null) {
   }
   return $array;
 }
+
+function array_key_by_value(array $array) {
+  $new_array = [];
+  foreach ($array as $key => $value) {
+    $new_array[$value] = $value;
+  }
+  return $new_array;
+}

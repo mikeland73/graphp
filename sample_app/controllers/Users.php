@@ -7,10 +7,10 @@ final class Users extends GPController {
     $password = $this->post->getString('password');
     $user = User::getOneByEmail($email);
     if (!$user || !password_verify($password, $user->getPassword())) {
-      Welcome::redirect()->index();
+      Welcome::redirect();
     }
     GPSession::set('user_id', $user->getID());
-    Posts::redirect()->index();
+    Posts::redirect();
   }
 
   public function create() {
@@ -18,7 +18,7 @@ final class Users extends GPController {
     $password = $this->post->getString('password');
     $user = User::getOneByEmail($email);
     if ($user) {
-      Welcome::redirect()->index();
+      Welcome::redirect();
     }
     $user = (new User())
       ->setEmail($email)
@@ -29,6 +29,6 @@ final class Users extends GPController {
 
   public function logout() {
     GPSession::destroy();
-    Welcome::redirect()->index();
+    Welcome::redirect();
   }
 }

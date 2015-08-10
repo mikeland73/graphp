@@ -39,7 +39,7 @@ class GPSecurity extends GPObject {
 
   public static function hmacVerify($bundle, $key) {
     $msgMAC = mb_substr($bundle, 0, 64, '8bit');
-    $message = mb_substr($bundle, 64, null, '8bit');
+    $message = self::hmacGetMessage($bundle);
     // For PHP 5.5 compat
     if (function_exists('hash_equals')) {
       return hash_equals(
@@ -48,6 +48,10 @@ class GPSecurity extends GPObject {
       );
     }
     return hash_hmac('sha256', $message, $key) === $msgMAC;
+  }
+
+  public static function hmacGetMessage($bundle) {
+    return mb_substr($bundle, 64, null, '8bit');
   }
 
 }
