@@ -2,9 +2,8 @@
 
 class GPController extends GPObject {
 
-  protected
-    $post,
-    $get;
+  protected $post;
+  protected $get;
 
   public function init() {
     $this->post = new GPRequestData($_POST);
@@ -17,13 +16,6 @@ class GPController extends GPObject {
 
   public static function __callStatic($method_name, $args) {
     return self::handleStatic($method_name, $args);
-  }
-
-  public static function isActive($method = 'index') {
-    $class = get_called_class();
-    return
-      GPRouter::getController() instanceof $class &&
-      strcasecmp(GPRouter::getMethod(), $method) === 0;
   }
 
   public function __destruct() {
