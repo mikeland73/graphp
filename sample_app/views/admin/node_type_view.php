@@ -1,5 +1,5 @@
 <h3>
-  <form action="<?=AdminAjax::getURI('create', $type)?>" method="POST">
+  <form action="<?=AdminAjax::URI()->create($type)?>" method="POST">
     <?=GPSecurity::csrf()?>
     <?=$name?>
     <button class="btn btn-primary">
@@ -24,7 +24,7 @@
       <?php foreach ($nodes as $node): ?>
         <tr>
           <td>
-            <a href="<?=Admin::getURI('node', $node->getID())?>">
+            <a href="<?=Admin::URI()->node($node->getID())?>">
               <?=$node->getID()?>
             </a>
           </td>
@@ -33,12 +33,12 @@
           <td>
             <a
               class="btn btn-sm btn-default active"
-              href="<?=Admin::getURI('node', $node->getID())?>">
+              href="<?=Admin::URI()->node($node->getID())?>">
               Edit
             </a>
           </td>
           <td>
-            <form action="<?=AdminAjax::getURI('delete', $type)?>" method="POST">
+            <form action="<?=AdminAjax::URI()->delete($type)?>" method="POST">
               <?=GPSecurity::csrf()?>
               <input
                 name="delete_node_id"

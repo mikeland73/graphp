@@ -86,7 +86,7 @@ Views
     <?= $title ?>
   </title?
   <body>
-    <a href="<?= OtherController::getURI('someMethod') ?>">Go to other controller</a>
+    <a href="<?= OtherController::URI()->someMethod() ?>">Go to other controller</a>
   </body>
 <html>
 ```

@@ -23,8 +23,8 @@
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
           <div class="container">
             <div class="navbar-header">
-              <a class="navbar-brand" href="<?=Admin::getURI()?>">Node Types</a>
-              <a class="navbar-brand" href="<?=Admin::getURI('edges')?>">Edge Types</a>
+              <a class="navbar-brand" href="<?=Admin::URI()?>">Node Types</a>
+              <a class="navbar-brand" href="<?=Admin::URI()->edges()?>">Edge Types</a>
             </div>
           </div>
         </div>

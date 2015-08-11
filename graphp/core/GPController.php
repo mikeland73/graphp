@@ -19,25 +19,6 @@ class GPController extends GPObject {
     return self::handleStatic($method_name, $args);
   }
 
-  public static function getURI($method = '') {
-    $name = get_called_class();
-    $args = func_get_args();
-    if ($method) {
-      if (
-        !method_exists($name, $method) ||
-        !(new ReflectionMethod($name, $method))->isPublic()
-      ) {
-        throw new GPException($name.' does not have a public method '.$method);
-      }
-    }
-    $index = GPConfig::get()->use_index_php ? '/index.php' : '';
-    return $index . '/'.strtolower($name).'/'.implode('/', $args);
-  }
-
-  public static function getURL($method = '') {
-    return GPConfig::get()->domain.static::getURI($method);
-  }
-
   public static function runAsync($method='') {
     $uri = call_user_func_array(get_called_class().'::getURI', func_get_args());
     $log = ini_get('error_log') ?: '/dev/null';

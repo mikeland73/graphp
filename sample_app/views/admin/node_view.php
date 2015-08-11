@@ -1,4 +1,4 @@
-<a href="<?=Admin::getURI('node_type', $node::getType())?>">
+<a href="<?=Admin::URI()->node_type($node::getType())?>">
   back to <?= get_class($node) ?> list
 </a>
 <h2><?= get_class($node) ?> ID <?= $node->getID() ?></h2>
@@ -24,7 +24,7 @@
           <th scope="row">
             <form
               class="text-center"
-              action="<?=AdminAjax::getURI('save', $node->getID())?>"
+              action="<?=AdminAjax::URI()->save($node->getID())?>"
               method="POST">
               <?=GPSecurity::csrf()?>
               <input name="data_key_to_unset" type="hidden" value="<?=$key?>">
@@ -38,7 +38,7 @@
     </tbody>
   </table>
 </div>
-<form action="<?=AdminAjax::getURI('save', $node->getID())?>" method="POST">
+<form action="<?=AdminAjax::URI()->save($node->getID())?>" method="POST">
   <?=GPSecurity::csrf()?>
   <input name="data_key" type="text" placeholder="key">
   <input name="data_val" type="text" placeholder="val">
@@ -66,7 +66,7 @@
               <code><?=$node::getEdgeTypeByType($e)->getName().' - '.$e?></code>
             </th>
             <th scope="row">
-              <a href="<?=Admin::getURI('node', $conn_node->getID())?>">
+              <a href="<?=Admin::URI()->node($conn_node->getID())?>">
                 Link
               </a>
               ID: <?=$conn_node->getID()?>
@@ -76,7 +76,7 @@
             <th scope="row">
               <form
                 class="text-center"
-                action="<?=AdminAjax::getURI('save', $node->getID())?>"
+                action="<?=AdminAjax::URI()->save($node->getID())?>"
                 method="POST">
                 <?=GPSecurity::csrf()?>
                 <input name="edge_type" type="hidden" value="<?=$e?>">
@@ -96,7 +96,7 @@
     </tbody>
   </table>
 </div>
-<form action="<?=AdminAjax::getURI('save', $node->getID())?>" method="POST">
+<form action="<?=AdminAjax::URI()->save($node->getID())?>" method="POST">
   <?=GPSecurity::csrf()?>
   <input name="edge_type" type="text" placeholder="edge type">
   <input name="to_id" type="text" placeholder="To node ID">

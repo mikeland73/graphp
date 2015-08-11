@@ -7,7 +7,7 @@
     <li><?=$comment->getText()?></li>
   <?php endforeach ?>
 </ul>
-<form method="POST" action="<?=Posts::getURI('createComment')?>">
+<form method="POST" action="<?=Posts::URI()->createComment()?>">
   <label>New Comment:</label>
   <textarea name="text"></textarea>
   <button>Create</button>
