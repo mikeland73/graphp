@@ -29,7 +29,7 @@ function idx0(array $array) {
 }
 
 function array_merge_by_keys() {
-  $result = array();
+  $result = [];
   foreach (func_get_args() as $array) {
     foreach ($array as $key => $value) {
       $result[$key] = $value;
@@ -39,7 +39,7 @@ function array_merge_by_keys() {
 }
 
 function key_by_value(array $array) {
-  $result = array();
+  $result = [];
   foreach ($array as $key => $value) {
     $result[$value] = $value;
   }
@@ -65,7 +65,7 @@ function array_concat(array $arr1 /*array2, ...*/) {
 }
 
 function array_flatten(array $array) {
-  $result = array();
+  $result = [];
   foreach ($array as $key => $value) {
     if (is_array($value)){
       array_concat_in_place($result, array_flatten($value));
@@ -81,7 +81,7 @@ function make_array($val) {
 }
 
 function array_select_keysx(array $dict, array $keys, $custom_error = null) {
-  $result = array();
+  $result = [];
   foreach ($keys as $key) {
     if (array_key_exists($key, $dict)) {
       $result[$key] = $dict[$key];
