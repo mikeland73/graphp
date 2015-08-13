@@ -71,12 +71,13 @@ abstract class GPNode extends GPObject {
   }
 
   public function getDataX($key) {
-    Assert::truthy(self::getDataTypeByName($key));
-    return $this->getData($key);
+    $type = self::getDataTypeByName($key);
+    Assert::truthy($type);
+    return $this->getData($key, $type->getDefault());
   }
 
-  public function getData($key) {
-    return idx($this->data, mb_strtolower($key));
+  public function getData($key, $default = null) {
+    return idx($this->data, mb_strtolower($key), $default);
   }
 
   public function getDataArray() {

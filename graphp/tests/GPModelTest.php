@@ -5,6 +5,7 @@ class GPTestModel extends GPNode {
     return [
       new GPDataType('name', GPDataType::GP_STRING, true),
       new GPDataType('age', GPDataType::GP_INT),
+      new GPDataType('currency', GPDataType::GP_STRING, false, 'USD'),
     ];
   }
 }
@@ -75,6 +76,12 @@ class GPNodeTest extends GPTest {
       $model->getDataArray(),
       ['name' => 'Bar', 'age' => 25]
     );
+  }
+
+  public function testDefaultData() {
+    $model = new GPTestModel();
+    $this->assertEquals($model->getCurrency(), 'USD');
+    $this->assertNull($model->getAge());
   }
 
   public static function tearDownAfterClass() {

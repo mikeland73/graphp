@@ -14,15 +14,18 @@ class GPDataType extends GPObject {
   private $name;
   private $type;
   private $isIndexed;
+  private $default;
 
   public function __construct(
     $name,
     $type = self::GP_ANY,
-    $is_indexed = false
+    $is_indexed = false,
+    $default = null
   ) {
     $this->name = mb_strtolower($name);
     $this->type = $type;
     $this->isIndexed = $is_indexed;
+    $this->default = $default;
   }
 
   public function assertValueIsOfType($value) {
@@ -53,6 +56,10 @@ class GPDataType extends GPObject {
 
   public function getType() {
     return $this->type;
+  }
+
+  public function getDefault() {
+    return $this->default;
   }
 
 }
