@@ -197,7 +197,8 @@ abstract class GPNode extends GPObject {
   private function loadConnectedIDs(
     array $edges,
     $force = false,
-    $limit = null
+    $limit = null,
+    $offset = 0
   ) {
     $types = mpull($edges, 'getType', 'getType');
     if ($force) {
@@ -205,7 +206,11 @@ abstract class GPNode extends GPObject {
     }
     $already_loaded = array_select_keys($this->connectedNodeIDs, $types);
     $to_load_types = array_diff_key($types, $this->connectedNodeIDs);
-    $ids = GPDatabase::get()->getConnectedIDs($this, $to_load_types, $limit);
+    $ids = GPDatabase::get()->getConnectedIDs(
+      $this,
+      $to_load_types,
+      $limit,
+      $offset);
     $this->connectedNodeIDs = array_merge_by_keys(
       $this->connectedNodeIDs,
       $ids + $already_loaded
@@ -221,10 +226,11 @@ abstract class GPNode extends GPObject {
   public function loadConnectedNodes(
     array $edges,
     $force = false,
-    $limit = null
+    $limit = null,
+    $offset = 0
   ) {
     $ids = $this
-      ->loadConnectedIDs($edges, $force, $limit)
+      ->loadConnectedIDs($edges, $force, $limit, $offset)
       ->getConnectedIDs($edges);
     $nodes = self::multiGetByID(array_flatten($ids));
     foreach ($ids as $edge_type => & $ids_for_edge_type) {

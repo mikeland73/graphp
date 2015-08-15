@@ -42,6 +42,21 @@ class GPTestLimitLoadTest extends GPTest {
     $this->assertEquals(count($m1->getGPTestLimitLoadModel2IDs()), 1);
   }
 
+  public function testLimitOffsetLoad() {
+    $m1 = new GPTestLimitLoadModel();
+    $m21 = new GPTestLimitLoadModel2();
+    $m22 = new GPTestLimitLoadModel2();
+    $m23 = new GPTestLimitLoadModel2();
+    batch($m1, $m21, $m22, $m23)->save();
+    $m1->addGPTestLimitLoadModel2([$m21, $m22, $m23])->save();
+    $m1->loadGPTestLimitLoadModel2(2, 1);
+    $this->assertEquals(count($m1->getGPTestLimitLoadModel2()), 2);
+    $this->assertEquals(idx0($m1->getGPTestLimitLoadModel2()), $m22);
+    $this->assertEquals(last($m1->getGPTestLimitLoadModel2()), $m21);
+    $m1->forceLoadGPTestLimitLoadModel2();
+    $this->assertEquals(count($m1->getGPTestLimitLoadModel2()), 3);
+  }
+
   public static function tearDownAfterClass() {
     batch(GPTestLimitLoadModel::getAll())->delete();
     batch(GPTestLimitLoadModel2::getAll())->delete();
