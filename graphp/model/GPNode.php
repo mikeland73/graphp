@@ -25,14 +25,9 @@ abstract class GPNode extends GPObject {
     $edge_types_by_type = [];
 
   public function __construct(array $data = []) {
-    foreach (self::getDataTypes() as $data_type) {
-      if (array_key_exists($data_type->getName(), $data)) {
-        $data_type->assertValueIsOfType($data[$data_type->getName()]);
-      }
-    }
     $this->data = [];
     foreach ($data as $key => $value) {
-      $this->data[mb_strtolower($key)] = $value;
+      $this->data[strtolower($key)] = $value;
     }
   }
 
@@ -66,7 +61,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function setData($key, $value) {
-    $this->data[mb_strtolower($key)] = $value;
+    $this->data[strtolower($key)] = $value;
     return $this;
   }
 
@@ -77,7 +72,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function getData($key, $default = null) {
-    return idx($this->data, mb_strtolower($key), $default);
+    return idx($this->data, strtolower($key), $default);
   }
 
   public function getDataArray() {
@@ -99,7 +94,7 @@ abstract class GPNode extends GPObject {
   }
 
   public function unsetData($key) {
-    unset($this->data[mb_strtolower($key)]);
+    unset($this->data[strtolower($key)]);
     return $this;
   }
 
@@ -303,7 +298,7 @@ abstract class GPNode extends GPObject {
   final public static function getEdgeType($name) {
     return idxx(
       self::getEdgeTypes(),
-      mb_strtolower($name),
+      strtolower($name),
       GPErrorText::missingEdgeType(
         get_called_class(),
         $name,
@@ -313,7 +308,7 @@ abstract class GPNode extends GPObject {
   }
 
   final public static function isEdgeType($name) {
-    return (bool) idx(self::getEdgeTypes(), mb_strtolower($name));
+    return (bool) idx(self::getEdgeTypes(), strtolower($name));
   }
 
   final public static function getEdgeTypeByType($type) {
@@ -342,7 +337,7 @@ abstract class GPNode extends GPObject {
 
   final public static function getDataTypeByName($name) {
     $data_types = self::getDataTypes();
-    return idx($data_types, mb_strtolower($name));
+    return idx($data_types, strtolower($name));
   }
 }
 

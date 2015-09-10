@@ -32,7 +32,7 @@ class GPController extends GPObject {
   private static function handleStatic($method_name, $args) {
     $handler = $method_name.GPConfig::get()->handler_suffix;
     if (
-      !idx(self::$coreHandlers, mb_strtolower($method_name)) &&
+      !idx(self::$coreHandlers, strtolower($method_name)) &&
       is_subclass_of($handler, GPControllerHandler::class)
     ) {
       return $handler::get(get_called_class());

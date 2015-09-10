@@ -22,7 +22,7 @@ class GPDataType extends GPObject {
     $is_indexed = false,
     $default = null
   ) {
-    $this->name = mb_strtolower($name);
+    $this->name = strtolower($name);
     $this->type = $type;
     $this->isIndexed = $is_indexed;
     $this->default = $default;

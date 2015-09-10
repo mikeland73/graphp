@@ -2,6 +2,8 @@
 
 trait GPNodeMagicMethods {
 
+  private static $methodCache = [];
+
   // Magic API:
   //
   // getX() should only work if the node has a GPDataType with the name x
@@ -29,6 +31,11 @@ trait GPNodeMagicMethods {
 
   public function __call($method, $args) {
 
+    $cache_key = get_class().$method;
+    if (array_key_exists($cache_key, self::$methodCache)) {
+      return call_user_func(self::$methodCache[$cache_key], $this);
+    }
+
     if (substr_compare($method, 'get', 0, 3) === 0) {
       return $this->handleGet(mb_substr($method, 3), $args);
     }
@@ -47,7 +54,7 @@ trait GPNodeMagicMethods {
         1,
         GPErrorText::wrongArgs(get_called_class(), $method, 1, count($args))
       );
-      return $this->setDataX(mb_strtolower(mb_substr($method, 3)), idx0($args));
+      return $this->setDataX(strtolower(mb_substr($method, 3)), idx0($args));
     }
 
     if (substr_compare($method, 'add', 0, 3) === 0) {
@@ -74,7 +81,7 @@ trait GPNodeMagicMethods {
     }
 
     if (substr_compare($method, 'unset', 0, 3) === 0) {
-      return $this->unsetDataX(mb_strtolower(mb_substr($method, 5)));
+      return $this->unsetDataX(strtolower(mb_substr($method, 5)));
     }
 
     throw new GPException(
@@ -83,10 +90,14 @@ trait GPNodeMagicMethods {
   }
 
   private function handleGet($name, $args) {
-    $lower_name = mb_strtolower($name);
+    $lower_name = strtolower($name);
     // Default to checking data first.
-    if (static::getDataTypeByName($lower_name)) {
-      return $this->getDataX($lower_name);
+    if (($type = static::getDataTypeByName($lower_name))) {
+      self::$methodCache[get_class().'get'.$name] =
+        function($that) use ($type, $lower_name) {
+          return $that->getData($lower_name, $type->getDefault());
+        };
+      return $this->getData($lower_name, $type->getDefault());
     }
 
     if (substr_compare($name, 'One', 0, 3, true) === 0) {
@@ -102,7 +113,7 @@ trait GPNodeMagicMethods {
       $ids_only = true;
     }
 
-    $name = mb_strtolower($name);
+    $name = strtolower($name);
 
     if (($edge = static::getEdgeType($name))) {
       if ($name === $edge->getSingleNodeName()) {

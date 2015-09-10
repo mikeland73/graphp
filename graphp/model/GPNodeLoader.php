@@ -45,12 +45,12 @@ trait GPNodeLoader {
       strpos($name, 'getBy') === 0  &&
       strpos($name, 'Range') === ($len - 5)
     ) {
-      $type_name = mb_strtolower(mb_substr($name, 5, $len - 10));
+      $type_name = strtolower(mb_substr($name, 5, $len - 10));
       $range = true;
     } else if (substr_compare($name, 'getBy', 0, 5) === 0) {
-      $type_name = mb_strtolower(mb_substr($name, 5));
+      $type_name = strtolower(mb_substr($name, 5));
     } else if (substr_compare($name, 'getOneBy', 0, 8) === 0) {
-      $type_name = mb_strtolower(mb_substr($name, 8));
+      $type_name = strtolower(mb_substr($name, 8));
       $only_one = true;
     }
     if (isset($type_name)) {
