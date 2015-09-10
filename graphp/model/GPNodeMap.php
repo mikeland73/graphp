@@ -57,10 +57,12 @@ class GPNodeMap extends GPObject {
   }
 
   private static function regenMap() {
+    $app_folder = GPConfig::get()->app_folder;
     self::$map = [];
     self::$inverseMap = [];
     $file = "<?php\nreturn [\n";
-    foreach (GP::getModelsMap()->getAllFileNames() as $class) {
+    $model_map = new GPFileMap(ROOT_PATH.$app_folder.'/models', 'models');
+    foreach ($model_map->getAllFileNames() as $class) {
       $file .= '  '.$class::getType().' => \''.$class."',\n";
       self::$map[$class::getType()] = $class;
       self::$inverseMap[$class] = $class::getType();

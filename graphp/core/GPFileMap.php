@@ -6,8 +6,8 @@ class GPFileMap extends GPObject {
   private $dir;
   private $name;
 
-  public function __construct($dir, $name) {
-    $this->dir = $dir;
+  public function __construct($dirs, $name) {
+    $this->dirs = make_array($dirs);
     $this->name = $name;
     $map = @include $this->buildPath();
     $this->map = $map ?: [];
@@ -18,18 +18,20 @@ class GPFileMap extends GPObject {
     if (!isset($this->map[$file]) || !file_exists($this->map[$file])) {
       $this->regenMap();
     }
-
     return idx($this->map, $file);
   }
 
   public function regenMap() {
-    $dir_iter = new RecursiveDirectoryIterator($this->dir);
-    $iter = new RecursiveIteratorIterator($dir_iter);
     $this->map = [];
-    foreach ($iter as $key => $file) {
-      if ($file->getExtension() === 'php') {
-        list($name) = explode('.', $file->getFileName());
-        $this->map[strtolower($name)] = $key;
+    foreach ($this->dirs as $dir) {
+      $dir_iter = new RecursiveDirectoryIterator($dir);
+      $iter = new RecursiveIteratorIterator($dir_iter);
+
+      foreach ($iter as $key => $file) {
+        if ($file->getExtension() === 'php') {
+          list($name) = explode('.', $file->getFileName());
+          $this->map[strtolower($name)] = $key;
+        }
       }
     }
     $this->writeMap();

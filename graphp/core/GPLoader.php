@@ -10,12 +10,12 @@ require_once ROOT_PATH.'third_party/libphutil/src/__phutil_library_init__.php';
 
 class GPLoader extends GPObject {
 
-  private static $maps = [];
+  private static $map = null;
   private static $viewData = [];
   private static $globalViewData = [];
 
   public static function init() {
-    self::registerGPAutoloader();
+    spl_autoload_register('GPLoader::GPAutoloader');
     if(!file_exists(ROOT_PATH.'maps')) {
       throw new GPException(
         'Please create maps dir and make sure it is writable'
@@ -23,52 +23,24 @@ class GPLoader extends GPObject {
     }
   }
 
-  private static function registerGPAutoloader() {
-    spl_autoload_register('GPLoader::GPAutoloader');
-    spl_autoload_register('GPLoader::GPNodeAutoloader');
-    spl_autoload_register('GPLoader::GPLibraryAutoloader');
-    spl_autoload_register('GPLoader::GPControllerAutoloader');
-  }
-
-  private static function getMap($path, $name) {
-    if (!isset(self::$maps[$name])) {
-      self::$maps[$name] = new GPFileMap($path, $name);
+  private static function getMap() {
+    if (self::$map === null) {
+      $app_folder = GPConfig::get()->app_folder;
+      self::$map = new GPFileMap(
+        [
+          ROOT_PATH.$app_folder.'/models',
+          ROOT_PATH.'graphp',
+          ROOT_PATH.$app_folder.'/libraries',
+          ROOT_PATH.$app_folder.'/controllers',
+        ],
+        'file_map'
+      );
     }
-    return self::$maps[$name];
-  }
-
-  public static function getModelsMap() {
-    $app_folder = GPConfig::get()->app_folder;
-    return self::getMap(ROOT_PATH.$app_folder.'/models', 'models');
+    return self::$map;
   }
 
   private static function GPAutoloader($class_name) {
-    $path = self::getMap(ROOT_PATH.'graphp', 'graphp')->getPath($class_name);
-    if ($path) {
-      require_once $path;
-    }
-  }
-
-  private static function GPNodeAutoloader($class_name) {
-    $path = self::getModelsMap()->getPath($class_name);
-    if ($path) {
-      require_once $path;
-    }
-  }
-
-  private static function GPLibraryAutoloader($class_name) {
-    $app_folder = GPConfig::get()->app_folder;
-    $map = self::getMap(ROOT_PATH.$app_folder.'/libraries', 'libraries');
-    $path = $map->getPath($class_name);
-    if ($path) {
-      require_once $path;
-    }
-  }
-
-  private static function GPControllerAutoloader($class_name) {
-    $app_folder = GPConfig::get()->app_folder;
-    $map = self::getMap(ROOT_PATH.$app_folder.'/controllers', 'controllers');
-    $path = $map->getPath($class_name);
+    $path = self::getMap()->getPath($class_name);
     if ($path) {
       require_once $path;
     }

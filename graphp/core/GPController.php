@@ -5,6 +5,13 @@ class GPController extends GPObject {
   protected $post;
   protected $get;
 
+  private static $coreHandlers = [
+    'async' => true,
+    'redirect' => true,
+    'uri' => true,
+    'url' => true,
+  ];
+
   public function init() {
     $this->post = new GPRequestData($_POST);
     $this->get = new GPRequestData($_GET);
@@ -24,7 +31,10 @@ class GPController extends GPObject {
 
   private static function handleStatic($method_name, $args) {
     $handler = $method_name.GPConfig::get()->handler_suffix;
-    if (is_subclass_of($handler, GPControllerHandler::class)) {
+    if (
+      !idx(self::$coreHandlers, mb_strtolower($method_name)) &&
+      is_subclass_of($handler, GPControllerHandler::class)
+    ) {
       return $handler::get(get_called_class());
     }
     $core_handler = 'GP'.$method_name.GPConfig::get()->handler_suffix;
