@@ -31,7 +31,7 @@ trait GPNodeMagicMethods {
 
   public function __call($method, $args) {
 
-    $cache_key = get_class().$method;
+    $cache_key = get_class($this).$method;
     if (array_key_exists($cache_key, self::$methodCache)) {
       return call_user_func(self::$methodCache[$cache_key], $this);
     }
@@ -93,7 +93,7 @@ trait GPNodeMagicMethods {
     $lower_name = strtolower($name);
     // Default to checking data first.
     if (($type = static::getDataTypeByName($lower_name))) {
-      self::$methodCache[get_class().'get'.$name] =
+      self::$methodCache[get_class($this).'get'.$name] =
         function($that) use ($type, $lower_name) {
           return $that->getData($lower_name, $type->getDefault());
         };
