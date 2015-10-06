@@ -95,6 +95,11 @@ class GPLoader extends GPObject {
     return php_sapi_name() === 'cli';
   }
 
+  public static function isAjax() {
+    return
+      filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH') === 'XMLHttpRequest';
+  }
+
   public static function return404() {
     GPDatabase::get()->dispose();
     http_response_code(404);
