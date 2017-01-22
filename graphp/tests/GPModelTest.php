@@ -10,6 +10,8 @@ class GPTestModel extends GPNode {
   }
 }
 
+class GPTestOtherModel extends GPNode {}
+
 class GPNodeTest extends GPTest {
 
   public static function setUpBeforeClass() {
@@ -32,6 +34,57 @@ class GPNodeTest extends GPTest {
     $this->assertNotEmpty(GPTestModel::getByID($model->getID()));
     // And from cache
     $this->assertNotEmpty(GPTestModel::getByID($model->getID()));
+  }
+
+  public function testLoadByIDWrongModel() {
+    $model = new GPTestModel();
+    $this->assertEmpty($model->getID());
+    $model->save();
+    $model::clearCache();
+    $this->assertEmpty(GPTestOtherModel::getByID($model->getID()));
+    // And from cache
+    GPTestModel::getByID($model->getID());
+    $this->assertEmpty(GPTestOtherModel::getByID($model->getID()));
+  }
+
+  public function testMultiLoadByID() {
+    $model = new GPTestModel();
+    $model2 = new GPTestModel();
+    batch($model, $model2)->save();
+    $model->save();
+    $model::clearCache();
+    $this->assertEquals(
+      mpull(
+        GPTestModel::multiGetByID([$model->getID(), $model2->getID()]),
+        'getID'
+      ),
+      mpull([$model, $model2], 'getID', 'getID')
+    );
+    // And from cache
+    $this->assertEquals(
+      mpull(
+        GPTestModel::multiGetByID([$model->getID(), $model2->getID()]),
+        'getID'
+      ),
+      mpull([$model, $model2], 'getID', 'getID')
+    );
+  }
+
+  public function testMultiLoadByIDWrongModel() {
+    $model = new GPTestModel();
+    $model2 = new GPTestModel();
+    batch($model, $model2)->save();
+    $model->save();
+    $model::clearCache();
+    $this->assertEmpty(
+      GPTestOtherModel::multiGetByID([$model->getID(), $model2->getID()])
+    );
+    // And from cache
+    GPTestModel::getByID($model->getID());
+    $this->assertEmpty(
+      GPTestOtherModel::multiGetByID([$model->getID(), $model2->getID()])
+    );
+    $this->assertNotEmpty(GPTestModel::multiGetByID([$model->getID()]));
   }
 
   public function testLoadByName() {

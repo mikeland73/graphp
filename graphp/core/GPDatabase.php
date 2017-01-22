@@ -103,14 +103,24 @@ class GPDatabase extends GPObject {
     );
   }
 
-  public function multigetNodeByID(array $ids) {
+  public function getNodeByIDType($id, $type) {
+    return queryfx_one(
+      $this->getConnection(),
+      'SELECT * FROM node WHERE id = %d AND type = %d;',
+      $id,
+      $type
+    );
+  }
+
+  public function multigetNodeByIDType(array $ids, $type = null) {
     if (!$ids) {
       return [];
     }
-    return queryfx_all(
+    $type_fragment = $type ? 'AND type = %d;' : ';';
+    return vqueryfx_all(
       $this->getConnection(),
-      'SELECT * FROM node WHERE id IN (%Ld);',
-      $ids
+      'SELECT * FROM node WHERE id IN (%Ld) '.$type_fragment,
+      array_filter([$ids, $type])
     );
   }
 

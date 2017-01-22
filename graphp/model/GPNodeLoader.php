@@ -19,11 +19,19 @@ trait GPNodeLoader {
 
   public static function getByID($id) {
     if (!array_key_exists($id, self::$cache)) {
-      $node_data = GPDatabase::get()->getNodeByID($id);
+      $node_data = get_called_class() === GPNode::class ?
+        GPDatabase::get()->getNodeByID($id) :
+        GPDatabase::get()->getNodeByIDType($id, self::getType());
       if ($node_data === null) {
         return null;
       }
       self::$cache[$id] = self::nodeFromArray($node_data);
+    }
+    if (
+      get_called_class() !== GPNode::class &&
+      self::$cache[$id]->getType() !== self::getType()
+    ) {
+      return null;
     }
     return self::$cache[$id];
   }
@@ -31,11 +39,21 @@ trait GPNodeLoader {
   public static function multiGetByID(array $ids) {
     $ids = key_by_value($ids);
     $to_fetch = array_diff_key($ids, self::$cache);
-    $node_datas = GPDatabase::get()->multigetNodeByID($to_fetch);
+    $node_datas = get_called_class() === GPNode::class ?
+      GPDatabase::get()->multigetNodeByIDType($to_fetch) :
+      GPDatabase::get()->multigetNodeByIDType($to_fetch, self::getType());
     foreach ($node_datas as $node_data) {
       self::$cache[$node_data['id']] = self::nodeFromArray($node_data);
     }
-    return array_select_keys(self::$cache, $ids);
+    $nodes = array_select_keys(self::$cache, $ids);
+    if (get_called_class() === GPNode::class) {
+      return $nodes;
+    }
+    $type = self::getType();
+    return array_filter(
+      $nodes,
+      function($node) use ($type) { return $node->getType() === $type; }
+    );
   }
 
   public static function __callStatic($name, array $arguments) {

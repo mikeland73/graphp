@@ -51,7 +51,7 @@ trait GPBatchLoader {
     }
     $ids = GPDatabase::get()->multiGetConnectedIDs($nodes, $raw_edge_types);
     if (!$ids_only) {
-      $to_nodes = self::multiGetByID(array_flatten($ids));
+      $to_nodes = GPNode::multiGetByID(array_flatten($ids));
     }
     foreach ($ids as $from_id => $type_ids) {
       $loaded_nodes_for_type = [];

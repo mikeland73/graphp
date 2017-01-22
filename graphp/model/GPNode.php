@@ -227,7 +227,7 @@ abstract class GPNode extends GPObject {
     $ids = $this
       ->loadConnectedIDs($edges, $force, $limit, $offset)
       ->getConnectedIDs($edges);
-    $nodes = self::multiGetByID(array_flatten($ids));
+    $nodes = GPNode::multiGetByID(array_flatten($ids));
     foreach ($ids as $edge_type => & $ids_for_edge_type) {
       foreach ($ids_for_edge_type as $key => $id) {
         $ids_for_edge_type[$key] = $nodes[$id];

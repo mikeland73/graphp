@@ -31,11 +31,11 @@ class GPLoadByRangeTest extends GPTest {
     $m2 = (new GPTestRangeModel())->setAge(26)->save();
     $m3 = (new GPTestRangeModel())->setAge(22)->save();
     $results = GPTestRangeModel::getByAgeRange(22, 50, 1);
-    $this->assertEquals(array_values($results), [$m3]);
+    $this->assertEquals(array_values($results), [$m1]);
     $results = GPTestRangeModel::getByAgeRange(22, 50, 1, 1);
     $this->assertEquals(array_values($results), [$m2]);
     $results = GPTestRangeModel::getByAgeRange(22, 50, 3, 0);
-    $this->assertEquals(array_values($results), [$m3, $m2, $m1]);
+    $this->assertEquals(array_values($results), [$m1, $m2, $m3]);
   }
 
   public static function tearDownAfterClass() {
