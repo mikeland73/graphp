@@ -287,7 +287,7 @@ class GPDatabase extends GPObject {
       'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
       ($limit === null ? '' : ' LIMIT %d, %d').';'
     );
-    $results = queryfx_all($args);
+    $results = call_user_func_array('queryfx_all', $args);
     $ordered = [];
     foreach ($results as $result) {
       if (!array_key_exists($result['from_node_id'], $ordered)) {
