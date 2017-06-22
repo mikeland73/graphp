@@ -117,11 +117,13 @@ class GPDatabase extends GPObject {
       return [];
     }
     $type_fragment = $type ? 'AND type = %d;' : ';';
-    return vqueryfx_all(
+    $args = array_filter([$ids, $type]);
+    array_unshift(
+      $args,
       $this->getConnection(),
-      'SELECT * FROM node WHERE id IN (%Ld) '.$type_fragment,
-      array_filter([$ids, $type])
+      'SELECT * FROM node WHERE id IN (%Ld) '.$type_fragment
     );
+    return call_user_func_array('queryfx_all', $args);
   }
 
   public function getNodeIDsByTypeData($type, array $data) {
@@ -167,12 +169,14 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    vqueryfx(
+    $args = $values;
+    array_unshift(
+      $args,
       $this->getConnection(),
       'INSERT INTO node_data (node_id, type, data) VALUES '.
-      implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);',
-      $values
+      implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);'
     );
+    call_user_func_array('queryfx', $args);
   }
 
   private function getEdgeParts(GPNode $from_node, array $array_of_arrays) {
@@ -192,12 +196,14 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    vqueryfx(
+    $args = $values;
+    array_unshift(
+      $args,
       $this->getConnection(),
       'INSERT IGNORE INTO edge (from_node_id, to_node_id, type) VALUES '.
-      implode(',', $parts) . ';',
-      $values
+      implode(',', $parts) . ';'
     );
+    call_user_func_array('queryfx', $args);
   }
 
   public function deleteEdges(GPNode $from_node, array $array_of_arrays) {
@@ -205,12 +211,14 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    vqueryfx(
+    $args = $values;
+    array_unshift(
+      $args,
       $this->getConnection(),
       'DELETE FROM edge WHERE (from_node_id, to_node_id, type) IN ('.
-      implode(',', $parts) . ');',
-      $values
+      implode(',', $parts) . ');'
     );
+    call_user_func_array('queryfx', $args);
   }
 
   public function deleteAllEdges(GPNode $node, array $edge_types) {
@@ -235,12 +243,14 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    vqueryfx(
+    $args = $values;
+    array_unshift(
+      $args,
       $this->getConnection(),
       'DELETE FROM edge WHERE ('.$col.', type) IN ('.
-      implode(',', $parts) . ');',
-      $values
+      implode(',', $parts) . ');'
     );
+    call_user_func_array('queryfx', $args);
   }
 
   public function getConnectedIDs(
@@ -270,13 +280,14 @@ class GPDatabase extends GPObject {
       $args[] = $offset;
       $args[] = $limit;
     }
-    $results = vqueryfx_all(
+    array_unshift(
+      $args,
       $this->getConnection(),
       'SELECT from_node_id, to_node_id, type FROM edge '.
       'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
-      ($limit === null ? '' : ' LIMIT %d, %d').';',
-      $args
+      ($limit === null ? '' : ' LIMIT %d, %d').';'
     );
+    $results = queryfx_all($args);
     $ordered = [];
     foreach ($results as $result) {
       if (!array_key_exists($result['from_node_id'], $ordered)) {
