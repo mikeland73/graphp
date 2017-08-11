@@ -18,7 +18,7 @@ return [
   'view_404'      => '',
   'layout_404'    => '',
 
-  'app_folder'    => 'sample_app',
+  'app_folder'    => 'app',
 
   // This will automatically drop the DB before the first view is rendered
   'disallow_view_db_access' => false,
