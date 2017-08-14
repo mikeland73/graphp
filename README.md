@@ -14,7 +14,7 @@ A couple of things that describe graphp:
 * DB API is designed for fast performance. No implicit joins or other magic, but expressive enough for nice readable code.
 * No CLI needed (but supported for cron and tests).
 * All classes are loaded on demand when used for the first time.
-* PHP 5.5+
+* PHP 5.6+
 
 A simple example:
 

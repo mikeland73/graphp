@@ -117,10 +117,11 @@ class GPDatabase extends GPObject {
       return [];
     }
     $type_fragment = $type ? 'AND type = %d;' : ';';
-    return vqueryfx_all(
+    $args = array_filter([$ids, $type]);
+    return queryfx_all(
       $this->getConnection(),
       'SELECT * FROM node WHERE id IN (%Ld) '.$type_fragment,
-      array_filter([$ids, $type])
+      ...$args
     );
   }
 
@@ -167,11 +168,11 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    vqueryfx(
+    queryfx(
       $this->getConnection(),
       'INSERT INTO node_data (node_id, type, data) VALUES '.
       implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);',
-      $values
+      ...$values
     );
   }
 
@@ -192,11 +193,11 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    vqueryfx(
+    queryfx(
       $this->getConnection(),
       'INSERT IGNORE INTO edge (from_node_id, to_node_id, type) VALUES '.
-      implode(',', $parts) . ';',
-      $values
+        implode(',', $parts) . ';',
+      ...$values
     );
   }
 
@@ -205,11 +206,11 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    vqueryfx(
+    queryfx(
       $this->getConnection(),
       'DELETE FROM edge WHERE (from_node_id, to_node_id, type) IN ('.
-      implode(',', $parts) . ');',
-      $values
+        implode(',', $parts) . ');',
+      ...$values
     );
   }
 
@@ -235,11 +236,11 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    vqueryfx(
+    queryfx(
       $this->getConnection(),
       'DELETE FROM edge WHERE ('.$col.', type) IN ('.
-      implode(',', $parts) . ');',
-      $values
+        implode(',', $parts) . ');',
+      ...$values
     );
   }
 
@@ -270,12 +271,12 @@ class GPDatabase extends GPObject {
       $args[] = $offset;
       $args[] = $limit;
     }
-    $results = vqueryfx_all(
+    $results = queryfx_all(
       $this->getConnection(),
       'SELECT from_node_id, to_node_id, type FROM edge '.
-      'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
-      ($limit === null ? '' : ' LIMIT %d, %d').';',
-      $args
+        'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
+        ($limit === null ? '' : ' LIMIT %d, %d').';',
+      ...$args
     );
     $ordered = [];
     foreach ($results as $result) {
