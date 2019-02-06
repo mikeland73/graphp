@@ -11,3 +11,9 @@ jobs:
     steps:
       - checkout
       - run: graphp/tests/run_tests.sh
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test
