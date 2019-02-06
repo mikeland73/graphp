@@ -13,18 +13,33 @@ class GPRouter extends GPObject {
   }
 
   public static function route() {
-    $controller_name = ucfirst(idxx(self::$parts, 0));
+    if (is_array(self::$parts)) {
+      $generator = new RouteGenerator(...self::$parts);
+    } else if (idx(class_parents(self::$parts), RouteGenerator::class)) {
+      $generator = new self::$parts($_SERVER['REQUEST_URI']);
+    } else {
+      throw new GPException('Unrecognized route value');
+    }
+
+    $controller_name = $generator->getController();
+
     if (!class_exists($controller_name)) {
       GP::return404();
     }
-    self::$method = idx(self::$parts, 1, 'index');
+
     self::$controller = new $controller_name();
+    self::$method = $generator->getMethod();
+
     if (!method_exists(self::$controller, self::$method)) {
       GP::return404();
     }
+
+    if (!self::$controller->isAllowed(self::$method)) {
+      GP::return404();
+    }
+
     self::$controller->init();
-    $args = array_slice(self::$parts, 2);
-    call_user_func_array([self::$controller, self::$method], $args);
+    call_user_func_array([self::$controller, self::$method], $generator->getArgs());
   }
 
   public static function getController() {
@@ -51,7 +66,9 @@ class GPRouter extends GPObject {
       $matches = [];
       if (preg_match('#'.$regex.'#', $uri, $matches)) {
         $parts = self::$routes[$regex];
-        array_concat_in_place($parts, array_slice($matches, 1));
+        if (is_array($parts)) {
+          array_concat_in_place($parts, array_slice($matches, 1));
+        }
         return $parts;
       }
     }

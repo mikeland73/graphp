@@ -109,6 +109,10 @@ trait GPNodeLoader {
     self::$cache = [];
   }
 
+  public static function unsetFromCache($id) {
+    unset(self::$cache[$id]);
+  }
+
   private static function getByIndexData($data_type, $data) {
     $db = GPDatabase::get();
     $node_ids = $db->getNodeIDsByTypeData($data_type, make_array($data));

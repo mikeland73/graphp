@@ -65,6 +65,11 @@ abstract class GPNode extends GPObject {
     return $this;
   }
 
+  public function setDataArray(array $data): self {
+    $this->data = $data;
+    return $this;
+  }
+
   public function getDataX($key) {
     $type = self::getDataTypeByName($key);
     Assert::truthy($type);
@@ -177,7 +182,8 @@ abstract class GPNode extends GPObject {
     Assert::allEquals(
       mpull($nodes, 'getType'),
       $edge->getToType(),
-      'Trying to add nodes of the wrong type.'
+      'Trying to add nodes of the wrong type. '.
+        json_encode(mpull($nodes, 'getType')).' != '.$edge->getToType()
     );
     if (!array_key_exists($edge->getType(), $this->$var)) {
       $this->{$var}[$edge->getType()] = [];

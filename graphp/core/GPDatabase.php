@@ -10,6 +10,7 @@ class GPDatabase extends GPObject {
   private $nestedTransactions = 0;
 
   private static $viewLock = 0;
+  private static $skipWriteGuard = false;
 
   public static function get($name = 'database') {
     if (!isset(self::$dbs[$name])) {
@@ -20,7 +21,7 @@ class GPDatabase extends GPObject {
 
   public function __construct($config_name) {
     $this->guard = new AphrontWriteGuard(function() {
-      if (GP::isCLI()) {
+      if (GP::isCLI() || self::$skipWriteGuard) {
         return;
       }
       if (idx($_SERVER, 'REQUEST_METHOD') !== 'POST') {
@@ -60,6 +61,10 @@ class GPDatabase extends GPObject {
 
   public function endUnguardedWrites() {
     AphrontWriteGuard::endUnguardedWrites();
+  }
+
+  public function skipWriteGuard() {
+    self::$skipWriteGuard = true;
   }
 
   public function startTransaction() {
@@ -117,11 +122,10 @@ class GPDatabase extends GPObject {
       return [];
     }
     $type_fragment = $type ? 'AND type = %d;' : ';';
-    $args = array_filter([$ids, $type]);
-    return queryfx_all(
+    return vqueryfx_all(
       $this->getConnection(),
       'SELECT * FROM node WHERE id IN (%Ld) '.$type_fragment,
-      ...$args
+      array_filter([$ids, $type])
     );
   }
 
@@ -165,15 +169,21 @@ class GPDatabase extends GPObject {
       $values[] = $node::getDataTypeByName($name)->getIndexedType();
       $values[] = $val;
     }
-    if (!$parts) {
-      return;
-    }
-    queryfx(
+    $this->startTransaction();
+    $result = queryfx(
       $this->getConnection(),
-      'INSERT INTO node_data (node_id, type, data) VALUES '.
-      implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);',
-      ...$values
+      'DELETE FROM node_data WHERE node_id = %d',
+      $node->getID()
     );
+    if ($parts) {
+      vqueryfx(
+        $this->getConnection(),
+        'INSERT INTO node_data (node_id, type, data) VALUES '.
+        implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);',
+        $values
+      );
+    }
+    $this->commit();
   }
 
   private function getEdgeParts(GPNode $from_node, array $array_of_arrays) {
@@ -193,11 +203,11 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    queryfx(
+    vqueryfx(
       $this->getConnection(),
       'INSERT IGNORE INTO edge (from_node_id, to_node_id, type) VALUES '.
-        implode(',', $parts) . ';',
-      ...$values
+      implode(',', $parts) . ';',
+      $values
     );
   }
 
@@ -206,11 +216,11 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    queryfx(
+    vqueryfx(
       $this->getConnection(),
       'DELETE FROM edge WHERE (from_node_id, to_node_id, type) IN ('.
-        implode(',', $parts) . ');',
-      ...$values
+      implode(',', $parts) . ');',
+      $values
     );
   }
 
@@ -236,11 +246,11 @@ class GPDatabase extends GPObject {
     if (!$parts) {
       return;
     }
-    queryfx(
+    vqueryfx(
       $this->getConnection(),
       'DELETE FROM edge WHERE ('.$col.', type) IN ('.
-        implode(',', $parts) . ');',
-      ...$values
+      implode(',', $parts) . ');',
+      $values
     );
   }
 
@@ -271,12 +281,12 @@ class GPDatabase extends GPObject {
       $args[] = $offset;
       $args[] = $limit;
     }
-    $results = queryfx_all(
+    $results = vqueryfx_all(
       $this->getConnection(),
       'SELECT from_node_id, to_node_id, type FROM edge '.
-        'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
-        ($limit === null ? '' : ' LIMIT %d, %d').';',
-      ...$args
+      'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
+      ($limit === null ? '' : ' LIMIT %d, %d').';',
+      $args
     );
     $ordered = [];
     foreach ($results as $result) {

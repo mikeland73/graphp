@@ -98,6 +98,20 @@ class GPNodeTest extends GPTest {
     $this->assertNotEmpty(GPTestModel::getByName($name));
   }
 
+  public function testLoadByNameAfterUnset() {
+    $name = 'Weirderer Name';
+    $model = new GPTestModel(['name' => $name]);
+    $this->assertEmpty($model->getID());
+    $model->save();
+    $model::clearCache();
+    $loaded_model = GPTestModel::getOneByName($name);
+    $this->assertNotEmpty($loaded_model);
+    $loaded_model->unsetName();
+    $loaded_model->save();
+    $model::clearCache();
+    $this->assertEmpty(GPTestModel::getOneByName($name));
+  }
+
   /**
    * @expectedException GPException
    */

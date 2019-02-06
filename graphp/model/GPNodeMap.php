@@ -8,7 +8,7 @@ class GPNodeMap extends GPObject {
 
   private static function getMap() {
     if (!self::$map) {
-      self::$map = @include self::buildPath();
+      self::$map = is_readable(self::buildPath()) ? include self::buildPath() : null;
     }
     return self::$map ?: [];
   }
@@ -69,12 +69,15 @@ class GPNodeMap extends GPObject {
     }
     $file .= "];\n";
     $file_path = self::buildPath();
+    $does_file_exist = file_exists($file_path);
     file_put_contents($file_path, $file);
-    // TODO this is probably not safe
-    @chmod($file_path, 0666);
+    if (!$does_file_exist) {
+      // File was just created, make sure to make it readable
+      chmod($file_path, 0666);
+    }
   }
 
   private static function buildPath() {
-    return ROOT_PATH.'maps/'.GPConfig::get()->app_folder.'_node';
+    return '/tmp/maps/'.GPConfig::get()->app_folder.'_node';
   }
 }

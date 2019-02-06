@@ -16,10 +16,9 @@ class GPLoader extends GPObject {
 
   public static function init() {
     spl_autoload_register('GPLoader::GPAutoloader');
-    if(!file_exists(ROOT_PATH.'maps')) {
-      throw new GPException(
-        'Please create maps dir and make sure it is writable'
-      );
+    if(!is_writable('/tmp/maps')) {
+      mkdir('/tmp/maps');
+      chmod('/tmp/maps', 0777);
     }
   }
 
@@ -100,16 +99,33 @@ class GPLoader extends GPObject {
       filter_input(INPUT_SERVER, 'HTTP_X_REQUESTED_WITH') === 'XMLHttpRequest';
   }
 
+  public static function isJSONRequest() {
+    return idx($_SERVER, 'CONTENT_TYPE') === 'application/json';
+  }
+
   public static function return404() {
     GPDatabase::get()->dispose();
     http_response_code(404);
     $config = GPConfig::get();
-    if ($config->view_404 && $config->layout_404) {
+    if (GP::isAjax() || GP::isJSONRequest()) {
+      GP::ajax(['error_code' => 404, 'error' => 'Resource Not Found']);
+    } else if ($config->view_404 && $config->layout_404) {
       GP::viewWithLayout($config->view_404, $config->layout_404);
     } else if ($config->view_404) {
       GP::view($config->view_404);
     } else {
-      die('404');
+      echo '404';
+    }
+    die();
+  }
+
+  public static function return403() {
+    GPDatabase::get()->dispose();
+    http_response_code(403);
+    if (GP::isAjax() || GP::isJSONRequest()) {
+      GP::ajax(['error_code' => 403, 'error' => 'Forbidden']);
+    } else {
+      echo 'Forbidden';
     }
     die();
   }
