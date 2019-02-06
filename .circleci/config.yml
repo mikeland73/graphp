@@ -5,4 +5,9 @@ jobs:
       - image: circleci/php:7.2
     steps:
       - checkout
-      - run: echo "A first hello"
+  test:
+    docker:
+      - image: circleci/php:7.2
+    steps:
+      - checkout
+      - run: graphp/tests/run_tests.sh
