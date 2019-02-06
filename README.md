@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/mikeland86/graphp/badge)](https://www.codefactor.io/repository/github/mikeland86/graphp)
+
 graphp
 ======
 
