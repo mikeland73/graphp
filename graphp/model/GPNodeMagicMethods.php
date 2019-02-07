@@ -92,7 +92,8 @@ trait GPNodeMagicMethods {
   private function handleGet($name, $args) {
     $lower_name = strtolower($name);
     // Default to checking data first.
-    if (($type = static::getDataTypeByName($lower_name))) {
+    $type = static::getDataTypeByName($lower_name);
+    if ($type) {
       self::$methodCache[get_class($this).'get'.$name] =
         function($that) use ($type, $lower_name) {
           return $that->getData($lower_name, $type->getDefault());
@@ -115,7 +116,8 @@ trait GPNodeMagicMethods {
 
     $name = strtolower($name);
 
-    if (($edge = static::getEdgeType($name))) {
+    $edge = static::getEdgeType($name);
+    if ($edge) {
       if ($name === $edge->getSingleNodeName()) {
         $one = true;
       }

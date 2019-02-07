@@ -17,7 +17,7 @@ final class GPErrorText extends GPObject {
 
     return 'One or more of '.json_encode($to_load).' has either not been loaded or '.
            'does not exist on '.get_class($obj).'. Possible edges are '.
-           json_encode($possible).' and '.'loaded edge types are '.json_encode($loaded);
+           json_encode($possible).' and loaded edge types are '.json_encode($loaded);
   }
 
   public static function wrongArgs($class, $method, $expected, $actual) {
