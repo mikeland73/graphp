@@ -1,9 +1,9 @@
 <?php
 
 return [
-  'host'                    => 'localhost',
+  'host'                    => '127.0.0.1',
   'database'                => 'graphp',
-  'user'                    => 'root',
-  'pass'                    => '',
+  'user'                    => 'graphp',
+  'pass'                    => 'graphp',
   'port'                    => 0,
 ];
