@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/php:7.2
+      - image: circleci/mysql:8.0.4
     steps:
       - checkout
   test:
