@@ -1,4 +1,4 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/mikeland86/graphp/badge)](https://www.codefactor.io/repository/github/mikeland86/graphp)
+[![CodeFactor](https://www.codefactor.io/repository/github/mikeland86/graphp/badge)](https://www.codefactor.io/repository/github/mikeland86/graphp) [![CircleCI](https://circleci.com/gh/mikeland86/graphp.svg?style=svg)](https://circleci.com/gh/mikeland86/graphp)
 
 graphp
 ======
