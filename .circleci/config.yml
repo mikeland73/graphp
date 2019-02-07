@@ -10,9 +10,11 @@ jobs:
       - image: circleci/php:7.2
       - image: circleci/mysql:8.0.4
         environment:
-          - MYSQL_ALLOW_EMPTY_PASSWORD=true
-          - MYSQL_ROOT_PASSWORD=
-          - MYSQL_DATABASE=graphp
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_ROOT_PASSWORD:
+          MYSQL_DATABASE: graphp
+          MYSQL_USER: graphp
+          MYSQL_PASSWORD: graphp
     steps:
       - checkout
       - run:
