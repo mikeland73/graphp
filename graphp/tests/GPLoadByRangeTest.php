@@ -11,7 +11,7 @@ class GPTestRangeModel extends GPNode {
 
 class GPLoadByRangeTest extends GPTest {
 
-  public static function setUpBeforeClass() {
+  public static function setUpBeforeClass(): void {
     GPDatabase::get()->beginUnguardedWrites();
     GPNodeMap::addToMapForTest(GPTestRangeModel::class);
   }
@@ -38,7 +38,7 @@ class GPLoadByRangeTest extends GPTest {
     $this->assertEquals(array_values($results), [$m1, $m2, $m3]);
   }
 
-  public static function tearDownAfterClass() {
+  public static function tearDownAfterClass(): void {
     batch(GPTestRangeModel::getAll())->delete();
     GPDatabase::get()->endUnguardedWrites();
   }

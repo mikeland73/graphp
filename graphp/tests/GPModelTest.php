@@ -14,7 +14,7 @@ class GPTestOtherModel extends GPNode {}
 
 class GPNodeTest extends GPTest {
 
-  public static function setUpBeforeClass() {
+  public static function setUpBeforeClass(): void {
     GPDatabase::get()->beginUnguardedWrites();
     GPNodeMap::addToMapForTest(GPTestModel::class);
   }
@@ -112,10 +112,9 @@ class GPNodeTest extends GPTest {
     $this->assertEmpty(GPTestModel::getOneByName($name));
   }
 
-  /**
-   * @expectedException GPException
-   */
   public function testLoadByAge() {
+    $this->expectException(GPException::class);
+
     $model = new GPTestModel(['name' => 'name', 'age' => 18]);
     $this->assertEmpty($model->getID());
     $model->save();
@@ -151,7 +150,7 @@ class GPNodeTest extends GPTest {
     $this->assertNull($model->getAge());
   }
 
-  public static function tearDownAfterClass() {
+  public static function tearDownAfterClass(): void {
     GPNode::simpleBatchDelete(GPTestModel::getAll());
     GPDatabase::get()->endUnguardedWrites();
   }

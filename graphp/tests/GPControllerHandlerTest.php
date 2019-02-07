@@ -22,10 +22,9 @@ class GPControllerHandlerTest extends GPTest {
     $this->assertEquals($uri, $index.'/testcontroller/');
   }
 
-  /**
-   * @expectedException GPException
-   */
   public function testBadURI() {
+    $this->expectException(GPException::class);
+
     $uri = TestController::URI()->bar('abc');
   }
 

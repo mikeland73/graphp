@@ -14,7 +14,7 @@ class GPTestCountModel2 extends GPNode {
 
 class GPEdgeCountTest extends GPTest {
 
-  public static function setUpBeforeClass() {
+  public static function setUpBeforeClass(): void {
     GPDatabase::get()->beginUnguardedWrites();
     GPNodeMap::addToMapForTest(GPTestCountModel1::class);
     GPNodeMap::addToMapForTest(GPTestCountModel2::class);
@@ -47,7 +47,7 @@ class GPEdgeCountTest extends GPTest {
     $this->assertEquals(idx0($count[$n12->getID()]), 5);
   }
 
-  public static function tearDownAfterClass() {
+  public static function tearDownAfterClass(): void {
     GPNode::simpleBatchDelete(GPTestCountModel1::getAll());
     GPNode::simpleBatchDelete(GPTestCountModel2::getAll());
     GPDatabase::get()->endUnguardedWrites();

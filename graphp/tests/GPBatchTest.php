@@ -37,7 +37,7 @@ class GPTestBatchModel4 extends GPNode {}
 
 class GPBatchTest extends GPTest {
 
-  public static function setUpBeforeClass() {
+  public static function setUpBeforeClass(): void {
     GPDatabase::get()->beginUnguardedWrites();
     GPNodeMap::addToMapForTest(GPTestBatchModel::class);
     GPNodeMap::addToMapForTest(GPTestBatchModel2::class);
@@ -118,16 +118,15 @@ class GPBatchTest extends GPTest {
     $this->assertNotEmpty($m2->getGPTestBatchModel4());
   }
 
-  /**
-   * @expectedException GPException
-   */
   public function testErrorBatchLoad() {
+    $this->expectException(GPException::class);
+
     $m1 = new GPTestBatchModel();
     $m2 = new GPTestBatchModel2();
     batch($m1, $m2)->loadBogus();
   }
 
-  public static function tearDownAfterClass() {
+  public static function tearDownAfterClass(): void {
     GPNode::simpleBatchDelete(GPTestBatchModel::getAll());
     GPNode::simpleBatchDelete(GPTestBatchModel2::getAll());
     GPNode::simpleBatchDelete(GPTestBatchModel3::getAll());
