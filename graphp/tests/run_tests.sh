@@ -1,5 +1,5 @@
 #!/bin/sh
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+DIR=`dirname "$0"`
 cd $DIR
 ../../third_party/vendor/bin/phpunit --bootstrap bootstrap.php .
