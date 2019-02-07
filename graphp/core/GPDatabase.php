@@ -152,7 +152,7 @@ class GPDatabase extends GPObject {
     return ipull(queryfx_all(
       $this->getConnection(),
       'SELECT node_id FROM node_data WHERE '.
-        'type = %d AND data >= %s AND data <= %s LIMIT %d, %d;',
+        'type = %d AND data >= %s AND data <= %s ORDER BY updated ASC LIMIT %d, %d;',
       $type,
       $start,
       $end,
