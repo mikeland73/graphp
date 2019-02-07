@@ -3,3 +3,4 @@ graphp/maps/
 maps
 *.DS_Store
 graphp/tests/.phpunit.result.cache
+third_party/vendor/*
