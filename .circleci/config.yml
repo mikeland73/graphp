@@ -3,16 +3,16 @@ jobs:
   build:
     docker:
       - image: circleci/php:7.2
-      - image: circleci/mysql:8.0.4
-        environment:
-          - MYSQL_ALLOW_EMPTY_PASSWORD=true
-          - MYSQL_ROOT_PASSWORD=
-          - MYSQL_DATABASE=graphp
     steps:
       - checkout
   test:
     docker:
       - image: circleci/php:7.2
+      - image: circleci/mysql:8.0.4
+        environment:
+          - MYSQL_ALLOW_EMPTY_PASSWORD=true
+          - MYSQL_ROOT_PASSWORD=
+          - MYSQL_DATABASE=graphp
     steps:
       - checkout
       - run:
