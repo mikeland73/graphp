@@ -8,6 +8,8 @@
 define('ROOT_PATH', __DIR__.'/../../');
 date_default_timezone_set('UTC');
 
+require_once(ROOT_PATH.'third_party/vendor/autoload.php');
+
 try {
   require_once ROOT_PATH.'graphp/core/GPLoader.php';
   GPRouter::init();
