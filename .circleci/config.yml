@@ -42,7 +42,7 @@ jobs:
           name: "Update composer"
           command: |
             cd third_party
-            php composer.phar update
+            php composer.phar install
       - run: graphp/tests/run_tests.sh
 workflows:
   version: 2

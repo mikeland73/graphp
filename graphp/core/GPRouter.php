@@ -14,8 +14,8 @@ class GPRouter extends GPObject {
 
   public static function route() {
     if (is_array(self::$parts)) {
-      $generator = new RouteGenerator(...self::$parts);
-    } else if (idx(class_parents(self::$parts), RouteGenerator::class)) {
+      $generator = GPRouteGenerator::createFromParts(...self::$parts);
+    } else if (idx(class_parents(self::$parts), GPRouteGenerator::class)) {
       $generator = new self::$parts($_SERVER['REQUEST_URI']);
     } else {
       throw new GPException('Unrecognized route value');
