@@ -14,7 +14,7 @@ class GPTestModel2 extends GPNode {
 
 class GPEdgeTest extends GPTest {
 
-  public static function setUpBeforeClass() {
+  public static function setUpBeforeClass(): void {
     GPDatabase::get()->beginUnguardedWrites();
     GPNodeMap::addToMapForTest(GPTestModel1::class);
     GPNodeMap::addToMapForTest(GPTestModel2::class);
@@ -44,19 +44,17 @@ class GPEdgeTest extends GPTest {
     );
   }
 
-  /**
-   * @expectedException GPException
-   */
   public function testAddingWrongType() {
+    $this->expectException(GPException::class);
+
     $model1 = (new GPTestModel1())->save();
     $model2 = (new GPTestModel1())->save();
     $model1->addGPTestModel2($model2)->save();
   }
 
-  /**
-   * @expectedException GPException
-   */
   public function testAddngBeforeSaving() {
+    $this->expectException(GPException::class);
+
     $model1 = (new GPTestModel1())->save();
     $model2 = new GPTestModel2();
     $model1->addGPTestModel2($model2)->save();
@@ -101,7 +99,7 @@ class GPEdgeTest extends GPTest {
     $this->assertEmpty($model1->getGPTestModel2());
   }
 
-  public static function tearDownAfterClass() {
+  public static function tearDownAfterClass(): void {
     GPNode::simpleBatchDelete(GPTestModel1::getAll());
     GPNode::simpleBatchDelete(GPTestModel2::getAll());
     GPDatabase::get()->endUnguardedWrites();

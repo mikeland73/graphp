@@ -44,7 +44,7 @@ class Assert extends GPObject {
     foreach ($vars as $var) {
       if ($var !== $val) {
         throw new GPException(
-          $message ?: 'Failed asserting that '.$var.' is equal to '.$val.' - '
+          $message ?: 'Failed asserting that '.json_encode($var).' is equal to '.$val.' - '
         );
       }
     }

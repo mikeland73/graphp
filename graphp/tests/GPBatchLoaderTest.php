@@ -37,7 +37,7 @@ class GPTestBatchLoaderModel4 extends GPNode {}
 
 class GPBatchLoaderTest extends GPTest {
 
-  public static function setUpBeforeClass() {
+  public static function setUpBeforeClass(): void {
     GPDatabase::get()->beginUnguardedWrites();
     GPNodeMap::addToMapForTest(GPTestBatchLoaderModel::class);
     GPNodeMap::addToMapForTest(GPTestBatchLoaderModel2::class);
@@ -101,7 +101,7 @@ class GPBatchLoaderTest extends GPTest {
     $this->assertNotEmpty($m2->getGPTestBatchLoaderModel4());
   }
 
-  public static function tearDownAfterClass() {
+  public static function tearDownAfterClass(): void {
     GPNode::simpleBatchDelete(GPTestBatchLoaderModel::getAll());
     GPNode::simpleBatchDelete(GPTestBatchLoaderModel2::getAll());
     GPNode::simpleBatchDelete(GPTestBatchLoaderModel3::getAll());

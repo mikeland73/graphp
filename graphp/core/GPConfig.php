@@ -29,4 +29,12 @@ class GPConfig extends GPObject {
     }
     throw new Exception($name.' is not in '.$this->name.' config' , 1);
   }
+
+  public static function from_file($file) {
+    $path = ROOT_PATH.'config/'.$file;
+    if (is_readable($path)) {
+      return include_once($path);
+    }
+    return [];
+  }
 }

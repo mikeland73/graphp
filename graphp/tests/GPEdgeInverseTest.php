@@ -21,7 +21,7 @@ class GPEdgeInverseTestModel2 extends GPNode {
 
 class GPEdgeInverseTest extends GPTest {
 
-  public static function setUpBeforeClass() {
+  public static function setUpBeforeClass(): void {
     GPDatabase::get()->beginUnguardedWrites();
     GPNodeMap::addToMapForTest(GPEdgeInverseTestModel1::class);
     GPNodeMap::addToMapForTest(GPEdgeInverseTestModel2::class);
@@ -72,7 +72,7 @@ class GPEdgeInverseTest extends GPTest {
     $this->assertEmpty($model3->getGPEdgeInverseTestModel1());
   }
 
-  public static function tearDownAfterClass() {
+  public static function tearDownAfterClass(): void {
     GPNode::simpleBatchDelete(GPEdgeInverseTestModel1::getAll());
     GPNode::simpleBatchDelete(GPEdgeInverseTestModel2::getAll());
     GPDatabase::get()->endUnguardedWrites();

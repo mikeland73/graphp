@@ -1,0 +1,52 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.2
+    steps:
+      - checkout
+  test:
+    docker:
+      - image: circleci/php:7.2
+      - image: circleci/mysql:5.7
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_ROOT_PASSWORD:
+          MYSQL_DATABASE: graphp
+          MYSQL_USER: graphp
+          MYSQL_PASSWORD: graphp
+    steps:
+      - checkout
+      - run:
+          name: "Pull Submodules"
+          command: |
+            git submodule init
+            git submodule update --remote
+      - run:
+          name: Waiting for MySQL to be ready
+          command: |
+            for i in `seq 1 30`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+      - run:
+          name: "Create DB"
+          command: |
+            sudo apt-get install mysql-client
+            mysql -h 127.0.0.1 -u graphp -pgraphp graphp < graphp/db/mysql_schema.sql
+            sudo docker-php-ext-install mysqli
+      - run:
+          name: "Update composer"
+          command: |
+            cd third_party
+            php composer.phar install
+      - run: graphp/tests/run_tests.sh
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test

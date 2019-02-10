@@ -93,6 +93,14 @@ Views
 <html>
 ```
 
+Libraries
+=
+Avoid bloating models and controllers with business logic. Instead, you can organize your logic in
+library classes that extend `GPLibrary`. These classes inherit all the abilities of Controllers so
+they can be called with `async()` or from the CLI, but they are not reachable on the browser. They
+also have access to any ControllerHandler you write.
+
+
 Set up instructions
 ======
 * Install php-5.5+ mysql php-mysqli

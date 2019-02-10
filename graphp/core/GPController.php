@@ -13,7 +13,8 @@ class GPController extends GPObject {
   ];
 
   public function init() {
-    $this->post = new GPRequestData($_POST);
+    $post_json_data = (array) json_decode(file_get_contents('php://input'), true);
+    $this->post = new GPRequestData(array_merge_by_keys($_POST, $post_json_data));
     $this->get = new GPRequestData($_GET);
   }
 
@@ -45,5 +46,14 @@ class GPController extends GPObject {
       echo 'Method "' . $method_name . '" is not in ' . get_called_class();
     }
     GP::return404();
+  }
+
+  /**
+   * Override this to limit access to individual methods or the entire controller
+   * @param  string
+   * @return boolean
+   */
+  public function isAllowed(string $method): bool {
+    return true;
   }
 }

@@ -22,6 +22,11 @@ class GPRequestData extends GPObject {
     return  $val !== null ? $val : $default;
   }
 
+  public function getNumeric($key, $default = null) {
+    $val = $this->get($key, 'is_numeric');
+    return  $val !== null ? $val : $default;
+  }
+
   public function getArray($key, $default = null) {
     $val = $this->get($key, 'is_array');
     return  $val !== null ? $val : $default;

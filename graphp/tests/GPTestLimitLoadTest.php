@@ -12,7 +12,7 @@ class GPTestLimitLoadModel2 extends GPNode {}
 
 class GPTestLimitLoadTest extends GPTest {
 
-  public static function setUpBeforeClass() {
+  public static function setUpBeforeClass(): void {
     GPDatabase::get()->beginUnguardedWrites();
     GPNodeMap::addToMapForTest(GPTestLimitLoadModel::class);
     GPNodeMap::addToMapForTest(GPTestLimitLoadModel2::class);
@@ -57,7 +57,7 @@ class GPTestLimitLoadTest extends GPTest {
     $this->assertEquals(count($m1->getGPTestLimitLoadModel2()), 3);
   }
 
-  public static function tearDownAfterClass() {
+  public static function tearDownAfterClass(): void {
     batch(GPTestLimitLoadModel::getAll())->delete();
     batch(GPTestLimitLoadModel2::getAll())->delete();
     GPDatabase::get()->endUnguardedWrites();

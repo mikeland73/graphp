@@ -9,7 +9,7 @@ class GPFileMap extends GPObject {
   public function __construct($dirs, $name) {
     $this->dirs = make_array($dirs);
     $this->name = $name;
-    $map = @include $this->buildPath();
+    $map = is_readable($this->buildPath()) ? include $this->buildPath() : null;
     $this->map = $map ?: [];
   }
 
@@ -45,17 +45,20 @@ class GPFileMap extends GPObject {
   private function writeMap() {
     $map_file = "<?php\nreturn [\n";
     foreach ($this->map as $file => $path) {
-      $map_file .= '  '.$file.' => \''.$path."',\n";
+      $map_file .= '  \''.$file.'\' => \''.$path."',\n";
     }
     $map_file .= "];\n";
     $file_path = $this->buildPath();
+    $does_file_exist = file_exists($file_path);
     file_put_contents($file_path, $map_file);
-    // TODO this is probably not safe
-    @chmod($file_path, 0666);
+    if (!$does_file_exist) {
+      // File was just created, make sure to make it readable
+      chmod($file_path, 0666);
+    }
   }
 
   private function buildPath() {
-    return ROOT_PATH.'maps/'.GPConfig::get()->app_folder.'_'.$this->name;
+    return '/tmp/maps/'.GPConfig::get()->app_folder.'_'.$this->name;
   }
 
 }

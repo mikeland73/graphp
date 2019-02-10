@@ -10,6 +10,7 @@ class GPDatabase extends GPObject {
   private $nestedTransactions = 0;
 
   private static $viewLock = 0;
+  private static $skipWriteGuard = false;
 
   public static function get($name = 'database') {
     if (!isset(self::$dbs[$name])) {
@@ -20,7 +21,7 @@ class GPDatabase extends GPObject {
 
   public function __construct($config_name) {
     $this->guard = new AphrontWriteGuard(function() {
-      if (GP::isCLI()) {
+      if (GP::isCLI() || self::$skipWriteGuard) {
         return;
       }
       if (idx($_SERVER, 'REQUEST_METHOD') !== 'POST') {
@@ -60,6 +61,10 @@ class GPDatabase extends GPObject {
 
   public function endUnguardedWrites() {
     AphrontWriteGuard::endUnguardedWrites();
+  }
+
+  public function skipWriteGuard() {
+    self::$skipWriteGuard = true;
   }
 
   public function startTransaction() {
@@ -147,7 +152,7 @@ class GPDatabase extends GPObject {
     return ipull(queryfx_all(
       $this->getConnection(),
       'SELECT node_id FROM node_data WHERE '.
-        'type = %d AND data >= %s AND data <= %s LIMIT %d, %d;',
+        'type = %d AND data >= %s AND data <= %s ORDER BY updated ASC LIMIT %d, %d;',
       $type,
       $start,
       $end,
@@ -165,15 +170,21 @@ class GPDatabase extends GPObject {
       $values[] = $node::getDataTypeByName($name)->getIndexedType();
       $values[] = $val;
     }
-    if (!$parts) {
-      return;
-    }
-    queryfx(
+    $this->startTransaction();
+    $result = queryfx(
       $this->getConnection(),
-      'INSERT INTO node_data (node_id, type, data) VALUES '.
-      implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);',
-      ...$values
+      'DELETE FROM node_data WHERE node_id = %d',
+      $node->getID()
     );
+    if ($parts) {
+      queryfx(
+        $this->getConnection(),
+        'INSERT INTO node_data (node_id, type, data) VALUES '.
+        implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);',
+        ...$values
+      );
+    }
+    $this->commit();
   }
 
   private function getEdgeParts(GPNode $from_node, array $array_of_arrays) {
@@ -196,7 +207,7 @@ class GPDatabase extends GPObject {
     queryfx(
       $this->getConnection(),
       'INSERT IGNORE INTO edge (from_node_id, to_node_id, type) VALUES '.
-        implode(',', $parts) . ';',
+      implode(',', $parts) . ';',
       ...$values
     );
   }
@@ -209,7 +220,7 @@ class GPDatabase extends GPObject {
     queryfx(
       $this->getConnection(),
       'DELETE FROM edge WHERE (from_node_id, to_node_id, type) IN ('.
-        implode(',', $parts) . ');',
+      implode(',', $parts) . ');',
       ...$values
     );
   }
@@ -239,7 +250,7 @@ class GPDatabase extends GPObject {
     queryfx(
       $this->getConnection(),
       'DELETE FROM edge WHERE ('.$col.', type) IN ('.
-        implode(',', $parts) . ');',
+      implode(',', $parts) . ');',
       ...$values
     );
   }
@@ -274,8 +285,8 @@ class GPDatabase extends GPObject {
     $results = queryfx_all(
       $this->getConnection(),
       'SELECT from_node_id, to_node_id, type FROM edge '.
-        'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
-        ($limit === null ? '' : ' LIMIT %d, %d').';',
+      'WHERE from_node_id IN (%Ld) AND type IN (%Ld) ORDER BY updated DESC'.
+      ($limit === null ? '' : ' LIMIT %d, %d').';',
       ...$args
     );
     $ordered = [];
