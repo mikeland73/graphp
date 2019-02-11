@@ -154,5 +154,4 @@ trait GPNodeMagicMethods {
       return $this->loadConnectedNodes([$edge], $force, $limit, $offset);
     }
   }
-
 }

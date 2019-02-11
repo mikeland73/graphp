@@ -35,7 +35,7 @@ class GPDataType extends GPObject {
     }
     if (!call_user_func($this->type, $value)) {
       throw new Exception(
-        'Value ' . $value . ' is not of type ' . mb_substr($this->type, 3)
+        'Value '.$value.' is not of type '.mb_substr($this->type, 3)
       );
     }
     return true;
@@ -61,5 +61,4 @@ class GPDataType extends GPObject {
   public function getDefault() {
     return $this->default;
   }
-
 }

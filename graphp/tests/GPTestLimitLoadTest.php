@@ -1,6 +1,7 @@
 <?php
 
 class GPTestLimitLoadModel extends GPNode {
+
   protected static function getEdgeTypesImpl() {
     return [
       new GPEdgeType(GPTestLimitLoadModel2::class),
@@ -63,5 +64,4 @@ class GPTestLimitLoadTest extends GPTest {
     GPDatabase::get()->endUnguardedWrites();
     GPDatabase::get()->dispose();
   }
-
 }

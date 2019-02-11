@@ -13,7 +13,7 @@
 function idxx(array $array, $key, $message = '') {
   if (!array_key_exists($key, $array)) {
     throw new GPException(
-      $message ?: $key . ' not in array: ' . json_encode($array)
+      $message ?: $key.' not in array: '.json_encode($array)
     );
   }
   return $array[$key];
@@ -67,7 +67,7 @@ function array_concat(array $arr1 /*array2, ...*/) {
 function array_flatten(array $array) {
   $result = [];
   foreach ($array as $key => $value) {
-    if (is_array($value)){
+    if (is_array($value)) {
       array_concat_in_place($result, array_flatten($value));
     } else {
       $result[] = $value;

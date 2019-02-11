@@ -37,12 +37,11 @@ final class GPProfiler {
     if (!self::$enabled) {
       return;
     }
-    $name = $name?: 'Mark '.count(self::$marks);
+    $name = $name ?: 'Mark '.count(self::$marks);
     self::$marks[] = ['name' => $name, 'microtime' => microtime(true)];
     $count = count(self::$marks);
     self::$marks[$count - 1]['duration'] =
         self::$marks[$count - 1]['microtime'] -
         self::$marks[$count - 2]['microtime'];
   }
-
 }

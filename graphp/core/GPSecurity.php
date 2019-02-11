@@ -34,7 +34,7 @@ class GPSecurity extends GPObject {
   }
 
   public static function hmacSign($message, $key) {
-    return hash_hmac('sha256', $message, $key) . $message;
+    return hash_hmac('sha256', $message, $key).$message;
   }
 
   public static function hmacVerify($bundle, $key) {
@@ -53,7 +53,6 @@ class GPSecurity extends GPObject {
   public static function hmacGetMessage($bundle) {
     return mb_substr($bundle, 64, null, '8bit');
   }
-
 }
 
 GPSecurity::init();

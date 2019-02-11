@@ -1,6 +1,7 @@
 <?php
 
 class GPTestCountModel1 extends GPNode {
+
   protected static function getEdgeTypesImpl() {
     return [
       (new GPEdgeType(GPTestCountModel2::class))->setSingleNodeName('Foo'),
@@ -52,5 +53,4 @@ class GPEdgeCountTest extends GPTest {
     GPNode::simpleBatchDelete(GPTestCountModel2::getAll());
     GPDatabase::get()->endUnguardedWrites();
   }
-
 }

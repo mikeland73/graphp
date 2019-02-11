@@ -21,7 +21,7 @@ abstract class GPControllerHandler extends GPObject {
   }
 
   // Override to implement handler functionality
-  protected abstract function handle($method, array $args);
+  abstract protected function handle($method, array $args);
 
   // Override for more complicated functionality/caching
   public static function get($controller) {
@@ -45,5 +45,4 @@ abstract class GPControllerHandler extends GPObject {
       }
     }
   }
-
 }

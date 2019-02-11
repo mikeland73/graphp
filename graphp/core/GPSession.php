@@ -80,7 +80,6 @@ class GPSession extends GPObject {
 
     }
   }
-
 }
 
 GPSession::init();

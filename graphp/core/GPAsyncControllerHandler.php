@@ -16,5 +16,4 @@ class GPAsyncControllerHandler extends GPURIControllerHandler {
       $this->handle('', []);
     }
   }
-
 }

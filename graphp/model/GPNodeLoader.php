@@ -2,14 +2,14 @@
 
 trait GPNodeLoader {
 
-  private static $cache = array();
+  private static $cache = [];
 
-  public static function createFromType($type, array $data = array()) {
+  public static function createFromType($type, array $data = []) {
     $class = GPNodeMap::getClass($type);
     return new $class($data);
   }
 
-  private static function NodeFromArray(array $data) {
+  private static function nodeFromArray(array $data) {
     $class = GPNodeMap::getClass($data['type']);
     $node = new $class(json_decode($data['data'], true));
     $node->id = $data['id'];
@@ -128,5 +128,4 @@ trait GPNodeLoader {
       idx($args, 4, 0));
     return self::multiGetByID($ids);
   }
-
 }

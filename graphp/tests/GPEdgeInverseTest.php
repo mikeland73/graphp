@@ -1,6 +1,7 @@
 <?php
 
 class GPEdgeInverseTestModel1 extends GPNode {
+
   protected static function getEdgeTypesImpl() {
     return [
       (new GPEdgeType(GPEdgeInverseTestModel2::class))
@@ -12,6 +13,7 @@ class GPEdgeInverseTestModel1 extends GPNode {
 }
 
 class GPEdgeInverseTestModel2 extends GPNode {
+
   protected static function getEdgeTypesImpl() {
     return [
       (new GPEdgeType(GPEdgeInverseTestModel1::class)),
@@ -77,5 +79,4 @@ class GPEdgeInverseTest extends GPTest {
     GPNode::simpleBatchDelete(GPEdgeInverseTestModel2::getAll());
     GPDatabase::get()->endUnguardedWrites();
   }
-
 }

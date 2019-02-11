@@ -16,7 +16,7 @@ class GPLoader extends GPObject {
 
   public static function init() {
     spl_autoload_register('GPLoader::GPAutoloader');
-    if(!is_writable('/tmp/maps')) {
+    if (!is_writable('/tmp/maps')) {
       mkdir('/tmp/maps');
       chmod('/tmp/maps', 0777);
     }
@@ -50,7 +50,7 @@ class GPLoader extends GPObject {
       GPDatabase::incrementViewLock();
     }
     $file =
-      ROOT_PATH.GPConfig::get()->app_folder.'/views/' . $view_name . '.php';
+      ROOT_PATH.GPConfig::get()->app_folder.'/views/'.$view_name.'.php';
     if (!file_exists($file)) {
       throw new GPException('View "'.$view_name.'"" not found');
     }

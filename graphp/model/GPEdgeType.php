@@ -70,5 +70,4 @@ class GPEdgeType extends GPObject {
     }
     return $this->fromType.$this->getToType().$this->name;
   }
-
 }

@@ -17,5 +17,4 @@ class GPURIControllerHandler
   public function jsonSerialize() {
     return (string) $this;
   }
-
 }
