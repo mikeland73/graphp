@@ -14,9 +14,11 @@
             <property name="requiredSpacesBeforeColon" value="0" />
         </properties>
         <exclude-pattern>/app/views/**</exclude-pattern>
+        <exclude-pattern>/sample_app/views/**</exclude-pattern>
     </rule>
     <rule ref="Squiz.ControlStructures.ElseIfDeclaration">
         <exclude-pattern>/app/views/**</exclude-pattern>
+        <exclude-pattern>/sample_app/views/**</exclude-pattern>
     </rule>
     <rule ref="Squiz.Commenting.BlockComment"/>
     <rule ref="Squiz.Commenting.DocCommentAlignment"/>
@@ -65,6 +67,7 @@
     <rule ref="PSR2.Files.EndFileNewline"/>
     <rule ref="Zend.Files.ClosingTag">
         <exclude-pattern>/app/views/**</exclude-pattern>
+        <exclude-pattern>/sample_app/views/**</exclude-pattern>
     </rule>
 
     <!-- PEAR uses warnings for inline control structures, so switch back to errors -->
