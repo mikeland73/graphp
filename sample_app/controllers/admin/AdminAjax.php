@@ -38,7 +38,7 @@ class AdminAjax extends GPController {
         $data_type !== null &&
         $data_type->getType() === GPDataType::GP_BOOL
       ) {
-        $val = (bool)$val;
+        $val = (bool) $val;
       }
       $node->setData($key, $val)->save();
     }
