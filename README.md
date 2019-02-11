@@ -103,9 +103,8 @@ also have access to any ControllerHandler you write.
 
 Set up instructions
 ======
-* Install php-5.5+ mysql php-mysqli
+* Install php-7.2+ mysql php-mysqli
 * Run `mysql -u db_user < graphp/db/mysql_schema.sql` to create the database.
-* Create maps folder and open permissions: `mkdir maps; chmod 777 maps`
 * Point your webserver to public directory.
 * Modify config files to suit your environment.
 * To check out sample app, change the general config 'app_folder' to "sample_app".
