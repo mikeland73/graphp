@@ -7,7 +7,7 @@ try {
   require_once ROOT_PATH.'graphp/core/GPLoader.php';
   GPRouter::init();
   GPRouter::route();
-} catch(Exception $e) {
+} catch (Exception $e) {
 
   $error = [
     'There was an exception:',
