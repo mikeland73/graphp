@@ -8,5 +8,4 @@ final class StringLibrary extends GPObject {
     }
     return $string;
   }
-
 }

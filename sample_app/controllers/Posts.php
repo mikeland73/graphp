@@ -37,5 +37,4 @@ final class Posts extends GPController {
     $post->addComments($comment)->save();
     Posts::redirect()->one($post_id);
   }
-
 }

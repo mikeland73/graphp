@@ -17,5 +17,4 @@ final class User extends GPNode {
         ->inverse(Comment::getEdgeType('creator')),
     ];
   }
-
 }
