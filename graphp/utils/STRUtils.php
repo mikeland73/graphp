@@ -33,7 +33,6 @@ class STRUtils {
         strpos($haystack, $needle, $temp) !== FALSE
       );
   }
-
 }
 
 class_alias('STRUtils', 'STR');

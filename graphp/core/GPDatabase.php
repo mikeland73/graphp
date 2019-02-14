@@ -180,7 +180,7 @@ class GPDatabase extends GPObject {
       queryfx(
         $this->getConnection(),
         'INSERT INTO node_data (node_id, type, data) VALUES '.
-        implode(',', $parts) . ' ON DUPLICATE KEY UPDATE data = VALUES(data);',
+        implode(',', $parts).' ON DUPLICATE KEY UPDATE data = VALUES(data);',
         ...$values
       );
     }
@@ -207,7 +207,7 @@ class GPDatabase extends GPObject {
     queryfx(
       $this->getConnection(),
       'INSERT IGNORE INTO edge (from_node_id, to_node_id, type) VALUES '.
-      implode(',', $parts) . ';',
+      implode(',', $parts).';',
       ...$values
     );
   }
@@ -220,7 +220,7 @@ class GPDatabase extends GPObject {
     queryfx(
       $this->getConnection(),
       'DELETE FROM edge WHERE (from_node_id, to_node_id, type) IN ('.
-      implode(',', $parts) . ');',
+      implode(',', $parts).');',
       ...$values
     );
   }
@@ -250,7 +250,7 @@ class GPDatabase extends GPObject {
     queryfx(
       $this->getConnection(),
       'DELETE FROM edge WHERE ('.$col.', type) IN ('.
-      implode(',', $parts) . ');',
+      implode(',', $parts).');',
       ...$values
     );
   }
@@ -367,5 +367,4 @@ class GPDatabase extends GPObject {
   public function __destruct() {
     $this->dispose();
   }
-
 }

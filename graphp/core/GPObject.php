@@ -29,5 +29,4 @@ class GPObject {
     self::$classConstantsFlip[get_called_class()] =
       array_flip(self::$classConstants[get_called_class()]);
   }
-
 }

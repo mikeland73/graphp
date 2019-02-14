@@ -43,7 +43,7 @@ class GPController extends GPObject {
       return $core_handler::get(get_called_class());
     }
     if (GPEnv::isDevEnv()) {
-      echo 'Method "' . $method_name . '" is not in ' . get_called_class();
+      echo 'Method "'.$method_name.'" is not in '.get_called_class();
     }
     GP::return404();
   }

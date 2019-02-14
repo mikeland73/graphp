@@ -24,6 +24,7 @@ class GPTestBatchModel extends GPNode {
 }
 
 class GPTestBatchModel2 extends GPNode {
+
   protected static function getEdgeTypesImpl() {
     return [
       new GPEdgeType(GPTestBatchModel3::class),
@@ -133,5 +134,4 @@ class GPBatchTest extends GPTest {
     GPNode::simpleBatchDelete(GPTestBatchModel4::getAll());
     GPDatabase::get()->endUnguardedWrites();
   }
-
 }

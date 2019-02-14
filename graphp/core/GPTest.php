@@ -8,5 +8,4 @@ abstract class GPTest extends TestCase {
     parent::__construct();
     GPEnv::isTest();
   }
-
 }

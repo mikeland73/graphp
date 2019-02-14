@@ -60,5 +60,4 @@ class GPFileMap extends GPObject {
   private function buildPath() {
     return '/tmp/maps/'.GPConfig::get()->app_folder.'_'.$this->name;
   }
-
 }

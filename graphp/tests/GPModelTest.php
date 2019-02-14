@@ -1,6 +1,7 @@
 <?php
 
 class GPTestModel extends GPNode {
+
   protected static function getDataTypesImpl() {
     return [
       new GPDataType('name', GPDataType::GP_STRING, true),
@@ -154,5 +155,4 @@ class GPNodeTest extends GPTest {
     GPNode::simpleBatchDelete(GPTestModel::getAll());
     GPDatabase::get()->endUnguardedWrites();
   }
-
 }

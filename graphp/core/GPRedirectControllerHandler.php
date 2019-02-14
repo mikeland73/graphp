@@ -31,5 +31,4 @@ class GPRedirectControllerHandler extends GPURIControllerHandler {
       $this->handle('', []);
     }
   }
-
 }

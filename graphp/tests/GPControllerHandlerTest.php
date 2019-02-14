@@ -5,7 +5,6 @@ class TestController extends GPController {
   public function foo($var) {
 
   }
-
 }
 
 class GPControllerHandlerTest extends GPTest {
@@ -47,5 +46,4 @@ class GPControllerHandlerTest extends GPTest {
     $this->assertTrue($handler instanceof GPRedirectControllerHandler);
     $handler->disableDestructRedirect();
   }
-
 }

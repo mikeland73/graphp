@@ -1,6 +1,7 @@
 <?php
 
 class GPTestRangeModel extends GPNode {
+
   protected static function getDataTypesImpl() {
     return [
       new GPDataType('firstName', GPDataType::GP_STRING, true),

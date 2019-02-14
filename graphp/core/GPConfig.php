@@ -16,7 +16,7 @@ class GPConfig extends GPObject {
 
   protected function __construct($name) {
     $this->name = $name;
-    $this->config = require_once ROOT_PATH.'config/' . $name . '.php';
+    $this->config = require_once ROOT_PATH.'config/'.$name.'.php';
   }
 
   public function toArray() {
