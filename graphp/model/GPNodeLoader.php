@@ -14,6 +14,7 @@ trait GPNodeLoader {
     $node = new $class(json_decode($data['data'], true));
     $node->id = $data['id'];
     $node->updated = $data['updated'];
+    $node->created = $data['created'];
     return $node;
   }
 
@@ -70,22 +71,37 @@ trait GPNodeLoader {
     } else if (substr_compare($name, 'getOneBy', 0, 8) === 0) {
       $type_name = strtolower(mb_substr($name, 8));
       $only_one = true;
+    } else if (substr_compare($name, 'getAllWith', 0, 10) === 0) {
+      $type_name = strtolower(mb_substr($name, 10));
+      $get_all_with_type = true;
     }
+
     if (isset($type_name)) {
       $class = get_called_class();
       $data_type = static::getDataTypeByName($type_name);
       Assert::truthy($data_type, $name.' is not a method on '.$class);
+      if (isset($range)) {
+        $required_args = 2;
+      } else if (isset($get_all_with_type)) {
+        $required_args = 0;
+      } else {
+        $required_args = 1;
+      }
       Assert::truthy(
-        isset($range) ? count($arguments) >= 2 : count($arguments) === 1,
-        GPErrorText::wrongArgs($class, $name, 1, count($arguments))
+        count($arguments) >= $required_args,
+        GPErrorText::wrongArgs($class, $name, $required_args, count($arguments))
       );
-      $arg = idx0($arguments);
-      foreach (make_array($arg) as $val) {
-        $data_type->assertValueIsOfType($val);
+      if ($arguments) {
+        $arg = idx0($arguments);
+        foreach (make_array($arg) as $val) {
+          $data_type->assertValueIsOfType($val);
+        }
       }
       if (isset($range)) {
         array_unshift($arguments, $data_type->getIndexedType());
         $results = self::getByIndexDataRange($arguments);
+      } else if (isset($get_all_with_type)) {
+        $results = self::getByIndexDataAll($data_type->getIndexedType());
       } else {
         $results = self::getByIndexData($data_type->getIndexedType(), $arg);
       }
@@ -111,6 +127,11 @@ trait GPNodeLoader {
 
   public static function unsetFromCache($id) {
     unset(self::$cache[$id]);
+  }
+
+  private static function getByIndexDataAll($data_type) {
+    $node_ids = GPDatabase::get()->getNodeIDsByTypeDataAll($data_type);
+    return self::multiGetByID($node_ids);
   }
 
   private static function getByIndexData($data_type, $data) {

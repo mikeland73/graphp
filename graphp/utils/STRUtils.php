@@ -33,6 +33,22 @@ class STRUtils {
         strpos($haystack, $needle, $temp) !== FALSE
       );
   }
+
+  public static function pluralize(string $singular, string $plural = null) {
+    if ($plural !== null) {
+      return $plural;
+    }
+
+    $last_letter = strtolower($singular[strlen($singular) - 1]);
+    switch ($last_letter) {
+    case 'y':
+      return substr($singular, 0, -1).'ies';
+    case 's':
+      return $singular.'es';
+    default:
+      return $singular.'s';
+    }
+  }
 }
 
 class_alias('STRUtils', 'STR');

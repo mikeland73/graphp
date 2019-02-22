@@ -1,5 +1,5 @@
 
-CREATE DATABASE IF NOT EXISTS  graphp;
+CREATE DATABASE IF NOT EXISTS graphp;
 
 USE graphp;
 
@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `edge` (
   `from_node_id` bigint(20) unsigned NOT NULL,
   `to_node_id` bigint(20) unsigned NOT NULL,
   `type` bigint(20) unsigned NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`from_node_id`,`to_node_id`,`type`),
   KEY `from_type_updated` (`from_node_id`,`type`,`updated`),
@@ -42,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `node` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type` bigint(20) unsigned NOT NULL,
   `data` text COLLATE utf8_unicode_ci NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `type_updated` (`type`,`updated`)
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `node_data` (
   `node_id` bigint(20) unsigned NOT NULL,
   `type` bigint(20) unsigned NOT NULL,
   `data` text COLLATE utf8_unicode_ci NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`node_id`,`type`),
   KEY `type_data` (`type`,`data`(128)),

@@ -5,11 +5,13 @@ abstract class GPNode extends GPObject {
   use GPNodeLoader;
   use GPNodeMagicMethods;
   use GPBatchLoader;
+  use GPNodeEdgeCreator;
 
   private
     $data,
     $id,
     $updated,
+    $created,
     // array([edge_type] => [array of nodes indexed by id])
     $connectedNodeIDs = [],
     $connectedNodes = [],
@@ -35,8 +37,16 @@ abstract class GPNode extends GPObject {
     return (int) $this->id;
   }
 
+  public function isSaved(): bool {
+    return $this->getID() > 0;
+  }
+
   public function getUpdated() {
     return $this->updated;
+  }
+
+  public function getCreatedTimestamp() {
+    return $this->created;
   }
 
   public static function getType() {

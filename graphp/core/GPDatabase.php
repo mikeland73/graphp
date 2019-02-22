@@ -2,7 +2,10 @@
 
 class GPDatabase extends GPObject {
 
-  const LIMIT = 100;
+  public const LIMIT = 100;
+
+  private const NODE_SELECT =
+    'SELECT id, type, data, UNIX_TIMESTAMP(created) AS created, UNIX_TIMESTAMP(updated) AS updated';
 
   private static $dbs = [];
   private $connection;
@@ -103,7 +106,7 @@ class GPDatabase extends GPObject {
   public function getNodeByID($id) {
     return queryfx_one(
       $this->getConnection(),
-      'SELECT * FROM node WHERE id = %d;',
+      self::NODE_SELECT.' FROM node WHERE id = %d;',
       $id
     );
   }
@@ -111,7 +114,7 @@ class GPDatabase extends GPObject {
   public function getNodeByIDType($id, $type) {
     return queryfx_one(
       $this->getConnection(),
-      'SELECT * FROM node WHERE id = %d AND type = %d;',
+      self::NODE_SELECT.' FROM node WHERE id = %d AND type = %d;',
       $id,
       $type
     );
@@ -125,9 +128,17 @@ class GPDatabase extends GPObject {
     $args = array_filter([$ids, $type]);
     return queryfx_all(
       $this->getConnection(),
-      'SELECT * FROM node WHERE id IN (%Ld) '.$type_fragment,
+      self::NODE_SELECT.' FROM node WHERE id IN (%Ld) '.$type_fragment,
       ...$args
     );
+  }
+
+  public function getNodeIDsByTypeDataAll(int $type): array {
+    return ipull(queryfx_all(
+      $this->getConnection(),
+      'SELECT node_id FROM node_data WHERE type = %d;',
+      $type
+    ), 'node_id');
   }
 
   public function getNodeIDsByTypeData($type, array $data) {
@@ -315,7 +326,7 @@ class GPDatabase extends GPObject {
   public function getAllByType($type, $limit, $offset) {
     return queryfx_all(
       $this->getConnection(),
-      'SELECT * FROM node WHERE type = %d ORDER BY updated DESC LIMIT %d, %d;',
+      self::NODE_SELECT.' FROM node WHERE type = %d ORDER BY updated DESC LIMIT %d, %d;',
       $type,
       $offset,
       $limit

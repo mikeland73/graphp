@@ -1,6 +1,6 @@
 <?php
 
-  class GPRouteGenerator extends GPObject {
+class GPRouteGenerator extends GPObject {
 
   private $path;
   private $controller;

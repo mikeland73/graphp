@@ -7,6 +7,25 @@
     </properties>
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
+    <rule ref="Squiz.Arrays.ArrayDeclaration"/>
+    <rule ref="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Squiz.Arrays.ArrayDeclaration.ValueNotAligned">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Squiz.Arrays.ArrayDeclaration.KeyNotAligned">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Squiz.Arrays.ArrayDeclaration.MultiLineNotAllowed">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned">
+        <severity>0</severity>
+    </rule>
     <rule ref="Squiz.Classes.ClassFileName"/>
     <rule ref="Squiz.Classes.ValidClassName"/>
     <rule ref="Squiz.ControlStructures.ControlSignature">
@@ -14,11 +33,9 @@
             <property name="requiredSpacesBeforeColon" value="0" />
         </properties>
         <exclude-pattern>/app/views/**</exclude-pattern>
-        <exclude-pattern>/sample_app/views/**</exclude-pattern>
     </rule>
     <rule ref="Squiz.ControlStructures.ElseIfDeclaration">
         <exclude-pattern>/app/views/**</exclude-pattern>
-        <exclude-pattern>/sample_app/views/**</exclude-pattern>
     </rule>
     <rule ref="Squiz.Commenting.BlockComment"/>
     <rule ref="Squiz.Commenting.DocCommentAlignment"/>
@@ -47,11 +64,17 @@
     </rule>
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+    <rule ref="Generic.Arrays.ArrayIndent">
+        <properties>
+            <property name="indent" value="2" />
+        </properties>
+    </rule>
     <rule ref="Generic.Classes.OpeningBraceSameLine"/>
     <rule ref="Generic.Commenting.Todo"/>
     <rule ref="Generic.ControlStructures.InlineControlStructure"/>
     <rule ref="Generic.Formatting.DisallowMultipleStatements"/>
     <rule ref="Generic.Formatting.SpaceAfterCast"/>
+    <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
     <rule ref="Generic.NamingConventions.ConstructorName"/>
     <rule ref="Generic.PHP.DeprecatedFunctions"/>
     <rule ref="Generic.PHP.LowerCaseKeyword"/>
@@ -67,7 +90,6 @@
     <rule ref="PSR2.Files.EndFileNewline"/>
     <rule ref="Zend.Files.ClosingTag">
         <exclude-pattern>/app/views/**</exclude-pattern>
-        <exclude-pattern>/sample_app/views/**</exclude-pattern>
     </rule>
 
     <!-- PEAR uses warnings for inline control structures, so switch back to errors -->
@@ -77,5 +99,14 @@
         </properties>
     </rule>
 
+    <!-- <arg name="tab-width" value="2"/> -->
 
+    <rule ref="PEAR.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="2" />
+            <property name="ignoreIndentationTokens" type="array"
+                value="T_COMMENT,T_DOC_COMMENT_OPEN_TAG"/>
+        </properties>
+        <exclude-pattern>/app/views/**</exclude-pattern>
+    </rule>
 </ruleset>
