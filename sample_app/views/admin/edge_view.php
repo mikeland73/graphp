@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-      <?php foreach($edges as $edge): ?>
+      <?php foreach ($edges as $edge): ?>
         <tr>
           <th scope="row"><code><?=$edge->getType()?></code></th>
           <th scope="row"><?=$edge->getName()?></th>

@@ -22,7 +22,7 @@ class GPEdgeType extends GPObject {
 
   public function getType() {
     if (!$this->type) {
-     $this->type = STRUtils::to64BitInt($this->getStorageKey());
+      $this->type = STRUtils::to64BitInt($this->getStorageKey());
     }
     return $this->type;
   }

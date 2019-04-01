@@ -14,7 +14,7 @@
       </tr>
     </thead>
     <tbody>
-      <?php foreach($node->getDataArray() as $key => $value): ?>
+      <?php foreach ($node->getDataArray() as $key => $value): ?>
         <tr>
           <th scope="row"><code><?=$key?></code></th>
           <th scope="row"><?=is_array($value) ? json_encode($value) : $value?></th>

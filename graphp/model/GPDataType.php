@@ -2,6 +2,8 @@
 
 class GPDataType extends GPObject {
 
+  use GPDataTypeCreator;
+
   const GP_INT = 'is_int';
   const GP_NODE_ID = 'is_int';
   const GP_FLOAT = 'is_float';

@@ -109,6 +109,8 @@ class GPLoader extends GPObject {
     $config = GPConfig::get();
     if (GP::isAjax() || GP::isJSONRequest()) {
       GP::ajax(['error_code' => 404, 'error' => 'Resource Not Found']);
+    } else if ($config->redirect_404) {
+      header('Location: '.$config->redirect_404, true);
     } else if ($config->view_404 && $config->layout_404) {
       GP::viewWithLayout($config->view_404, $config->layout_404);
     } else if ($config->view_404) {
@@ -138,6 +140,12 @@ class GPLoader extends GPObject {
     header('Pragma: no-cache');
     header('Content-type: application/json');
     echo json_encode($data);
+    GP::exit();
+  }
+
+  public static function exit() {
+    GPDatabase::disposeALl();
+    exit();
   }
 
   public static function addGlobal($key, $val) {

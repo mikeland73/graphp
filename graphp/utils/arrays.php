@@ -20,11 +20,14 @@ function idxx(array $array, $key, $message = '') {
 }
 
 /**
- * Returns first element in array. false if array is empty.
+ * Returns first element in array. null if array is empty.
  * @param  array  $array
  * @return mixed        First element of array or false is array is empty
  */
 function idx0(array $array) {
+  if (count($array) === 0) {
+    return null;
+  }
   return reset($array);
 }
 
