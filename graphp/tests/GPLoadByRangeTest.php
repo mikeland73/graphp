@@ -4,8 +4,9 @@ class GPTestRangeModel extends GPNode {
 
   protected static function getDataTypesImpl() {
     return [
-      new GPDataType('firstName', GPDataType::GP_STRING, true),
-      new GPDataType('age', GPDataType::GP_INT, true),
+      GPDataType::string('firstName', true),
+      GPDataType::int('age', true),
+      GPDataType::string('sex', true),
     ];
   }
 }
@@ -37,6 +38,14 @@ class GPLoadByRangeTest extends GPTest {
     $this->assertEquals(array_values($results), [$m2]);
     $results = GPTestRangeModel::getByAgeRange(22, 50, 3, 0);
     $this->assertEquals(array_values($results), [$m1, $m2, $m3]);
+  }
+
+  public function testgetAllWith() {
+    $m1 = (new GPTestRangeModel())->setSex('M')->save();
+    $m2 = (new GPTestRangeModel())->save();
+    $m3 = (new GPTestRangeModel())->setSex('F')->save();
+    $results = GPTestRangeModel::getAllWithSex();
+    $this->assertEquals(array_values($results), [$m1, $m3]);
   }
 
   public static function tearDownAfterClass(): void {

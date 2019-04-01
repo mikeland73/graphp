@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ac69bab358a14faafdf4864a1b16e05",
+    "content-hash": "b66857c88c2926078b83550fb62c48e9",
     "packages": [],
     "packages-dev": [
         {
@@ -680,16 +680,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "8.0.1",
+            "version": "8.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "753a192050133fc649234de34d1993d87785b134"
+                "reference": "a7af0201285445c9c73c4bdf869c486e36b41604"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/753a192050133fc649234de34d1993d87785b134",
-                "reference": "753a192050133fc649234de34d1993d87785b134",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a7af0201285445c9c73c4bdf869c486e36b41604",
+                "reference": "a7af0201285445c9c73c4bdf869c486e36b41604",
                 "shasum": ""
             },
             "require": {
@@ -758,7 +758,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-02-03T17:34:56+00:00"
+            "time": "2019-02-18T09:23:05+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1374,7 +1374,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
